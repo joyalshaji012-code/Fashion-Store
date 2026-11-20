@@ -1,0 +1,915 @@
+{#<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">#}
+{#<html xmlns="http://www.w3.org/1999/xhtml">#}
+{#<head>#}
+{#<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />#}
+{#<title>Untitled Document</title>#}
+{#</head>#}
+{##}
+{#<body><form action="" method="post">#}
+{#  <table width="433" border="1">#}
+{#    <tr>#}
+{#      <th scope="row">#</th>#}
+{#      <td>Image</td>#}
+{#      <td>Colour</td>#}
+{#      <td>&nbsp;</td>#}
+{#    </tr>#}
+{#      {% for i in data %}#}
+{#    <tr>#}
+{#      <th scope="row">&nbsp;{{ forloop.counter }}</th>#}
+{#      <td>&nbsp;<img src="{{ i.image }}" height="100" width="100"></td>#}
+{#      <td>&nbsp;{{ i.color }}</td>#}
+{#      <td><a href="/deleteproductimage/{{ i.id }}">Delete</a></td>#}
+{#    </tr>#}
+{#      {% endfor %}#}
+{#  </table>#}
+{#</form>#}
+{#</body>#}
+{#</html>#}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Product Image Manager</title>
+<style>
+  /* Reset and Base */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+  }
+
+  body {
+    background: linear-gradient(135deg, #f8fbff 0%, #e6f0ff 50%, #d4e4ff 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    animation: bgPulse 10s infinite alternate;
+  }
+
+  @keyframes bgPulse {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  /* Animated Background Elements */
+  .floating-grid {
+    position: fixed;
+    width: 200%;
+    height: 200%;
+    top: -50%;
+    left: -50%;
+    background-image:
+      linear-gradient(rgba(0, 102, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 102, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: gridMove 20s linear infinite;
+    z-index: -3;
+  }
+
+  @keyframes gridMove {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
+  }
+
+  .blue-wave {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 300%;
+    height: 300px;
+    background: linear-gradient(90deg, #0066ff, #00a2ff, #0066ff);
+    opacity: 0.05;
+    border-radius: 50% 50% 0 0;
+    animation: waveMove 15s infinite linear;
+    z-index: -2;
+  }
+
+  .blue-wave:nth-child(2) {
+    height: 250px;
+    opacity: 0.03;
+    animation: waveMove 12s infinite linear reverse;
+    bottom: 50px;
+  }
+
+  @keyframes waveMove {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .floating-dots {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+
+  .dot {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #0066ff;
+    border-radius: 50%;
+    opacity: 0.1;
+    animation: floatDot 20s infinite linear;
+  }
+
+  @keyframes floatDot {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(100px, -50px); }
+    50% { transform: translate(-50px, 100px); }
+    75% { transform: translate(50px, 50px); }
+  }
+
+  /* Header with advanced animations */
+  .header {
+    text-align: center;
+    padding: 50px 20px;
+    background: white;
+    margin: 20px auto;
+    max-width: 1200px;
+    border-radius: 20px;
+    box-shadow:
+      0 20px 40px rgba(0, 102, 255, 0.1),
+      0 0 100px rgba(0, 102, 255, 0.05);
+    position: relative;
+    overflow: hidden;
+    animation: headerFloat 6s ease-in-out infinite;
+    transform-style: preserve-3d;
+  }
+
+  @keyframes headerFloat {
+    0%, 100% {
+      transform: translateY(0) rotateX(0deg);
+      box-shadow:
+        0 20px 40px rgba(0, 102, 255, 0.1),
+        0 0 100px rgba(0, 102, 255, 0.05);
+    }
+    50% {
+      transform: translateY(-15px) rotateX(2deg);
+      box-shadow:
+        0 30px 60px rgba(0, 102, 255, 0.15),
+        0 0 120px rgba(0, 102, 255, 0.08);
+    }
+  }
+
+  .header:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #0066ff, #00a2ff, #0066ff);
+    background-size: 200% 100%;
+    animation: shine 3s infinite linear;
+  }
+
+  .header:after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, transparent 40%, rgba(0, 102, 255, 0.03) 50%, transparent 60%);
+    animation: shimmer 6s infinite linear;
+  }
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%) skewX(-15deg); }
+    100% { transform: translateX(200%) skewX(-15deg); }
+  }
+
+  @keyframes shine {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  .header h1 {
+    font-size: 3.5rem;
+    margin-bottom: 15px;
+    background: linear-gradient(135deg, #0066ff 0%, #00a2ff 50%, #0066ff 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: textShimmer 3s infinite linear;
+    text-shadow: 0 5px 15px rgba(0, 102, 255, 0.2);
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+
+  @keyframes textShimmer {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
+  }
+
+  .header p {
+    font-size: 1.3rem;
+    color: #333;
+    max-width: 800px;
+    margin: 0 auto;
+    opacity: 0.9;
+    animation: fadeInUp 1s ease-out;
+  }
+
+  /* Main Container */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+    animation: containerAppear 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  @keyframes containerAppear {
+    from {
+      opacity: 0;
+      transform: translateY(50px) scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  /* Table Container with 3D Effect */
+  .table-container {
+    background: white;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow:
+      0 25px 50px rgba(0, 102, 255, 0.15),
+      0 15px 35px rgba(0, 102, 255, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    position: relative;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: tableFloat 8s ease-in-out infinite;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+  }
+
+  @keyframes tableFloat {
+    0%, 100% {
+      transform: translateY(0) rotateX(0.5deg);
+    }
+    50% {
+      transform: translateY(-20px) rotateX(-0.5deg);
+    }
+  }
+
+  .table-container:hover {
+    transform: translateY(-10px) rotateX(1deg) rotateY(1deg);
+    box-shadow:
+      0 35px 70px rgba(0, 102, 255, 0.2),
+      0 25px 50px rgba(0, 102, 255, 0.15),
+      0 0 150px rgba(0, 102, 255, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  }
+
+  /* Table Styling */
+  form table {
+    width: 100%;
+    border-collapse: collapse;
+    animation: tableRows 1s ease-out;
+  }
+
+  @keyframes tableRows {
+    from {
+      opacity: 0;
+      transform: perspective(1000px) rotateX(10deg);
+    }
+    to {
+      opacity: 1;
+      transform: perspective(1000px) rotateX(0);
+    }
+  }
+
+  form table tr {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: rowSlideIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+  }
+
+  @keyframes rowSlideIn {
+    from {
+      opacity: 0;
+      transform: translateX(-50px) skewX(-5deg);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0) skewX(0);
+    }
+  }
+
+  form table th {
+    background: linear-gradient(135deg, #0066ff, #00a2ff);
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 28px 24px;
+    text-align: left;
+    border: none;
+    position: relative;
+    font-size: 1.1rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  form table th:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, white, transparent);
+    animation: borderFlow 4s infinite linear;
+  }
+
+  @keyframes borderFlow {
+    0% { background-position: -100% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  form table td, form table th.scope-row {
+    padding: 28px 24px;
+    border-bottom: 1px solid #e6f0ff;
+    vertical-align: middle;
+    transition: all 0.3s ease;
+  }
+
+  form table th.scope-row {
+    background: #f0f7ff;
+    color: #0066ff;
+    font-weight: 700;
+    font-size: 1.2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  form table th.scope-row:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 102, 255, 0.1), transparent);
+    animation: rowShine 4s infinite linear;
+  }
+
+  @keyframes rowShine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  form table tr:hover {
+    background: linear-gradient(90deg, rgba(0, 102, 255, 0.05), rgba(0, 162, 255, 0.05));
+    transform: translateX(15px) scale(1.01);
+    box-shadow: 0 10px 20px rgba(0, 102, 255, 0.1);
+  }
+
+  /* Image Styling with Advanced Animations */
+  form table img {
+    border-radius: 16px;
+    box-shadow:
+      0 15px 30px rgba(0, 102, 255, 0.2),
+      0 5px 15px rgba(0, 102, 255, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 3px solid #e6f0ff;
+    position: relative;
+    overflow: hidden;
+    animation: imageFloat 6s ease-in-out infinite;
+  }
+
+  @keyframes imageFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(0.5deg); }
+  }
+
+  form table img:hover {
+    transform: scale(1.2) rotate(5deg) translateZ(20px);
+    box-shadow:
+      0 25px 50px rgba(0, 102, 255, 0.3),
+      0 15px 35px rgba(0, 102, 255, 0.2),
+      0 0 60px rgba(0, 102, 255, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    border-color: #0066ff;
+    animation-play-state: paused;
+  }
+
+  form table img:after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      to bottom right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.3) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    transform: rotate(45deg);
+    transition: transform 0.6s;
+  }
+
+  form table img:hover:after {
+    transform: rotate(45deg) translate(50px, 50px);
+  }
+
+  /* Color Cell with Animated Swatch */
+  form table td:nth-child(3) {
+    font-weight: 700;
+    color: #0066ff;
+    font-size: 1.2rem;
+    position: relative;
+    padding-left: 70px;
+  }
+
+  .color-swatch {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--swatch-color, #0066ff);
+    box-shadow:
+      0 8px 16px rgba(0, 102, 255, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+    border: 2px solid white;
+    animation: swatchPulse 2s infinite alternate;
+    transition: all 0.3s ease;
+  }
+
+  .color-swatch:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.3) 50%, transparent 60%);
+    border-radius: 10px;
+    animation: swatchShine 4s infinite linear;
+  }
+
+  @keyframes swatchPulse {
+    0% {
+      transform: translateY(-50%) scale(1);
+      box-shadow:
+        0 8px 16px rgba(0, 102, 255, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+    }
+    100% {
+      transform: translateY(-50%) scale(1.1);
+      box-shadow:
+        0 12px 24px rgba(0, 102, 255, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  @keyframes swatchShine {
+    0% { transform: translateX(-100%) skewX(-15deg); }
+    100% { transform: translateX(200%) skewX(-15deg); }
+  }
+
+  form table td:nth-child(3):hover .color-swatch {
+    animation: swatchSpin 1s ease-in-out;
+    transform: translateY(-50%) scale(1.2) rotate(180deg);
+  }
+
+  @keyframes swatchSpin {
+    0% { transform: translateY(-50%) rotate(0deg); }
+    100% { transform: translateY(-50%) rotate(180deg); }
+  }
+
+  /* Delete Button with Advanced Effects */
+  form table a {
+    display: inline-block;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, #ff4444, #ff6666);
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 700;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-align: center;
+    min-width: 120px;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+      0 10px 20px rgba(255, 68, 68, 0.3),
+      0 5px 10px rgba(255, 68, 68, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    animation: buttonGlow 2s infinite alternate;
+  }
+
+  @keyframes buttonGlow {
+    0% {
+      box-shadow:
+        0 10px 20px rgba(255, 68, 68, 0.3),
+        0 5px 10px rgba(255, 68, 68, 0.2);
+    }
+    100% {
+      box-shadow:
+        0 15px 30px rgba(255, 68, 68, 0.4),
+        0 10px 20px rgba(255, 68, 68, 0.3),
+        0 0 30px rgba(255, 68, 68, 0.2);
+    }
+  }
+
+  form table a:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.7s;
+  }
+
+  form table a:hover {
+    background: linear-gradient(135deg, #ff3333, #ff5555);
+    transform: translateY(-5px) scale(1.1);
+    box-shadow:
+      0 20px 40px rgba(255, 68, 68, 0.4),
+      0 15px 30px rgba(255, 68, 68, 0.3),
+      0 0 50px rgba(255, 68, 68, 0.3);
+  }
+
+  form table a:hover:before {
+    left: 100%;
+  }
+
+  /* Row Animation Delays */
+  form table tr:nth-child(2) { animation-delay: 0.1s; }
+  form table tr:nth-child(3) { animation-delay: 0.2s; }
+  form table tr:nth-child(4) { animation-delay: 0.3s; }
+  form table tr:nth-child(5) { animation-delay: 0.4s; }
+  form table tr:nth-child(6) { animation-delay: 0.5s; }
+  form table tr:nth-child(7) { animation-delay: 0.6s; }
+  form table tr:nth-child(8) { animation-delay: 0.7s; }
+  form table tr:nth-child(9) { animation-delay: 0.8s; }
+  form table tr:nth-child(10) { animation-delay: 0.9s; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 40px;
+    color: #0066ff;
+    font-size: 1rem;
+    margin-top: 60px;
+    position: relative;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 102, 255, 0.1);
+    animation: footerFloat 8s ease-in-out infinite;
+  }
+
+  @keyframes footerFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .footer:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 3px;
+    background: linear-gradient(90deg, #0066ff, #00a2ff, #0066ff);
+    border-radius: 0 0 10px 10px;
+    animation: footerLine 4s infinite linear;
+  }
+
+  @keyframes footerLine {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .header h1 {
+      font-size: 2.8rem;
+    }
+
+    .header {
+      margin: 20px;
+      animation: none;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      animation: none;
+    }
+
+    form table {
+      min-width: 800px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .header h1 {
+      font-size: 2.2rem;
+    }
+
+    .header p {
+      font-size: 1.1rem;
+    }
+
+    form table th, form table td {
+      padding: 20px 15px;
+    }
+
+    form table a {
+      padding: 12px 20px;
+      min-width: 100px;
+    }
+  }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <!-- Background Elements -->
+  <div class="floating-grid"></div>
+  <div class="blue-wave"></div>
+  <div class="blue-wave"></div>
+
+  <div class="floating-dots">
+    <div class="dot" style="top: 10%; left: 15%; animation-delay: 0s;"></div>
+    <div class="dot" style="top: 20%; left: 80%; animation-delay: -5s;"></div>
+    <div class="dot" style="top: 40%; left: 30%; animation-delay: -10s;"></div>
+    <div class="dot" style="top: 60%; left: 70%; animation-delay: -15s;"></div>
+    <div class="dot" style="top: 80%; left: 20%; animation-delay: -7s;"></div>
+    <div class="dot" style="top: 90%; left: 90%; animation-delay: -12s;"></div>
+  </div>
+
+  <!-- Header -->
+  <div class="header">
+    <h1>PRODUCT IMAGE MANAGER</h1>
+    <p>Efficiently manage your product images with our dynamic interface. Hover over elements to see animations.</p>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <form action="" method="post">
+      <div class="table-container">
+        <table width="433" border="1">
+          <tr>
+            <th scope="row">#</th>
+            <td>Image</td>
+            <td>Colour</td>
+            <td>&nbsp;</td>
+          </tr>
+          {% for i in data %}
+          <tr>
+            <th scope="row" class="scope-row">&nbsp;{{ forloop.counter }}</th>
+            <td>&nbsp;<img src="{{ i.image }}" height="100" width="100"></td>
+            <td>
+              <div class="color-swatch" style="--swatch-color: {{ i.color|default:'#0066ff' }};"></div>
+              &nbsp;{{ i.color }}
+            </td>
+            <td><a href="/deleteproductimage/{{ i.id }}">DELETE</a></td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="4" style="text-align: center; padding: 60px; color: #666;">
+              <p style="font-size: 1.4rem; animation: fadeIn 2s infinite alternate;">No product images found. Add some to get started!</p>
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </form>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>© 2024 Product Image Management System | Blue & White Dynamic Design</p>
+  </div>
+
+  <script>
+    // Advanced Animation Controller
+    document.addEventListener('DOMContentLoaded', function() {
+      // Create floating dots dynamically
+      for(let i = 0; i < 20; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'dot';
+        dot.style.top = Math.random() * 100 + '%';
+        dot.style.left = Math.random() * 100 + '%';
+        dot.style.animationDelay = Math.random() * -20 + 's';
+        dot.style.animationDuration = (15 + Math.random() * 15) + 's';
+        document.querySelector('.floating-dots').appendChild(dot);
+      }
+
+      // Enhanced row hover effects
+      const rows = document.querySelectorAll('tr');
+      rows.forEach((row, index) => {
+        if(index > 0) {
+          row.addEventListener('mouseenter', function() {
+            this.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            this.style.zIndex = '10';
+
+            // Create particle effect on hover
+            for(let i = 0; i < 8; i++) {
+              const particle = document.createElement('div');
+              particle.style.cssText = `
+                position: absolute;
+                width: 4px;
+                height: 4px;
+                background: #0066ff;
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 100;
+              `;
+
+              const rect = this.getBoundingClientRect();
+              const x = Math.random() * rect.width;
+              const y = Math.random() * rect.height;
+
+              particle.style.left = x + 'px';
+              particle.style.top = y + 'px';
+
+              this.style.position = 'relative';
+              this.appendChild(particle);
+
+              // Animate particle
+              particle.animate([
+                { transform: 'translate(0, 0)', opacity: 1 },
+                { transform: `translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px)`, opacity: 0 }
+              ], {
+                duration: 1000,
+                easing: 'ease-out'
+              }).onfinish = () => particle.remove();
+            }
+          });
+
+          row.addEventListener('mouseleave', function() {
+            this.style.zIndex = '1';
+          });
+
+          // Row click animation
+          row.addEventListener('click', function(e) {
+            if(e.target.tagName !== 'A') {
+              this.animate([
+                { transform: 'scale(1)', backgroundColor: 'transparent' },
+                { transform: 'scale(0.98)', backgroundColor: 'rgba(0, 102, 255, 0.1)' },
+                { transform: 'scale(1)', backgroundColor: 'transparent' }
+              ], {
+                duration: 300,
+                easing: 'ease-out'
+              });
+            }
+          });
+        }
+      });
+
+      // Image loading animation
+      const images = document.querySelectorAll('img');
+      images.forEach(img => {
+        img.addEventListener('load', function() {
+          this.animate([
+            { transform: 'scale(0.8)', opacity: 0 },
+            { transform: 'scale(1.1)', opacity: 0.8 },
+            { transform: 'scale(1)', opacity: 1 }
+          ], {
+            duration: 600,
+            easing: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+          });
+        });
+      });
+
+      // Color swatch interaction
+      const swatches = document.querySelectorAll('.color-swatch');
+      swatches.forEach(swatch => {
+        swatch.addEventListener('mouseenter', function() {
+          const color = getComputedStyle(this).getPropertyValue('--swatch-color');
+
+          // Create color wave effect
+          const wave = document.createElement('div');
+          wave.style.cssText = `
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100px;
+            height: 100px;
+            background: ${color};
+            border-radius: 50%;
+            opacity: 0.1;
+            transform: translate(-50%, -50%) scale(0);
+            pointer-events: none;
+            z-index: -1;
+          `;
+
+          this.parentElement.style.position = 'relative';
+          this.parentElement.appendChild(wave);
+
+          wave.animate([
+            { transform: 'translate(-50%, -50%) scale(0)', opacity: 0.2 },
+            { transform: 'translate(-50%, -50%) scale(2)', opacity: 0 }
+          ], {
+            duration: 800,
+            easing: 'ease-out'
+          }).onfinish = () => wave.remove();
+        });
+      });
+
+      // Delete button particle explosion
+      const deleteButtons = document.querySelectorAll('a[href*="deleteproductimage"]');
+      deleteButtons.forEach(button => {
+        button.addEventListener('mouseenter', function() {
+          // Create warning particles
+          for(let i = 0; i < 6; i++) {
+            const particle = document.createElement('div');
+            particle.style.cssText = `
+              position: absolute;
+              width: 6px;
+              height: 6px;
+              background: #ff4444;
+              border-radius: 50%;
+              pointer-events: none;
+              z-index: 100;
+              top: 50%;
+              left: 50%;
+            `;
+
+            document.body.appendChild(particle);
+
+            particle.animate([
+              {
+                transform: 'translate(0, 0) scale(1)',
+                opacity: 1
+              },
+              {
+                transform: `translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) scale(0)`,
+                opacity: 0
+              }
+            ], {
+              duration: 800,
+              easing: 'ease-out'
+            }).onfinish = () => particle.remove();
+          }
+        });
+      });
+
+      // Continuous table container animation
+      const tableContainer = document.querySelector('.table-container');
+      let floatAngle = 0;
+
+      function animateTable() {
+        floatAngle += 0.5;
+        const floatY = Math.sin(floatAngle * Math.PI / 180) * 10;
+        const rotateX = Math.sin(floatAngle * Math.PI / 180) * 0.5;
+
+        tableContainer.style.transform = `
+          translateY(${floatY}px)
+          rotateX(${rotateX}deg)
+        `;
+
+        requestAnimationFrame(animateTable);
+      }
+
+      if(window.innerWidth > 1024) {
+        requestAnimationFrame(animateTable);
+      }
+
+      // Background wave animation control
+      const waves = document.querySelectorAll('.blue-wave');
+      waves.forEach((wave, index) => {
+        wave.animate([
+          { transform: 'translateX(0)' },
+          { transform: 'translateX(-50%)' }
+        ], {
+          duration: 15000 + index * 3000,
+          iterations: Infinity,
+          easing: 'linear'
+        });
+      });
+    });
+  </script>
+<script>
+// Prevent going back to this page after form submission
+if (window.history && window.history.pushState) {
+    // Add current page to history
+    window.history.pushState(null, null, window.location.href);
+
+    // Listen for back/forward navigation
+    window.onpopstate = function(event) {
+        // Redirect to /rtohome when back button is pressed
+        window.location.href = '/home';
+    };
+}
+</script>
+</body>
+</html>

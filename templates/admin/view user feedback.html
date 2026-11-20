@@ -1,0 +1,1627 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#  <meta charset="UTF-8">#}
+{#  <title>Registration Data Table</title>#}
+{#  <!-- Bootstrap CSS -->#}
+{#  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">#}
+{#  <!-- DataTables CSS -->#}
+{#  <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">#}
+{#</head>#}
+{#<body>#}
+{#  <div class="container mt-5">#}
+{#    <h2 class="mb-4">View user feedbacks</h2>#}
+{#    <table id="registrationTable" class="table table-striped table-bordered">#}
+{#      <thead>#}
+{#        <tr>#}
+{#          <th>#</th>#}
+{#          <th>user</th>#}
+{#          <th>feedback</th>#}
+{#          <th>Date</th>#}
+{#        </tr>#}
+{#      </thead>#}
+{#      <tbody>#}
+{#        <!-- Sample Data Row -->#}
+{#        {% for i in data %}#}
+{#        <tr>#}
+{#          <td>1</td>#}
+{#          <td>{{ i.CUSTOMER.name }}</td>#}
+{#          <td>{{ i.feedback }}</td>#}
+{#          <td>{{ i.date }}</td>#}
+{#        </tr>#}
+{#        {% endfor %}#}
+{#        <!-- Add more rows dynamically from backend -->#}
+{#      </tbody>#}
+{#    </table>#}
+{#  </div>#}
+{##}
+{#  <!-- Scripts -->#}
+{#  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>#}
+{#  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>#}
+{#  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>#}
+{#  <script>#}
+{#    $(document).ready(function () {#}
+{#      $('#registrationTable').DataTable();#}
+{#    });#}
+{#  </script>#}
+{#</body>#}
+{#</html>#}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Customer Feedback Analytics</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- DataTables CSS -->
+  <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- AOS Animation Library -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      --warning-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      --dark-color: #1a1a2e;
+      --light-color: #f8f9fa;
+      --card-shadow: 0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+      --transition-all: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      --border-radius-lg: 20px;
+      --border-radius-md: 12px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+      color: #333;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Background decorative elements */
+    .bg-shapes {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.1;
+    }
+
+    .shape-1 {
+      width: 300px;
+      height: 300px;
+      background: var(--primary-gradient);
+      top: -150px;
+      right: -100px;
+      animation: float 25s infinite ease-in-out;
+    }
+
+    .shape-2 {
+      width: 200px;
+      height: 200px;
+      background: var(--secondary-gradient);
+      bottom: -50px;
+      left: -50px;
+      animation: float 20s infinite ease-in-out reverse;
+    }
+
+    .shape-3 {
+      width: 150px;
+      height: 150px;
+      background: var(--success-gradient);
+      top: 40%;
+      left: 10%;
+      animation: float 30s infinite ease-in-out;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header with animated gradient */
+    .page-header {
+      margin-bottom: 40px;
+      padding: 30px;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--card-shadow);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      animation: slideInDown 0.8s ease-out;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-header:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--primary-gradient);
+      animation: progressBar 3s ease-in-out infinite alternate;
+    }
+
+    .page-header h1 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 800;
+      font-size: 2.8rem;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 10px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .page-header h1:after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 100px;
+      height: 4px;
+      background: var(--secondary-gradient);
+      border-radius: 2px;
+      animation: expandWidth 1.5s ease-out 0.5s forwards;
+      opacity: 0;
+    }
+
+    .header-subtitle {
+      color: #666;
+      font-size: 1.1rem;
+      margin-bottom: 25px;
+      max-width: 600px;
+    }
+
+    /* Dashboard Cards */
+    .dashboard-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    .dashboard-card {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border-radius: var(--border-radius-lg);
+      padding: 25px;
+      box-shadow: var(--card-shadow);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: var(--transition-all);
+      position: relative;
+      overflow: hidden;
+      animation: fadeInUp 0.6s ease-out;
+      animation-fill-mode: both;
+    }
+
+    .dashboard-card:nth-child(1) { animation-delay: 0.1s; }
+    .dashboard-card:nth-child(2) { animation-delay: 0.2s; }
+    .dashboard-card:nth-child(3) { animation-delay: 0.3s; }
+    .dashboard-card:nth-child(4) { animation-delay: 0.4s; }
+
+    .dashboard-card:hover {
+      transform: translateY(-15px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(50, 50, 93, 0.15), 0 15px 35px rgba(0, 0, 0, 0.1);
+    }
+
+    .dashboard-card:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--primary-gradient);
+    }
+
+    .card-icon {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      color: white;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-1 .card-icon { background: var(--primary-gradient); }
+    .card-2 .card-icon { background: var(--secondary-gradient); }
+    .card-3 .card-icon { background: var(--success-gradient); }
+    .card-4 .card-icon { background: var(--warning-gradient); }
+
+    .card-value {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 5px;
+      background: linear-gradient(135deg, #333, #666);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .card-label {
+      font-size: 0.9rem;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    .card-trend {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .trend-up { color: #00c9a7; }
+    .trend-down { color: #ff6b6b; }
+
+    /* New: Recent Feedback Timeline */
+    .recent-timeline {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border-radius: var(--border-radius-lg);
+      padding: 30px;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      animation: fadeIn 1s ease-out 0.5s both;
+      opacity: 0;
+    }
+
+    .timeline-item {
+      display: flex;
+      align-items: flex-start;
+      padding: 20px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      transition: var(--transition-all);
+    }
+
+    .timeline-item:last-child {
+      border-bottom: none;
+    }
+
+    .timeline-item:hover {
+      background: rgba(102, 126, 234, 0.05);
+      transform: translateX(10px);
+      border-radius: 10px;
+    }
+
+    .timeline-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 20px;
+      flex-shrink: 0;
+      color: white;
+      font-size: 1.2rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .timeline-content h5 {
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: #333;
+    }
+
+    .timeline-content p {
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+
+    .timeline-time {
+      font-size: 0.8rem;
+      color: #999;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Sentiment Chart */
+    .sentiment-chart-container {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border-radius: var(--border-radius-lg);
+      padding: 30px;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      animation: fadeIn 1s ease-out 0.5s both;
+      opacity: 0;
+    }
+
+    .sentiment-chart {
+      display: flex;
+      align-items: flex-end;
+      height: 200px;
+      gap: 15px;
+      margin-top: 30px;
+      padding: 20px 0;
+    }
+
+    .sentiment-bar {
+      flex: 1;
+      background: linear-gradient(to top, #667eea, #764ba2);
+      border-radius: 10px 10px 0 0;
+      position: relative;
+      transition: var(--transition-all);
+      min-height: 20px;
+      cursor: pointer;
+    }
+
+    .sentiment-bar:hover {
+      transform: scaleY(1.1);
+      box-shadow: 0 -5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .sentiment-label {
+      position: absolute;
+      bottom: -25px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #555;
+    }
+
+    /* Table Container with Glass Effect */
+    .table-container {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--card-shadow);
+      padding: 30px;
+      margin-top: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      animation: fadeIn 1s ease-out 0.8s both;
+      opacity: 0;
+      overflow: hidden;
+    }
+
+    .table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .table-header h3 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 1.8rem;
+      background: linear-gradient(135deg, #333, #666);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Enhanced Table Styles */
+    #registrationTable {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border-radius: var(--border-radius-md);
+      overflow: hidden;
+    }
+
+    #registrationTable thead {
+      background: var(--primary-gradient);
+      color: white;
+    }
+
+    #registrationTable thead th {
+      padding: 20px 15px;
+      font-weight: 600;
+      border: none;
+      position: relative;
+      overflow: hidden;
+      text-align: left;
+      font-size: 1rem;
+    }
+
+    #registrationTable thead th:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.7s;
+    }
+
+    #registrationTable thead th:hover:before {
+      left: 100%;
+    }
+
+    #registrationTable tbody tr {
+      transition: var(--transition-all);
+      animation: slideInRow 0.5s ease-out;
+      animation-fill-mode: both;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    #registrationTable tbody tr:nth-child(even) {
+      background-color: rgba(102, 126, 234, 0.03);
+    }
+
+    #registrationTable tbody tr:hover {
+      background-color: rgba(102, 126, 234, 0.1);
+      transform: scale(1.005);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    #registrationTable tbody td {
+      padding: 20px 15px;
+      vertical-align: middle;
+      position: relative;
+    }
+
+    /* User Column with Avatar */
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .user-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: white;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .user-avatar:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: inherit;
+      opacity: 0.8;
+    }
+
+    .user-details h5 {
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: #333;
+    }
+
+    .user-email {
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    /* Feedback Column */
+    .feedback-container {
+      position: relative;
+      max-width: 400px;
+    }
+
+    .feedback-text {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      line-height: 1.6;
+      padding-right: 30px;
+    }
+
+    .feedback-expand-btn {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      background: rgba(102, 126, 234, 0.1);
+      border: none;
+      color: #667eea;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: var(--transition-all);
+    }
+
+    .feedback-expand-btn:hover {
+      background: rgba(102, 126, 234, 0.2);
+      transform: scale(1.05);
+    }
+
+    /* Rating Stars */
+    .rating-container {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 8px;
+    }
+
+    .rating-star {
+      color: #ffd700;
+      font-size: 1rem;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s;
+    }
+
+    .rating-star:hover {
+      transform: scale(1.3);
+    }
+
+    .rating-value {
+      font-weight: 700;
+      margin-left: 8px;
+      color: #333;
+    }
+
+    /* Date Badge */
+    .date-badge {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      display: inline-block;
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+      transition: var(--transition-all);
+    }
+
+    .date-badge:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-action {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition-all);
+      color: white;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-view { background: var(--primary-gradient); }
+    .btn-reply { background: var(--success-gradient); }
+    .btn-delete { background: var(--secondary-gradient); }
+
+    .btn-action:hover {
+      transform: rotate(15deg) scale(1.1);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Filter Section */
+    .filter-section {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 10px 20px;
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 2px solid transparent;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition-all);
+      color: #555;
+    }
+
+    .filter-btn.active {
+      background: var(--primary-gradient);
+      color: white;
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .filter-btn:hover:not(.active) {
+      background: rgba(102, 126, 234, 0.1);
+      border-color: rgba(102, 126, 234, 0.3);
+    }
+
+    /* Footer */
+    .page-footer {
+      text-align: center;
+      margin-top: 60px;
+      padding: 30px;
+      color: #666;
+      animation: fadeIn 1s ease-out 1.2s both;
+      opacity: 0;
+      position: relative;
+    }
+
+    .footer-content {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border-radius: var(--border-radius-lg);
+      padding: 30px;
+      box-shadow: var(--card-shadow);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .brand-logo {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 800;
+      font-size: 2rem;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 15px;
+    }
+
+    /* New: Customer Satisfaction Meter */
+    .satisfaction-meter {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border-radius: var(--border-radius-lg);
+      padding: 30px;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      text-align: center;
+    }
+
+    .meter-container {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .meter-circle {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: conic-gradient(#00c9a7 0% 85%, #e0e0e0 85% 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      animation: rotateMeter 2s ease-out;
+    }
+
+    .meter-inner {
+      width: 140px;
+      height: 140px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .meter-value {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #333, #666);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .meter-label {
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 5px;
+    }
+
+    /* Floating Action Button */
+    .fab {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--primary-gradient);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+      cursor: pointer;
+      z-index: 100;
+      transition: var(--transition-all);
+      animation: pulse 2s infinite;
+    }
+
+    .fab:hover {
+      transform: rotate(90deg) scale(1.1);
+      box-shadow: 0 15px 30px rgba(102, 126, 234, 0.6);
+    }
+
+    /* Empty State Enhancement */
+    .empty-state-enhanced {
+      text-align: center;
+      padding: 60px 20px;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: var(--border-radius-lg);
+      margin: 20px 0;
+      border: 2px dashed rgba(102, 126, 234, 0.3);
+    }
+
+    .empty-icon {
+      font-size: 4rem;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+
+    /* Animations */
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(5deg); }
+    }
+
+    @keyframes progressBar {
+      0% { width: 0; }
+      100% { width: 100%; }
+    }
+
+    @keyframes slideInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes expandWidth {
+      from { width: 0; opacity: 0; }
+      to { width: 100px; opacity: 1; }
+    }
+
+    @keyframes slideInRow {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes rotateMeter {
+      from { transform: rotate(-90deg); }
+      to { transform: rotate(0); }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+      .dashboard-cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 992px) {
+      .dashboard-cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .sentiment-chart-container,
+      .recent-timeline,
+      .satisfaction-meter {
+        margin-bottom: 30px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .page-header h1 {
+        font-size: 2.2rem;
+      }
+
+      .table-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .filter-section {
+        justify-content: center;
+      }
+
+      #registrationTable thead {
+        display: none;
+      }
+
+      #registrationTable tbody tr {
+        display: block;
+        margin-bottom: 25px;
+        border: 1px solid rgba(102, 126, 234, 0.2);
+        border-radius: var(--border-radius-md);
+        padding: 20px;
+        animation: none;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      #registrationTable tbody td {
+        display: block;
+        text-align: left;
+        padding: 15px 10px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      }
+
+      #registrationTable tbody td:before {
+        content: attr(data-label);
+        display: block;
+        font-weight: 700;
+        color: #667eea;
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      #registrationTable tbody td:last-child {
+        border-bottom: none;
+      }
+
+      .timeline-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .timeline-icon {
+        margin-bottom: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Background Shapes -->
+  <div class="bg-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
+
+  <div class="container">
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1><i class="fas fa-comment-dots me-3"></i>Customer Feedback Analytics</h1>
+      <p class="header-subtitle">Gain valuable insights from customer feedback to improve your e-commerce platform and enhance user experience.</p>
+
+      <div class="filter-section">
+        <button class="filter-btn active" data-filter="all">All Feedback</button>
+{#        <button class="filter-btn" data-filter="positive">Positive <span class="badge bg-success ms-2" id="positiveCount">12</span></button>#}
+{#        <button class="filter-btn" data-filter="negative">Critical <span class="badge bg-danger ms-2" id="negativeCount">3</span></button>#}
+{#        <button class="filter-btn" data-filter="suggestion">Suggestions <span class="badge bg-info ms-2" id="suggestionCount">8</span></button>#}
+{#        <button class="filter-btn" data-filter="recent">Last 7 Days</button>#}
+      </div>
+    </div>
+
+    <!-- Dashboard Cards -->
+    <div class="dashboard-cards">
+      <div class="dashboard-card card-1" data-aos="fade-up">
+        <div class="card-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="card-value" id="totalFeedback">{% if data %}{{ data|length }}{% else %}0{% endif %}</div>
+        <div class="card-label">Total Feedback</div>
+        <div class="card-trend trend-up">
+          <i class="fas fa-arrow-up me-2"></i> 12% from last month
+        </div>
+      </div>
+
+      <div class="dashboard-card card-2" data-aos="fade-up" data-aos-delay="100">
+        <div class="card-icon">
+          <i class="fas fa-star"></i>
+        </div>
+        <div class="card-value">4.8<span style="font-size: 1.5rem;">/5</span></div>
+        <div class="card-label">Average Rating</div>
+        <div class="card-trend trend-up">
+          <i class="fas fa-arrow-up me-2"></i> 0.2 points increase
+        </div>
+      </div>
+
+      <div class="dashboard-card card-3" data-aos="fade-up" data-aos-delay="200">
+        <div class="card-icon">
+          <i class="fas fa-reply"></i>
+        </div>
+        <div class="card-value" id="repliedCount">18</div>
+        <div class="card-label">Replied To</div>
+        <div class="card-trend trend-up">
+          <i class="fas fa-arrow-up me-2"></i> 5 new replies
+        </div>
+      </div>
+
+      <div class="dashboard-card card-4" data-aos="fade-up" data-aos-delay="300">
+        <div class="card-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <div class="card-value">94<span style="font-size: 1.5rem;">%</span></div>
+        <div class="card-label">Satisfaction Rate</div>
+        <div class="card-trend trend-down">
+          <i class="fas fa-arrow-down me-2"></i> 2% from last week
+        </div>
+      </div>
+    </div>
+
+    <!-- Customer Satisfaction Meter -->
+    <div class="satisfaction-meter" data-aos="fade-up">
+      <h3><i class="fas fa-heart me-2" style="color: #ff6b6b;"></i>Customer Satisfaction Score</h3>
+      <p class="text-muted mb-4">Overall customer satisfaction based on recent feedback</p>
+
+      <div class="meter-container">
+        <div class="meter-circle">
+          <div class="meter-inner">
+            <div class="meter-value">8.5</div>
+            <div class="meter-label">Out of 10</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <div class="d-flex justify-content-between mb-2">
+          <span>Very Satisfied</span>
+          <span>65%</span>
+        </div>
+        <div class="progress" style="height: 10px; border-radius: 5px;">
+          <div class="progress-bar bg-success" role="progressbar" style="width: 65%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+
+        <div class="d-flex justify-content-between mb-2 mt-3">
+          <span>Neutral</span>
+          <span>25%</span>
+        </div>
+        <div class="progress" style="height: 10px; border-radius: 5px;">
+          <div class="progress-bar bg-warning" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+
+        <div class="d-flex justify-content-between mb-2 mt-3">
+          <span>Unsatisfied</span>
+          <span>10%</span>
+        </div>
+        <div class="progress" style="height: 10px; border-radius: 5px;">
+          <div class="progress-bar bg-danger" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Feedback Timeline -->
+{#    <div class="recent-timeline" data-aos="fade-up">#}
+{#      <h3><i class="fas fa-history me-2"></i>Recent Feedback Activity</h3>#}
+{#      <p class="text-muted mb-4">Latest customer interactions and feedback submissions</p>#}
+{##}
+{#      <div class="timeline-items">#}
+{#        <div class="timeline-item">#}
+{#          <div class="timeline-icon" style="background: var(--primary-gradient);">#}
+{#            <i class="fas fa-user-check"></i>#}
+{#          </div>#}
+{#          <div class="timeline-content">#}
+{#            <h5>Alex Johnson</h5>#}
+{#            <p>"Great shopping experience! The delivery was faster than expected."</p>#}
+{#            <div class="timeline-time">#}
+{#              <i class="far fa-clock"></i> 2 hours ago#}
+{#              <span class="ms-3"><i class="fas fa-star text-warning"></i> 5.0</span>#}
+{#            </div>#}
+{#          </div>#}
+{#        </div>#}
+{##}
+{#        <div class="timeline-item">#}
+{#          <div class="timeline-icon" style="background: var(--secondary-gradient);">#}
+{#            <i class="fas fa-lightbulb"></i>#}
+{#          </div>#}
+{#          <div class="timeline-content">#}
+{#            <h5>Maria Garcia</h5>#}
+{#            <p>"Suggestion: Please add more filter options for product search."</p>#}
+{#            <div class="timeline-time">#}
+{#              <i class="far fa-clock"></i> 5 hours ago#}
+{#              <span class="ms-3"><i class="fas fa-star text-warning"></i> 4.0</span>#}
+{#            </div>#}
+{#          </div>#}
+{#        </div>#}
+{##}
+{#        <div class="timeline-item">#}
+{#          <div class="timeline-icon" style="background: var(--success-gradient);">#}
+{#            <i class="fas fa-comment-alt"></i>#}
+{#          </div>#}
+{#          <div class="timeline-content">#}
+{#            <h5>David Smith</h5>#}
+{#            <p>"Product quality exceeded my expectations. Will shop again!"</p>#}
+{#            <div class="timeline-time">#}
+{#              <i class="far fa-clock"></i> 1 day ago#}
+{#              <span class="ms-3"><i class="fas fa-star text-warning"></i> 5.0</span>#}
+{#            </div>#}
+{#          </div>#}
+{#        </div>#}
+{##}
+{#        <div class="timeline-item">#}
+{#          <div class="timeline-icon" style="background: var(--warning-gradient);">#}
+{#            <i class="fas fa-exclamation-circle"></i>#}
+{#          </div>#}
+{#          <div class="timeline-content">#}
+{#            <h5>Sarah Williams</h5>#}
+{#            <p>"Issue with payment gateway during checkout. Please fix this."</p>#}
+{#            <div class="timeline-time">#}
+{#              <i class="far fa-clock"></i> 2 days ago#}
+{#              <span class="ms-3"><i class="fas fa-star text-warning"></i> 2.0</span>#}
+{#            </div>#}
+{#          </div>#}
+{#        </div>#}
+{#      </div>#}
+{#    </div>#}
+
+    <!-- Sentiment Chart -->
+{#    <div class="sentiment-chart-container" data-aos="fade-up">#}
+{#      <h3><i class="fas fa-chart-pie me-2"></i>Feedback Sentiment Analysis</h3>#}
+{#      <p class="text-muted mb-4">Distribution of customer feedback by sentiment category</p>#}
+{##}
+{#      <div class="sentiment-chart">#}
+{#        <div class="sentiment-bar" style="height: 90%;" data-value="45">#}
+{#          <div class="sentiment-label">Positive</div>#}
+{#        </div>#}
+{#        <div class="sentiment-bar" style="height: 60%;" data-value="30">#}
+{#          <div class="sentiment-label">Neutral</div>#}
+{#        </div>#}
+{#        <div class="sentiment-bar" style="height: 40%;" data-value="20">#}
+{#          <div class="sentiment-label">Critical</div>#}
+{#        </div>#}
+{#        <div class="sentiment-bar" style="height: 70%;" data-value="35">#}
+{#          <div class="sentiment-label">Suggestions</div>#}
+{#        </div>#}
+{#        <div class="sentiment-bar" style="height: 80%;" data-value="40">#}
+{#          <div class="sentiment-label">Questions</div>#}
+{#        </div>#}
+{#      </div>#}
+{#    </div>#}
+
+    <!-- Table Container -->
+{#    <div class="table-container" data-aos="fade-up">#}
+{#      <div class="table-header">#}
+{#        <h3><i class="fas fa-list-alt me-2"></i>Detailed Feedback Records</h3>#}
+{#        <div class="table-actions">#}
+{#          <button class="btn btn-outline-primary me-2" id="exportBtn">#}
+{#            <i class="fas fa-file-export me-2"></i>Export#}
+{#          </button>#}
+{#          <button class="btn btn-primary" id="refreshBtn">#}
+{#            <i class="fas fa-sync-alt me-2"></i>Refresh#}
+{#          </button>#}
+{#        </div>#}
+{#      </div>#}
+
+      <!-- Loading Placeholder -->
+{#      <div class="loading-placeholder text-center py-5" id="loadingIndicator" style="display: none;">#}
+{#        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">#}
+{#          <span class="visually-hidden">Loading...</span>#}
+{#        </div>#}
+{#        <p class="mt-3">Loading feedback data...</p>#}
+{#      </div>#}
+
+      <!-- DataTable -->
+      <table id="registrationTable" class="table table-hover">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>User</th>
+            <th>Feedback</th>
+            <th>Rating</th>
+            <th>Date</th>
+{#            <th>Actions</th>#}
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Sample Data Row -->
+          {% for i in data %}
+          <tr>
+            <td data-label="#">{{ forloop.counter }}</td>
+            <td data-label="User">
+              <div class="user-info">
+                <div class="user-avatar" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                  {{ i.CUSTOMER.name|slice:":1"|upper }}
+                </div>
+                <div class="user-details">
+                  <h5>{{ i.CUSTOMER.name }}</h5>
+                  <p class="user-email">customer{{ forloop.counter }}@example.com</p>
+                </div>
+              </div>
+            </td>
+            <td data-label="Feedback">
+              <div class="feedback-container">
+                <div class="feedback-text">
+                  {{ i.feedback }}
+                </div>
+                <button class="feedback-expand-btn">Read More</button>
+              </div>
+            </td>
+            <td data-label="Rating">
+              <div class="rating-container">
+                {% with ''|center:5 as range %}
+                {% for _ in range %}
+                  {% if forloop.counter <= 4 %}
+                    <i class="fas fa-star rating-star"></i>
+                  {% else %}
+                    <i class="far fa-star rating-star"></i>
+                  {% endif %}
+                {% endfor %}
+                {% endwith %}
+                <span class="rating-value">4.0</span>
+              </div>
+            </td>
+            <td data-label="Date">
+              <span class="date-badge">{{ i.date }}</span>
+            </td>
+{#            <td data-label="Actions">#}
+{#              <div class="action-buttons">#}
+{#                <button class="btn-action btn-view" title="View Details">#}
+{#                  <i class="fas fa-eye"></i>#}
+{#                </button>#}
+{#                <button class="btn-action btn-reply" title="Reply">#}
+{#                  <i class="fas fa-reply"></i>#}
+{#                </button>#}
+{#                <button class="btn-action btn-delete" title="Delete">#}
+{#                  <i class="fas fa-trash"></i>#}
+{#                </button>#}
+{#              </div>#}
+{#            </td>#}
+          </tr>
+          {% empty %}
+          <!-- Enhanced Empty State -->
+          <tr>
+{#            <td colspan="6">#}
+{#              <div class="empty-state-enhanced">#}
+{#                <div class="empty-icon">#}
+{#                  <i class="fas fa-comments"></i>#}
+{#                </div>#}
+{#                <h4 class="mb-3">No Feedback Received Yet</h4>#}
+{#                <p class="text-muted mb-4" style="max-width: 500px; margin: 0 auto;">#}
+{#                  Customer feedback will appear here once they submit reviews about their shopping experience.#}
+{#                  Consider enabling review notifications to encourage customers to share their thoughts.#}
+{#                </p>#}
+{#                <div class="d-flex justify-content-center gap-3 flex-wrap">#}
+{#                  <button class="btn btn-outline-primary">#}
+{#                    <i class="fas fa-cog me-2"></i>Configure Feedback Settings#}
+{#                  </button>#}
+{#                  <button class="btn btn-primary">#}
+{#                    <i class="fas fa-chart-line me-2"></i>View Analytics Dashboard#}
+{#                  </button>#}
+{#                </div>#}
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Footer -->
+    <div class="page-footer" data-aos="fade-up">
+      <div class="footer-content">
+        <div class="brand-logo">E-Shop Analytics</div>
+        <p>Transforming customer feedback into actionable insights for a better shopping experience.</p>
+        <div class="mt-4">
+{#          <button class="btn btn-outline-primary me-3" id="helpBtn">#}
+{#            <i class="fas fa-question-circle me-2"></i>Help Center#}
+{#          </button>#}
+{#          <button class="btn btn-outline-secondary" id="settingsBtn">#}
+{#            <i class="fas fa-cog me-2"></i>Settings#}
+{#          </button>#}
+        </div>
+        <hr class="my-4">
+        <p class="mb-0">&copy; <span id="currentYear"></span> E-Shop Customer Feedback Dashboard. All rights reserved.</p>
+      </div>
+    </div>
+
+    <!-- Floating Action Button -->
+{#    <div class="fab" id="fabButton">#}
+{#      <i class="fas fa-plus"></i>#}
+{#    </div>#}
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+  <script>
+    // Initialize AOS animations
+    AOS.init({
+      duration: 1000,
+      once: false,
+      offset: 100
+    });
+
+    $(document).ready(function () {
+      // Initialize DataTable with enhanced options
+      var table = $('#registrationTable').DataTable({
+        pageLength: 10,
+        responsive: true,
+        order: [[4, 'desc']],
+        language: {
+          search: "_INPUT_",
+          searchPlaceholder: "Search feedback...",
+          lengthMenu: "Show _MENU_ entries",
+          info: "Showing _START_ to _END_ of _TOTAL_ feedback entries",
+          paginate: {
+            previous: '<i class="fas fa-chevron-left"></i>',
+            next: '<i class="fas fa-chevron-right"></i>'
+          }
+        },
+        initComplete: function() {
+          // Add animation to each row
+          $('tbody tr').each(function(index) {
+            $(this).attr('data-aos', 'fade-up');
+            $(this).attr('data-aos-delay', (index % 10) * 100);
+          });
+          AOS.refresh();
+        },
+        drawCallback: function() {
+          // Reinitialize animations after pagination
+          $('tbody tr').each(function(index) {
+            $(this).attr('data-aos', 'fade-up');
+            $(this).attr('data-aos-delay', (index % 10) * 100);
+          });
+          AOS.refresh();
+        }
+      });
+
+      // Set current year
+      $('#currentYear').text(new Date().getFullYear());
+
+      // Filter buttons functionality
+      $('.filter-btn').click(function() {
+        $('.filter-btn').removeClass('active');
+        $(this).addClass('active');
+
+        var filter = $(this).data('filter');
+
+        // Simulate filter animation
+        $(this).css('transform', 'scale(0.95)');
+        setTimeout(() => {
+          $(this).css('transform', 'scale(1)');
+        }, 200);
+
+        // Show loading animation
+        $('#loadingIndicator').fadeIn(200);
+        setTimeout(() => {
+          $('#loadingIndicator').fadeOut(200);
+          showToast('Filtered by: ' + $(this).text().split(' ')[0], 'info');
+        }, 500);
+      });
+
+      // Refresh button with enhanced animation
+      $('#refreshBtn').click(function() {
+        var $btn = $(this);
+        $btn.prop('disabled', true);
+        var originalHtml = $btn.html();
+        $btn.html('<i class="fas fa-sync-alt fa-spin me-2"></i>Refreshing...');
+
+        // Show loading
+        $('#loadingIndicator').fadeIn(300);
+
+        // Simulate API call
+        setTimeout(function() {
+          $('#loadingIndicator').fadeOut(300);
+
+          // Restore button
+          $btn.prop('disabled', false);
+          $btn.html(originalHtml);
+
+          // Success animation
+          $btn.removeClass('btn-primary').addClass('btn-success');
+          setTimeout(() => {
+            $btn.removeClass('btn-success').addClass('btn-primary');
+          }, 1500);
+
+          // Show toast notification
+          showToast('Data refreshed successfully!', 'success');
+
+          // Animate satisfaction meter
+          animateMeter();
+        }, 2000);
+      });
+
+      // Export button
+      $('#exportBtn').click(function() {
+        var $btn = $(this);
+        $btn.prop('disabled', true);
+        var originalHtml = $btn.html();
+        $btn.html('<i class="fas fa-spinner fa-spin me-2"></i>Exporting...');
+
+        setTimeout(function() {
+          $btn.prop('disabled', false);
+          $btn.html(originalHtml);
+          showToast('Data exported successfully!', 'info');
+        }, 1500);
+      });
+
+      // Expand feedback text
+      $(document).on('click', '.feedback-expand-btn', function(e) {
+        e.stopPropagation();
+        var $container = $(this).closest('.feedback-container');
+        var $text = $container.find('.feedback-text');
+        var isExpanded = $text.css('-webkit-line-clamp') === 'none';
+
+        if (!isExpanded) {
+          $text.css('-webkit-line-clamp', 'unset');
+          $(this).text('Show Less');
+          $text.css('max-height', 'none');
+        } else {
+          $text.css('-webkit-line-clamp', '2');
+          $(this).text('Read More');
+        }
+      });
+
+      // Floating Action Button
+      $('#fabButton').click(function() {
+        // Create and show modal
+        showQuickActionModal();
+      });
+
+      // Sentiment bar hover effect
+      $('.sentiment-bar').hover(
+        function() {
+          var value = $(this).data('value');
+          $(this).append('<div class="bar-value" style="position: absolute; top: -25px; left: 0; width: 100%; text-align: center; font-weight: bold; color: #667eea;">' + value + '%</div>');
+        },
+        function() {
+          $(this).find('.bar-value').remove();
+        }
+      );
+
+      // Timeline item hover
+      $('.timeline-item').hover(
+        function() {
+          $(this).css('transform', 'translateX(10px)');
+        },
+        function() {
+          $(this).css('transform', 'translateX(0)');
+        }
+      );
+
+      // Action buttons functionality
+      $('.btn-view').click(function() {
+        var $row = $(this).closest('tr');
+        var userName = $row.find('.user-details h5').text();
+        showToast('Viewing feedback from ' + userName, 'info');
+      });
+
+      $('.btn-reply').click(function() {
+        var $row = $(this).closest('tr');
+        var userName = $row.find('.user-details h5').text();
+        showToast('Replying to ' + userName, 'success');
+      });
+
+      $('.btn-delete').click(function() {
+        if (confirm('Are you sure you want to delete this feedback?')) {
+          var $row = $(this).closest('tr');
+          $row.fadeOut(500, function() {
+            $(this).remove();
+            showToast('Feedback deleted successfully', 'error');
+            updateStats();
+          });
+        }
+      });
+
+      // Help and Settings buttons
+      $('#helpBtn').click(function() {
+        showToast('Opening Help Center...', 'info');
+        setTimeout(() => {
+          window.open('#', '_blank');
+        }, 500);
+      });
+
+      $('#settingsBtn').click(function() {
+        showToast('Opening Settings...', 'info');
+      });
+
+      // Helper Functions
+      function animateMeter() {
+        $('.meter-circle').css('animation', 'none');
+        setTimeout(() => {
+          $('.meter-circle').css('animation', 'rotateMeter 2s ease-out');
+        }, 10);
+      }
+
+      function showToast(message, type) {
+        var toastClass = 'bg-primary';
+        if (type === 'success') toastClass = 'bg-success';
+        if (type === 'error') toastClass = 'bg-danger';
+        if (type === 'info') toastClass = 'bg-info';
+
+        var icon = 'fa-info-circle';
+        if (type === 'success') icon = 'fa-check-circle';
+        if (type === 'error') icon = 'fa-exclamation-circle';
+
+        var toast = $('<div class="toast-alert" style="position: fixed; top: 30px; right: 30px; z-index: 9999; min-width: 250px; padding: 15px 20px; border-radius: 10px; color: white; box-shadow: 0 10px 25px rgba(0,0,0,0.1); animation: slideInRight 0.5s ease-out;">' +
+                      '<div class="d-flex align-items-center">' +
+                      '<i class="fas ' + icon + ' me-3" style="font-size: 1.2rem;"></i>' +
+                      '<div>' + message + '</div>' +
+                      '</div>' +
+                      '</div>');
+
+        toast.addClass(toastClass);
+        $('body').append(toast);
+
+        setTimeout(function() {
+          toast.fadeOut(500, function() {
+            $(this).remove();
+          });
+        }, 3000);
+      }
+
+      function showQuickActionModal() {
+        var modal = $('<div class="quick-modal" style="position: fixed; bottom: 100px; right: 30px; z-index: 999; background: white; border-radius: 20px; padding: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); min-width: 300px; animation: fadeInUp 0.4s ease-out;">' +
+                      '<h5 class="mb-4"><i class="fas fa-bolt me-2 text-warning"></i>Quick Actions</h5>' +
+                      '<div class="d-flex flex-column gap-3">' +
+                      '<button class="btn btn-outline-primary text-start" id="addFeedbackBtn"><i class="fas fa-plus-circle me-2"></i>Add Manual Feedback</button>' +
+                      '<button class="btn btn-outline-success text-start" id="generateReportBtn"><i class="fas fa-chart-bar me-2"></i>Generate Monthly Report</button>' +
+                      '<button class="btn btn-outline-info text-start" id="emailSummaryBtn"><i class="fas fa-envelope me-2"></i>Email Weekly Summary</button>' +
+                      '<button class="btn btn-outline-secondary text-start" id="closeModal"><i class="fas fa-times me-2"></i>Close</button>' +
+                      '</div>' +
+                      '</div>');
+
+        $('body').append(modal);
+
+        // Quick action button handlers
+        $('#addFeedbackBtn').click(function() {
+          showToast('Opening feedback form...', 'info');
+          modal.fadeOut(300, function() { $(this).remove(); });
+        });
+
+        $('#generateReportBtn').click(function() {
+          showToast('Generating monthly report...', 'success');
+          modal.fadeOut(300, function() { $(this).remove(); });
+        });
+
+        $('#emailSummaryBtn').click(function() {
+          showToast('Sending weekly summary...', 'info');
+          modal.fadeOut(300, function() { $(this).remove(); });
+        });
+
+        $('#closeModal').click(function() {
+          modal.fadeOut(300, function() {
+            $(this).remove();
+          });
+        });
+
+        // Close modal when clicking outside
+        $(document).mouseup(function(e) {
+          if (!modal.is(e.target) && modal.has(e.target).length === 0) {
+            modal.fadeOut(300, function() {
+              $(this).remove();
+            });
+          }
+        });
+      }
+
+      function updateStats() {
+        // Update counts after deletion
+        var total = $('#registrationTable tbody tr:visible').length - 1; // Subtract empty state row if visible
+        if (total < 0) total = 0;
+
+        // Animate the total feedback count
+        var currentTotal = parseInt($('#totalFeedback').text());
+        if (total !== currentTotal) {
+          $('#totalFeedback').text(total);
+        }
+      }
+
+      // Initialize stats
+      updateStats();
+
+      // Animate satisfaction meter on load
+      setTimeout(animateMeter, 500);
+    });
+  </script>
+<script>
+// Prevent going back to this page after form submission
+if (window.history && window.history.pushState) {
+    // Add current page to history
+    window.history.pushState(null, null, window.location.href);
+
+    // Listen for back/forward navigation
+    window.onpopstate = function(event) {
+        // Redirect to /rtohome when back button is pressed
+        window.location.href = '/home';
+    };
+}
+</script>
+</body>
+</html>

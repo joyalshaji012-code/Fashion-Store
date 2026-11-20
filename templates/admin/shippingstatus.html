@@ -1,0 +1,846 @@
+{#<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">#}
+{#<html xmlns="http://www.w3.org/1999/xhtml">#}
+{#<head>#}
+{#<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />#}
+{#<title>Untitled Document</title>#}
+{#</head>#}
+{##}
+{#<body><form action="/shippingstatus_buttonclick" method="post">#}
+{#  <table width="340" border="1">#}
+{#    <tr>#}
+{#      <th width="118" height="50" scope="row">Status</th>#}
+{#      <td width="206"><input type="radio" name="radio" id="radio" value="Order confirmed" />#}
+{#      <label for="radio">Order confirmed<br />#}
+{#        <input type="radio" name="radio" id="radio2" value="Shipped" />#}
+{#      Shipped<br />#}
+{#      <input type="radio" name="radio" id="radio3" value="Out for delivery" />#}
+{#      Out for delivery<br />#}
+{#       <input type="radio" name="radio" id="radio4" value="delivered" />#}
+{#      Delivered</label>#}
+{#      </td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th scope="row">Description</th>#}
+{#      <td><label for="textfield"></label>#}
+{#      <input type="text" name="textfield" id="textfield" /></td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th colspan="2" scope="row"><input type="submit" name="button" id="button" value="Submit" /></th>#}
+{#    </tr>#}
+{#  </table>#}
+{#      <table width="294" border="1">#}
+{#    <tr>#}
+{#      <th width="23" scope="row"><h3>#</h3></th>#}
+{#      <td width="61">Status</td>#}
+{#      <td width="98">Description</td>#}
+{#      <td width="84">Date</td>#}
+{#    </tr>#}
+{#        {% for i in data %}#}
+{#    <tr>#}
+{##}
+{#      <th scope="row">&nbsp;{{ forloop.counter }}</th>#}
+{#      <td>&nbsp;{{ i.status }}</td>#}
+{#      <td>&nbsp;{{ i.description }}</td>#}
+{#      <td>&nbsp;{{ i.date }}</td>#}
+{#    </tr>#}
+{#      {% endfor %}#}
+{##}
+{#  </table>#}
+{#</form>#}
+{#</body>#}
+{#</html>#}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Flipkart Style · Shipping Status (White & Blue)</title>
+<style>
+  /* ===== Flipkart Inspired White & Blue Theme ===== */
+  :root {
+    --fk-blue: #2a55e5;
+    --fk-blue-light: #e7f0ff;
+    --fk-blue-soft: #6c8cff;
+    --fk-white: #ffffff;
+    --fk-white-off: #fcfcfc;
+    --fk-grey-bg: #f1f3f6;
+    --fk-text-dark: #212121;
+    --fk-text-soft: #666666;
+    --fk-border-soft: #dde3f0;
+    --fk-shadow: 0 4px 20px rgba(42, 85, 229, 0.08);
+    --fk-shadow-hover: 0 8px 30px rgba(42, 85, 229, 0.12);
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: var(--fk-grey-bg);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 24px;
+    margin: 0;
+    animation: fadeInBg 0.5s ease;
+  }
+
+  @keyframes fadeInBg {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* ===== Main Container – Flipkart Card ===== */
+  form[action="/shippingstatus_buttonclick"] {
+    background: var(--fk-white);
+    border-radius: 28px;
+    box-shadow: var(--fk-shadow);
+    width: 100%;
+    max-width: 1000px;
+    padding: 36px 40px;
+    border: 1px solid var(--fk-border-soft);
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+    animation: cardRise 0.6s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+  }
+
+  form[action="/shippingstatus_buttonclick"]:hover {
+    box-shadow: var(--fk-shadow-hover);
+    transform: translateY(-3px);
+  }
+
+  @keyframes cardRise {
+    0% { opacity: 0; transform: translateY(30px) scale(0.98); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* ===== Header with Flipkart style blue accent ===== */
+  .status-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 24px;
+    border-bottom: 3px solid var(--fk-blue);
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+
+  .status-icon {
+    background: var(--fk-blue-light);
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
+    color: var(--fk-blue);
+    box-shadow: 0 8px 20px rgba(42, 85, 229, 0.2);
+    animation: floatPlane 3s infinite ease-in-out;
+  }
+
+  @keyframes floatPlane {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  .status-title h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--fk-text-dark);
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+  }
+
+  .status-title p {
+    font-size: 15px;
+    color: var(--fk-text-soft);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .live-badge {
+    background: var(--fk-blue);
+    color: white;
+    padding: 5px 16px;
+    border-radius: 40px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .order-ref {
+    background: #f0f0f0;
+    padding: 5px 14px;
+    border-radius: 30px;
+    font-size: 13px;
+    color: var(--fk-text-soft);
+  }
+
+  /* ===== Summary Cards (Flipkart style stats) ===== */
+  .summary-strip {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+
+  .summary-card {
+    background: var(--fk-blue-light);
+    border-radius: 22px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex: 1 1 200px;
+    border: 1px solid #d9e6ff;
+    transition: all 0.3s ease;
+    cursor: default;
+  }
+
+  .summary-card:hover {
+    background: white;
+    border-color: var(--fk-blue);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(42, 85, 229, 0.12);
+  }
+
+  .summary-emoji {
+    font-size: 32px;
+    background: white;
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.04);
+    color: var(--fk-blue);
+  }
+
+  .summary-details {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .summary-label {
+    font-size: 14px;
+    color: var(--fk-text-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    font-weight: 500;
+  }
+
+  .summary-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--fk-text-dark);
+    line-height: 1.2;
+  }
+
+  .summary-sub {
+    font-size: 14px;
+    color: #2a55e5;
+    font-weight: 500;
+  }
+
+  /* ===== FORM SECTION – Update Status (White & Blue) ===== */
+  .form-section {
+    background: var(--fk-blue-light);
+    border-radius: 28px;
+    padding: 28px 32px;
+    margin-bottom: 40px;
+    border: 1px solid #d9e6ff;
+    transition: box-shadow 0.3s ease;
+  }
+
+  .form-section:hover {
+    box-shadow: 0 8px 20px rgba(42, 85, 229, 0.1);
+  }
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .section-title h3 {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--fk-text-dark);
+  }
+
+  .section-title span {
+    background: var(--fk-blue);
+    color: white;
+    padding: 4px 14px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  /* Original tables – we keep them but style them */
+  table {
+    width: 100%;
+    border: none !important;
+    border-collapse: collapse;
+  }
+
+  table[border="1"] {
+    border: none;
+  }
+
+  /* First table (radio form) styling */
+  table:first-of-type {
+    background: transparent;
+  }
+
+  table:first-of-type tr {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    background: transparent;
+  }
+
+  table:first-of-type th {
+    flex: 0 0 120px;
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--fk-text-dark);
+    padding: 12px 16px 12px 0;
+    text-align: left;
+    border: none;
+    background: transparent;
+  }
+
+  table:first-of-type td {
+    flex: 1;
+    padding: 0;
+    border: none;
+    background: transparent;
+  }
+
+  /* Radio group styling */
+  .radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px 30px;
+    background: white;
+    padding: 22px 28px;
+    border-radius: 24px;
+    border: 1px solid #e0eaff;
+  }
+
+  .radio-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    min-width: 150px;
+  }
+
+  .radio-option input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    border: 2px solid #cbd5e0;
+    border-radius: 50%;
+    outline: none;
+    transition: all 0.2s;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .radio-option input[type="radio"]:checked {
+    border-color: var(--fk-blue);
+    background: var(--fk-blue);
+    box-shadow: 0 0 0 3px rgba(42, 85, 229, 0.15);
+  }
+
+  .radio-option input[type="radio"]:checked::after {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+  }
+
+  .radio-option label {
+    font-size: 15px;
+    color: var(--fk-text-dark);
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  /* Description input field */
+  .input-field {
+    background: white;
+    border-radius: 20px;
+    padding: 4px;
+    border: 1px solid #e0eaff;
+    transition: all 0.3s;
+  }
+
+  .input-field:focus-within {
+    border-color: var(--fk-blue);
+    box-shadow: 0 0 0 4px rgba(42, 85, 229, 0.1);
+  }
+
+  input[type="text"]#textfield {
+    width: 100%;
+    padding: 18px 22px;
+    font-size: 16px;
+    border: none;
+    border-radius: 20px;
+    outline: none;
+    background: transparent;
+    color: var(--fk-text-dark);
+    font-family: inherit;
+  }
+
+  /* Submit button */
+  table:first-of-type tr:last-child th {
+    text-align: center;
+    padding: 20px 0 0 0;
+    flex: auto;
+  }
+
+  input[type="submit"]#button {
+    background: var(--fk-blue);
+    border: none;
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 18px 50px;
+    min-width: 280px;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(42, 85, 229, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 2px solid transparent;
+    display: inline-block;
+    animation: buttonPulse 2s infinite;
+  }
+
+  @keyframes buttonPulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 10px 25px rgba(42, 85, 229, 0.3); }
+    50% { transform: scale(1.02); box-shadow: 0 18px 35px rgba(42, 85, 229, 0.4); }
+  }
+
+  input[type="submit"]#button:hover {
+    background: #1a3fbb;
+    transform: scale(1.03) translateY(-2px);
+    box-shadow: 0 20px 35px rgba(42, 85, 229, 0.35);
+  }
+
+  input[type="submit"]#button:active {
+    transform: scale(0.98);
+    box-shadow: 0 10px 20px rgba(42, 85, 229, 0.3);
+  }
+
+  /* ===== HISTORY SECTION – Table 2 (White & Blue Cards) ===== */
+  .history-section {
+    margin-top: 40px;
+  }
+
+  .history-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .history-header h3 {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--fk-text-dark);
+  }
+
+  .history-header span {
+    background: var(--fk-blue-light);
+    color: var(--fk-blue);
+    padding: 4px 14px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  /* Second table styling */
+  table:last-of-type {
+    border-collapse: separate;
+    border-spacing: 0 12px;
+  }
+
+  /* Header row */
+  table:last-of-type tr:first-of-type {
+    background: var(--fk-blue-light);
+    border-radius: 16px;
+    margin-bottom: 16px;
+    display: flex;
+    width: 100%;
+    padding: 16px 20px;
+  }
+
+  table:last-of-type tr:first-of-type th,
+  table:last-of-type tr:first-of-type td {
+    background: transparent;
+    color: var(--fk-blue);
+    font-weight: 700;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: none;
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Data rows */
+  table:last-of-type tr:not(:first-of-type) {
+    display: flex;
+    width: 100%;
+    background: white;
+    border-radius: 20px;
+    padding: 18px 20px;
+    border: 1px solid #e0eaff;
+    transition: all 0.3s ease;
+    animation: rowSlide 0.4s ease-out backwards;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  }
+
+  table:last-of-type tr:not(:first-of-type):hover {
+    border-color: var(--fk-blue);
+    box-shadow: 0 8px 20px rgba(42, 85, 229, 0.1);
+    transform: translateY(-2px);
+    background: #fafcff;
+  }
+
+  @keyframes rowSlide {
+    from { opacity: 0; transform: translateX(-15px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  table:last-of-type tr:not(:first-of-type) th,
+  table:last-of-type tr:not(:first-of-type) td {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 15px;
+    color: var(--fk-text-dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  table:last-of-type tr:not(:first-of-type) th {
+    font-weight: 600;
+    color: var(--fk-blue);
+  }
+
+  /* Status badges in history */
+  td:nth-child(2) {
+    font-weight: 500;
+  }
+
+  td:nth-child(2)::before {
+    content: "●";
+    color: var(--fk-blue);
+    font-size: 18px;
+    margin-right: 8px;
+    opacity: 0.8;
+  }
+
+  td:nth-child(4)::before {
+    content: "📅";
+    margin-right: 8px;
+    font-size: 14px;
+    opacity: 0.7;
+  }
+
+  /* Hide header row icons */
+  tr:first-of-type td::before,
+  tr:first-of-type th::before {
+    display: none;
+  }
+
+  /* ===== Delivery note ===== */
+  .tracking-note {
+    margin-top: 40px;
+    padding: 18px 28px;
+    background: var(--fk-blue-light);
+    border-radius: 60px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border: 1px dashed var(--fk-blue);
+    font-size: 16px;
+    color: var(--fk-text-dark);
+    flex-wrap: wrap;
+  }
+
+  .note-icon {
+    background: white;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: var(--fk-blue);
+  }
+
+  .note-text {
+    flex: 1;
+    font-weight: 500;
+  }
+
+  .note-badge {
+    background: var(--fk-blue);
+    color: white;
+    padding: 8px 22px;
+    border-radius: 40px;
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 800px) {
+    form[action="/shippingstatus_buttonclick"] {
+      padding: 24px 20px;
+    }
+
+    .status-header {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .summary-strip {
+      flex-direction: column;
+    }
+
+    table:first-of-type tr {
+      flex-direction: column;
+    }
+
+    table:first-of-type th {
+      padding: 0 0 10px 0;
+    }
+
+    .radio-group {
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    table:last-of-type tr:first-of-type {
+      display: none; /* Hide header on mobile */
+    }
+
+    table:last-of-type tr:not(:first-of-type) {
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    table:last-of-type tr:not(:first-of-type) th,
+    table:last-of-type tr:not(:first-of-type) td {
+      flex: auto;
+      width: 50%;
+    }
+  }
+
+  /* blue flair */
+  .blue-flair {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    opacity: 0.15;
+    pointer-events: none;
+    font-size: 56px;
+    z-index: -1;
+  }
+
+  /* preserve original ids, etc */
+  #radio, #radio2, #radio3, #radio4 {
+    /* styling applied via radio-option */
+  }
+
+  label[for="radio"], label[for="radio2"], label[for="radio3"], label[for="radio4"] {
+    /* handled */
+  }
+</style>
+</head>
+
+<body>
+
+<form action="/shippingstatus_buttonclick" method="post">
+
+  <!-- Flipkart style header -->
+  <div class="status-header">
+    <div class="status-icon">✈️</div>
+    <div class="status-title">
+      <h1>Shipping Status</h1>
+      <p>
+        <span class="live-badge"><span>●</span> LIVE UPDATE</span>
+        <span class="order-ref">REF #SHIP-2024</span>
+        <span>⏱️ Real-time tracking</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- Summary cards (dynamic) -->
+  <div class="summary-strip">
+    <div class="summary-card">
+      <div class="summary-emoji">📦</div>
+      <div class="summary-details">
+        <span class="summary-label">Total updates</span>
+        <span class="summary-value" id="total-count">{{ data|length }}</span>
+        <span class="summary-sub">status entries</span>
+      </div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-emoji">🚚</div>
+      <div class="summary-details">
+        <span class="summary-label">In transit</span>
+        <span class="summary-value" id="in-transit-count">0</span>
+        <span class="summary-sub">active</span>
+      </div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-emoji">✅</div>
+      <div class="summary-details">
+        <span class="summary-label">Delivered</span>
+        <span class="summary-value" id="delivered-count">0</span>
+        <span class="summary-sub">completed</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORM SECTION – Update Status (original table 1) -->
+  <div class="form-section">
+    <div class="section-title">
+      <h3>Update Shipping Status</h3>
+      <span>NEW ENTRY</span>
+    </div>
+
+    <!-- ORIGINAL TABLE 1 – structure preserved, visually enhanced -->
+    <table width="340" border="1">
+      <tr>
+        <th width="118" height="50" scope="row">Status</th>
+        <td width="206">
+          <div class="radio-group">
+            <div class="radio-option">
+              <input type="radio" name="radio" id="radio" value="Order confirmed" />
+              <label for="radio">Order confirmed</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" name="radio" id="radio2" value="Shipped" />
+              <label for="radio2">Shipped</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" name="radio" id="radio3" value="Out for delivery" />
+              <label for="radio3">Out for delivery</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" name="radio" id="radio4" value="delivered" />
+              <label for="radio4">Delivered</label>
+            </div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">Description</th>
+        <td>
+          <label for="textfield"></label>
+          <div class="input-field">
+            <input type="text" name="textfield" id="textfield" placeholder="Enter description..." />
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <th colspan="2" scope="row">
+          <input type="submit" name="button" id="button" value="Submit Update" />
+        </th>
+      </tr>
+    </table>
+  </div>
+
+  <!-- HISTORY SECTION – Table 2 (status history) -->
+  <div class="history-section">
+    <div class="history-header">
+      <h3>Status History</h3>
+      <span>{{ data|length }} ENTRIES</span>
+    </div>
+
+    <!-- ORIGINAL TABLE 2 – structure preserved, visual card style -->
+    <table width="294" border="1">
+      <tr>
+        <th width="23" scope="row"><h3>#</h3></th>
+        <td width="61">Status</td>
+        <td width="98">Description</td>
+        <td width="84">Date</td>
+      </tr>
+      {% for i in data %}
+      <tr>
+        <th scope="row">&nbsp;{{ forloop.counter }}</th>
+        <td>&nbsp;{{ i.status }}</td>
+        <td>&nbsp;{{ i.description }}</td>
+        <td>&nbsp;{{ i.date }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  <!-- Delivery note / Flipkart style tip -->
+  <div class="tracking-note">
+    <div class="note-icon">📋</div>
+    <div class="note-text">⏱️ Status updates are logged immediately — history reflects last 10 entries</div>
+    <div class="note-badge">🔵 TRACKING</div>
+  </div>
+
+</form>
+
+<!-- Script to update summary cards (purely cosmetic) -->
+<script>
+(function() {
+  // Count statuses from the history table
+  const rows = document.querySelectorAll('table:last-of-type tr:not(:first-of-type)');
+  let inTransit = 0, delivered = 0;
+
+  rows.forEach(row => {
+    const statusCell = row.querySelector('td:nth-child(2)');
+    if (statusCell) {
+      const status = statusCell.textContent.trim().toLowerCase();
+      if (status.includes('deliver') || status.includes('delivered')) delivered++;
+      else if (status.includes('ship') || status.includes('out for') || status.includes('confirm')) inTransit++;
+    }
+  });
+
+  const totalSpan = document.getElementById('total-count');
+  const inTransitSpan = document.getElementById('in-transit-count');
+  const deliveredSpan = document.getElementById('delivered-count');
+
+  if (totalSpan) totalSpan.textContent = rows.length;
+  if (inTransitSpan) inTransitSpan.textContent = inTransit || '—';
+  if (deliveredSpan) deliveredSpan.textContent = delivered || '—';
+})();
+</script>
+
+<!-- decorative blue element -->
+<div class="blue-flair">🔵</div>
+
+</body>
+</html>

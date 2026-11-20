@@ -1,0 +1,984 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#  <meta charset="UTF-8">#}
+{#  <title>Registration Data Table</title>#}
+{#  <!-- Bootstrap CSS -->#}
+{#  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">#}
+{#  <!-- DataTables CSS -->#}
+{#  <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">#}
+{#</head>#}
+{#<body>#}
+{#  <div class="container mt-5">#}
+{#    <h2 class="mb-4">View order</h2>#}
+{#    <table width="643" class="table table-striped table-bordered" id="registrationTable">#}
+{#      <thead>#}
+{#        <tr>#}
+{#          <th height="61">#</th>#}
+{#          <th>Name</th>#}
+{#          <th>Email</th>#}
+{#          <th>Phone</th>#}
+{#          <th>Location</th>#}
+{#          <th>Update delivery</th>#}
+{#          <th>Item</th>#}
+{#          <th>Payment</th>#}
+{#        </tr>#}
+{#      </thead>#}
+{#      <tbody>#}
+{#        <!-- Sample Data Row -->#}
+{#        {% for i in data %}#}
+{#        <tr>#}
+{#          <td>&nbsp;{{ forloop.counter }}</td>#}
+{#          <td>&nbsp;{{ i.CUSTOMER.name }}</td>#}
+{#          <td>&nbsp;{{ i.CUSTOMER.email }}</td>#}
+{#          <td>&nbsp;{{ i.CUSTOMER.phone }}</td>#}
+{#          <td><a href="{{ i.latitude }},{{ i.longitude }}">Click here</a></td>#}
+{#          <td><a href="#">Set as delivered</a></td>#}
+{#          <td><a href="/viewproducts">View</a></td>#}
+{#          <td>&nbsp;{{ i.paymentstatus }},{{ i.paymentdate }}</td>#}
+{#        </tr>#}
+{#        {% endfor %}#}
+{#       #}
+{#        <!-- Add more rows dynamically from backend -->#}
+{#      </tbody>#}
+{#    </table>#}
+{#  </div>#}
+{##}
+{#  <!-- Scripts -->#}
+{#  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>#}
+{#  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>#}
+{#  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>#}
+{#  <script>#}
+{#    $(document).ready(function () {#}
+{#      $('#registrationTable').DataTable();#}
+{#    });#}
+{#  </script>#}
+{#</body>#}
+{#</html>#}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>OrderFlow Pro - Sales Dashboard</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- DataTables CSS -->
+  <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <!-- Custom Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-blue: #4361ee;
+      --primary-purple: #6a11cb;
+      --success-green: #10b981;
+      --warning-orange: #f59e0b;
+      --info-cyan: #06b6d4;
+      --gradient-primary: linear-gradient(135deg, #4361ee 0%, #6a11cb 100%);
+      --gradient-success: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+      --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+      --glass-bg: rgba(255, 255, 255, 0.98);
+      --shadow-soft: 0 8px 32px rgba(31, 38, 135, 0.08);
+      --shadow-hard: 0 20px 60px rgba(0, 0, 0, 0.08);
+      --text-primary: #1e293b;
+      --text-secondary: #475569;
+      --text-light: #64748b;
+      --border-color: #e2e8f0;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      min-height: 100vh;
+      color: var(--text-primary);
+      padding: 1rem;
+    }
+
+    .container-fluid {
+      max-width: 1800px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .dashboard-header {
+      background: var(--glass-bg);
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-hard);
+      border: 1px solid var(--border-color);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dashboard-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--gradient-primary);
+    }
+
+    .dashboard-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 2.5rem;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .dashboard-subtitle {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+    }
+
+    /* Stats Cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--glass-bg);
+      border-radius: 16px;
+      padding: 1.8rem;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hard);
+      border-color: var(--primary-blue);
+    }
+
+    .stat-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      background: var(--gradient-primary);
+      color: white;
+    }
+
+    .stat-value {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .stat-label {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    /* Main Table Container */
+    .table-main-container {
+      background: var(--glass-bg);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow-hard);
+      border: 1px solid var(--border-color);
+      margin-bottom: 2rem;
+    }
+
+    /* Table Header - HIGH VISIBILITY */
+    #registrationTable_wrapper {
+      padding: 2rem;
+    }
+
+    #registrationTable {
+      border-collapse: separate;
+      border-spacing: 0;
+      width: 100% !important;
+      color: var(--text-primary);
+    }
+
+    #registrationTable thead {
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+    }
+
+    #registrationTable thead th {
+      border: none !important;
+      padding: 1.5rem 1.2rem !important;
+      font-weight: 700 !important;
+      font-size: 0.95rem !important;
+      text-transform: uppercase !important;
+      letter-spacing: 1px !important;
+      color: #ffffff !important;
+      background: transparent !important;
+      border-bottom: 2px solid var(--primary-blue) !important;
+    }
+
+    #registrationTable thead th i {
+      color: #ffffff !important;
+      margin-right: 10px !important;
+      font-size: 1.1rem !important;
+    }
+
+    /* Table Body - CLEAR VISIBILITY */
+    #registrationTable tbody tr {
+      transition: all 0.3s ease;
+      background: #ffffff;
+    }
+
+    #registrationTable tbody tr:nth-child(even) {
+      background: #f8fafc;
+    }
+
+    #registrationTable tbody tr:hover {
+      background: #f1f5f9;
+      transform: translateX(5px);
+    }
+
+    #registrationTable tbody td {
+      padding: 1.5rem 1.2rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: middle;
+    }
+
+    /* Customer Info */
+    .customer-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .customer-avatar {
+      width: 45px;
+      height: 45px;
+      border-radius: 10px;
+      background: var(--gradient-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .customer-details {
+      min-width: 150px;
+    }
+
+    .customer-name {
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+      display: block;
+    }
+
+    .customer-id {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      display: block;
+    }
+
+    /* Contact Info */
+    .contact-info {
+      min-width: 180px;
+    }
+
+    .email, .phone {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+      font-size: 0.9rem;
+    }
+
+    .email i {
+      color: var(--primary-blue);
+      width: 16px;
+    }
+
+    .phone i {
+      color: var(--success-green);
+      width: 16px;
+    }
+
+    /* Location Button */
+    .location-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.7rem 1.2rem;
+      background: var(--gradient-primary);
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      border: none;
+    }
+
+    .location-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(67, 97, 238, 0.2);
+      color: white;
+    }
+
+    /* Delivery Button */
+    .delivery-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.7rem 1.2rem;
+      background: var(--gradient-success);
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .delivery-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(16, 185, 129, 0.2);
+      color: white;
+    }
+
+    /* View Button */
+    .view-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.7rem 1.2rem;
+      background: var(--gradient-warning);
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      border: none;
+    }
+
+    .view-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(245, 158, 11, 0.2);
+      color: white;
+    }
+
+    /* Payment Status */
+    .payment-status {
+      min-width: 120px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .status-paid {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success-green);
+    }
+
+    .status-pending {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--warning-orange);
+    }
+
+    .payment-date {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      margin-top: 4px;
+      display: block;
+    }
+
+    /* Action Buttons Container */
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+      min-width: 200px;
+    }
+
+    /* Controls Bar */
+    .controls-bar {
+      background: var(--glass-bg);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--border-color);
+    }
+
+    .filter-btn {
+      padding: 0.7rem 1.5rem;
+      background: white;
+      border: 2px solid var(--border-color);
+      border-radius: 10px;
+      color: var(--text-secondary);
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--gradient-primary);
+      color: white;
+      border-color: var(--primary-blue);
+    }
+
+    /* Search Box */
+    .search-box {
+      position: relative;
+      min-width: 300px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 0.8rem 1rem 0.8rem 3rem;
+      border: 2px solid var(--border-color);
+      border-radius: 10px;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      background: white;
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-light);
+    }
+
+    /* DataTables Customization */
+    .dataTables_wrapper .dataTables_filter,
+    .dataTables_wrapper .dataTables_length {
+      margin-bottom: 1rem;
+    }
+
+    .dataTables_wrapper .dataTables_filter input {
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.6rem 1rem;
+      font-size: 0.9rem;
+    }
+
+    .dataTables_wrapper .dataTables_filter input:focus {
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+      outline: none;
+    }
+
+    .dataTables_wrapper .dataTables_length select {
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.6rem 2rem 0.6rem 1rem;
+      font-size: 0.9rem;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+      border: 1px solid var(--border-color) !important;
+      border-radius: 6px !important;
+      margin: 0 2px;
+      transition: all 0.3s ease !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+      background: var(--gradient-primary) !important;
+      color: white !important;
+      border-color: var(--primary-blue) !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+      background: var(--gradient-primary) !important;
+      color: white !important;
+      border-color: var(--primary-blue) !important;
+    }
+
+    /* Footer Summary */
+    .footer-summary {
+      text-align: center;
+      padding: 1.5rem;
+      color: var(--text-light);
+      font-size: 0.9rem;
+      background: var(--glass-bg);
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+    }
+
+    /* Print Button */
+    .print-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--gradient-primary);
+      color: white;
+      border: none;
+      box-shadow: var(--shadow-hard);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      cursor: pointer;
+      z-index: 100;
+      transition: all 0.3s ease;
+    }
+
+    .print-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 10px 25px rgba(67, 97, 238, 0.3);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      body {
+        padding: 0.5rem;
+      }
+
+      .dashboard-header {
+        padding: 1.5rem;
+      }
+
+      .dashboard-title {
+        font-size: 2rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #registrationTable_wrapper {
+        padding: 1rem;
+        overflow-x: auto;
+      }
+
+      .controls-bar {
+        padding: 1rem;
+      }
+
+      .search-box {
+        min-width: 100%;
+        margin-top: 1rem;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+      }
+
+      .location-btn,
+      .delivery-btn,
+      .view-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <!-- Header -->
+    <header class="dashboard-header animate__animated animate__fadeInDown">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-4">
+        <div>
+          <h1 class="dashboard-title">Order Management</h1>
+          <p class="dashboard-subtitle">Complete order tracking and management dashboard</p>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div class="text-end">
+            <div class="text-primary fs-6 fw-bold">
+              <i class="fas fa-circle text-success me-2"></i>
+              Live System
+            </div>
+            <small class="text-muted">Updated: <span id="lastSync">Just now</span></small>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+      <div class="stat-card animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
+        <div class="stat-icon">
+          <i class="fas fa-shopping-bag"></i>
+        </div>
+        <div class="stat-value" id="totalOrders">{{ data|length }}</div>
+        <div class="stat-label">Total Orders</div>
+      </div>
+
+      <div class="stat-card animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
+        <div class="stat-icon">
+          <i class="fas fa-truck"></i>
+        </div>
+        <div class="stat-value">{{ data|length|add:"-2" }}</div>
+        <div class="stat-label">Active Delivery</div>
+      </div>
+
+      <div class="stat-card animate__animated animate__fadeInUp" style="animation-delay: 0.3s">
+        <div class="stat-icon">
+          <i class="fas fa-clock"></i>
+        </div>
+        <div class="stat-value">2</div>
+        <div class="stat-label">Pending</div>
+      </div>
+
+      <div class="stat-card animate__animated animate__fadeInUp" style="animation-delay: 0.4s">
+        <div class="stat-icon">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="stat-value">{{ data|length|add:"-4" }}</div>
+        <div class="stat-label">Delivered</div>
+      </div>
+    </div>
+
+    <!-- Controls Bar -->
+    <div class="controls-bar animate__animated animate__fadeIn">
+      <div class="d-flex flex-wrap gap-3 align-items-center">
+        <button class="filter-btn active">
+          <i class="fas fa-list"></i>
+          All Orders
+        </button>
+{#        <button class="filter-btn">#}
+{#          <i class="fas fa-truck"></i>#}
+{#          Shipping#}
+{#        </button>#}
+{#        <button class="filter-btn">#}
+{#          <i class="fas fa-clock"></i>#}
+{#          Pending#}
+{#        </button>#}
+{#        <button class="filter-btn">#}
+{#          <i class="fas fa-check-circle"></i>#}
+{#          Delivered#}
+{#        </button>#}
+{##}
+{#        <div class="ms-auto">#}
+{#          <div class="search-box">#}
+{#            <i class="fas fa-search"></i>#}
+{#            <input type="text" placeholder="Search orders, customers, emails...">#}
+{#          </div>#}
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Table -->
+    <div class="table-main-container animate__animated animate__fadeIn">
+      <div id="registrationTable_wrapper">
+        <table width="100%" class="table table-hover display" id="registrationTable">
+          <thead>
+            <tr>
+              <th><i class="fas fa-hashtag"></i> Order #</th>
+              <th><i class="fas fa-user"></i> Customer</th>
+              <th><i class="fas fa-envelope"></i> Contact Info</th>
+              <th><i class="fas fa-map-marker-alt"></i> Location</th>
+              <th><i class="fas fa-truck"></i> Delivery</th>
+              <th><i class="fas fa-box"></i> Items</th>
+              <th><i class="fas fa-credit-card"></i> Payment</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in data %}
+            <tr class="animate__animated animate__fadeIn" style="animation-delay: {{ forloop.counter|add:"-1"|divisibleby:2 }}0.1s">
+              <!-- Order Number -->
+              <td>
+                <div class="fw-bold">#{{ forloop.counter }}</div>
+              </td>
+
+              <!-- Customer Info -->
+              <td>
+                <div class="customer-info">
+                  <div class="customer-avatar">
+                    {{ forloop.counter }}
+                  </div>
+                  <div class="customer-details">
+                    <span class="customer-name">{{ i.CUSTOMER.name }}</span>
+                    <span class="customer-id">CUST{{ forloop.counter|stringformat:"04d" }}</span>
+                  </div>
+                </div>
+              </td>
+
+              <!-- Contact Info -->
+              <td>
+                <div class="contact-info">
+                  <div class="email">
+                    <i class="fas fa-envelope"></i>
+                    <span>{{ i.CUSTOMER.email }}</span>
+                  </div>
+                  <div class="phone">
+                    <i class="fas fa-phone"></i>
+                    <span>{{ i.CUSTOMER.phone }}</span>
+                  </div>
+                </div>
+              </td>
+
+              <!-- Location -->
+              <td>
+                <a href="https://www.google.com/maps/?q={{ i.latitude }},{{ i.longitude }}" class="location-btn">
+                  <i class="fas fa-map-marker-alt"></i>
+                  View Map
+                </a>
+              </td>
+
+              <!-- Delivery Action -->
+              <td>
+                  {% if i.status != "delivered" %}
+               <a href="/shippingstatus/{{ i.id }}" class="delivery-btn">
+                 Delivery status
+                </a>
+                  {% else %}
+
+                  Delivered
+
+                  {% endif %}
+              </td>
+
+              <!-- View Items -->
+              <td>
+                <a href="/viewordereditem/{{ i.id }}" class="view-btn">
+                  <i class="fas fa-eye"></i>
+                  View Items
+                </a>
+              </td>
+
+              <!-- Payment Info -->
+              <td>
+                <div class="payment-status">
+                  <span class="status-badge status-paid">
+                    <i class="fas fa-check-circle"></i>
+                    {{ i.paymentstatus }}
+                  </span>
+                  <span class="payment-date">{{ i.paymentdate }}</span>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Footer Summary -->
+    <div class="footer-summary animate__animated animate__fadeIn">
+      <i class="fas fa-info-circle me-2"></i>
+      Showing <span class="fw-bold">{{ data|length }}</span> orders •
+      <span class="fw-bold">{{ data|length|add:"-2" }}</span> active •
+      <span class="fw-bold">2</span> pending •
+      Last updated: <span id="currentTime">Today, 10:30 AM</span>
+    </div>
+  </div>
+
+  <!-- Print Button -->
+  <button class="print-btn" onclick="window.print()">
+    <i class="fas fa-print"></i>
+  </button>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+  <script>
+{#    $(document).ready(function() {#}
+{#      // Initialize DataTable#}
+{#      const table = $('#registrationTable').DataTable({#}
+{#        pageLength: 10,#}
+{#        lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],#}
+{#        order: [[0, 'asc']],#}
+{#        language: {#}
+{#          search: '<i class="fas fa-search me-2"></i>',#}
+{#          lengthMenu: 'Show _MENU_ entries',#}
+{#          info: 'Showing _START_ to _END_ of _TOTAL_ entries',#}
+{#          paginate: {#}
+{#            previous: '<i class="fas fa-chevron-left"></i>',#}
+{#            next: '<i class="fas fa-chevron-right"></i>'#}
+{#          }#}
+{#        },#}
+{#        dom: '<"row"<"col-md-6"l><"col-md-6"f>>rt<"row"<"col-md-6"i><"col-md-6"p>>',#}
+{#        initComplete: function() {#}
+{#          $('.dataTables_filter input').addClass('form-control');#}
+{#          $('.dataTables_length select').addClass('form-select');#}
+{#        }#}
+{#      });#}
+{##}
+{#      // Update time display#}
+{#      function updateTime() {#}
+{#        const now = new Date();#}
+{#        const timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});#}
+{#        const dateString = now.toLocaleDateString('en-US', {#}
+{#          weekday: 'short',#}
+{#          month: 'short',#}
+{#          day: 'numeric'#}
+{#        });#}
+{##}
+{#        $('#lastSync').text(timeString);#}
+{#        $('#currentTime').text(dateString + ', ' + timeString);#}
+{#      }#}
+{##}
+{#      setInterval(updateTime, 60000);#}
+{#      updateTime();#}
+{##}
+{#      // Delivery button click handler#}
+{#      $('.delivery-btn').click(function() {#}
+{#        const btn = $(this);#}
+{#        const orderNum = btn.data('order');#}
+{#        const row = btn.closest('tr');#}
+{##}
+{#        // Add loading animation#}
+{#        btn.html('<i class="fas fa-spinner fa-spin"></i> Processing');#}
+{#        btn.prop('disabled', true);#}
+{##}
+{#        // Simulate API call delay#}
+{#        setTimeout(() => {#}
+{#          // Update button#}
+{#          btn.html('<i class="fas fa-check"></i> Delivered');#}
+{#          btn.removeClass('delivery-btn');#}
+{#          btn.css('background', '#10b981');#}
+{#          btn.prop('disabled', true);#}
+{##}
+{#          // Add success animation#}
+{#          btn.addClass('animate__animated animate__bounceIn');#}
+{##}
+{#          // Update stats#}
+{#          updateStats();#}
+{##}
+{#          // Show success message#}
+{#          showNotification(`Order #${orderNum} marked as delivered successfully!`, 'success');#}
+{#        }, 1000);#}
+{#      });#}
+{##}
+{#      // Filter button functionality#}
+{#      $('.filter-btn').click(function() {#}
+{#        $('.filter-btn').removeClass('active');#}
+{#        $(this).addClass('active');#}
+{##}
+{#        const filterText = $(this).text().trim();#}
+{#        table.search(filterText === 'All Orders' ? '' : filterText).draw();#}
+{#      });#}
+{##}
+{#      // Custom search box#}
+{#      $('.search-box input').on('keyup', function() {#}
+{#        table.search(this.value).draw();#}
+{#      });#}
+{##}
+{#      // Update stats function#}
+{#      function updateStats() {#}
+{#        // Count pending deliveries#}
+{#        const pendingBtns = $('.delivery-btn:not(:disabled)');#}
+{#        const deliveredCount = $('.delivery-btn[disabled]').length;#}
+{##}
+{#        // Update stats cards#}
+{#        $('.stat-card:nth-child(2) .stat-value').text(pendingBtns.length);#}
+{#        $('.stat-card:nth-child(4) .stat-value').text(deliveredCount);#}
+{##}
+{#        // Update footer#}
+{#        const total = {{ data|length }};#}
+{#        $('.footer-summary').html(`#}
+{#          <i class="fas fa-info-circle me-2"></i>#}
+{#          Showing <span class="fw-bold">${total}</span> orders •#}
+{#          <span class="fw-bold">${pendingBtns.length}</span> active •#}
+{#          <span class="fw-bold">${pendingBtns.length}</span> pending •#}
+{#          Last updated: <span id="currentTime">Today, 10:30 AM</span>#}
+{#        `);#}
+{#      }#}
+{##}
+{#      // Show notification#}
+{#      function showNotification(message, type) {#}
+{#        const alertClass = type === 'success' ? 'alert-success' : 'alert-info';#}
+{#        const icon = type === 'success' ? 'fa-check-circle' : 'fa-info-circle';#}
+{##}
+{#        const notification = $(`#}
+{#          <div class="alert ${alertClass} alert-dismissible fade show position-fixed top-0 end-0 m-3" role="alert" style="z-index: 9999;">#}
+{#            <i class="fas ${icon} me-2"></i>#}
+{#            ${message}#}
+{#            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>#}
+{#          </div>#}
+{#        `);#}
+{##}
+{#        $('body').append(notification);#}
+{##}
+{#        // Auto remove after 3 seconds#}
+{#        setTimeout(() => {#}
+{#          notification.alert('close');#}
+{#        }, 3000);#}
+{#      }#}
+{##}
+{#      // Add hover animation to table rows#}
+{#      $('#registrationTable tbody tr').hover(#}
+{#        function() {#}
+{#          $(this).addClass('animate__animated animate__pulse');#}
+{#        },#}
+{#        function() {#}
+{#          $(this).removeClass('animate__animated animate__pulse');#}
+{#        }#}
+{#      );#}
+{##}
+{#      // Initialize tooltips#}
+{#      $('[data-bs-toggle="tooltip"]').tooltip();#}
+{#    });#}
+
+    // Print handling
+    window.addEventListener('beforeprint', () => {
+      document.querySelector('.print-btn').style.display = 'none';
+    });
+
+    window.addEventListener('afterprint', () => {
+      document.querySelector('.print-btn').style.display = 'flex';
+    });
+  </script>
+<script>
+// Prevent going back to this page after form submission
+if (window.history && window.history.pushState) {
+    // Add current page to history
+    window.history.pushState(null, null, window.location.href);
+
+    // Listen for back/forward navigation
+    window.onpopstate = function(event) {
+        // Redirect to /rtohome when back button is pressed
+        window.location.href = '/home';
+    };
+}
+</script>
+</body>
+</html>

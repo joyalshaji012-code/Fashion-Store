@@ -1,0 +1,1279 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#  <meta charset="UTF-8">#}
+{#  <meta name="viewport" content="width=device-width, initial-scale=1.0">#}
+{#  <title>Add to Cart</title>#}
+{#  <!-- Bootstrap CSS -->#}
+{#  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">#}
+{#  <style>#}
+{#    * {#}
+{#      margin: 0;#}
+{#      padding: 0;#}
+{#      box-sizing: border-box;#}
+{#    }#}
+{#    #}
+{#    body {#}
+{#      background-color: #f5f5f5;#}
+{#      font-family: Roboto, Arial, sans-serif;#}
+{#    }#}
+{#    #}
+{#    .container-custom {#}
+{#      background: white;#}
+{#      border-radius: 4px;#}
+{#      padding: 20px;#}
+{#      margin: 20px auto;#}
+{#      max-width: 1000px;#}
+{#      box-shadow: 0 1px 3px rgba(0,0,0,0.1);#}
+{#    }#}
+{#    #}
+{#    .product-section {#}
+{#      display: grid;#}
+{#      grid-template-columns: 1fr 1fr;#}
+{#      gap: 40px;#}
+{#      align-items: start;#}
+{#    }#}
+{#    #}
+{#    @media (max-width: 768px) {#}
+{#      .product-section {#}
+{#        grid-template-columns: 1fr;#}
+{#      }#}
+{#      .product-section {#}
+{#        gap: 20px;#}
+{#      }#}
+{#    }#}
+{#    #}
+{#    /* Image Section */#}
+{#    .image-section {#}
+{#      position: relative;#}
+{#    }#}
+{#    #}
+{#    .main-image-container {#}
+{#      background: #f9f9f9;#}
+{#      border-radius: 4px;#}
+{#      overflow: hidden;#}
+{#      margin-bottom: 12px;#}
+{#      aspect-ratio: 1;#}
+{#      display: flex;#}
+{#      align-items: center;#}
+{#      justify-content: center;#}
+{#    }#}
+{#    #}
+{#    .main-image {#}
+{#      max-width: 100%;#}
+{#      max-height: 100%;#}
+{#      object-fit: contain;#}
+{#      width: 100%;#}
+{#      height: 100%;#}
+{#    }#}
+{#    #}
+{#    .color-label {#}
+{#      font-size: 12px;#}
+{#      color: #666;#}
+{#      margin-bottom: 8px;#}
+{#      font-weight: 500;#}
+{#    }#}
+{#    #}
+{#    .color-name {#}
+{#      font-size: 14px;#}
+{#      font-weight: 600;#}
+{#      color: #0f1419;#}
+{#    }#}
+{#    #}
+{#    /* Thumbnail Container */#}
+{#    .thumbnail-scroll-label {#}
+{#      font-size: 12px;#}
+{#      font-weight: 600;#}
+{#      color: #666;#}
+{#      margin-top: 16px;#}
+{#      margin-bottom: 8px;#}
+{#    }#}
+{#    #}
+{#    .thumbnail-container {#}
+{#      display: flex;#}
+{#      gap: 8px;#}
+{#      overflow-x: auto;#}
+{#      padding: 8px;#}
+{#      background: #f5f5f5;#}
+{#      border-radius: 4px;#}
+{#      scroll-behavior: smooth;#}
+{#    }#}
+{#    #}
+{#    .thumbnail-container::-webkit-scrollbar {#}
+{#      height: 6px;#}
+{#    }#}
+{#    #}
+{#    .thumbnail-container::-webkit-scrollbar-track {#}
+{#      background: #e0e0e0;#}
+{#      border-radius: 3px;#}
+{#    }#}
+{#    #}
+{#    .thumbnail-container::-webkit-scrollbar-thumb {#}
+{#      background: #999;#}
+{#      border-radius: 3px;#}
+{#    }#}
+{#    #}
+{#    .thumbnail {#}
+{#      position: relative;#}
+{#      width: 70px;#}
+{#      height: 70px;#}
+{#      border: 2px solid transparent;#}
+{#      border-radius: 4px;#}
+{#      cursor: pointer;#}
+{#      flex-shrink: 0;#}
+{#      transition: all 0.3s ease;#}
+{#      overflow: hidden;#}
+{#      background: white;#}
+{#    }#}
+{#    #}
+{#    .thumbnail img {#}
+{#      width: 100%;#}
+{#      height: 100%;#}
+{#      object-fit: cover;#}
+{#    }#}
+{#    #}
+{#    .thumbnail:hover,#}
+{#    .thumbnail.active {#}
+{#      border-color: #ff9800;#}
+{#      box-shadow: 0 2px 6px rgba(255,152,0,0.3);#}
+{#    }#}
+{#    #}
+{#    .color-badge {#}
+{#      position: absolute;#}
+{#      bottom: 2px;#}
+{#      left: 2px;#}
+{#      right: 2px;#}
+{#      font-size: 8px;#}
+{#      background: rgba(0,0,0,0.7);#}
+{#      color: white;#}
+{#      padding: 2px;#}
+{#      border-radius: 2px;#}
+{#      text-align: center;#}
+{#      white-space: nowrap;#}
+{#      overflow: hidden;#}
+{#      text-overflow: ellipsis;#}
+{#    }#}
+{#    #}
+{#    /* Product Details */#}
+{#    .product-details {#}
+{#      padding: 0 10px;#}
+{#    }#}
+{#    #}
+{#    .product-title {#}
+{#      font-size: 18px;#}
+{#      font-weight: 600;#}
+{#      color: #0f1419;#}
+{#      margin-bottom: 8px;#}
+{#    }#}
+{#    #}
+{#    .product-description {#}
+{#      font-size: 13px;#}
+{#      color: #666;#}
+{#      margin-bottom: 16px;#}
+{#      line-height: 1.5;#}
+{#    }#}
+{#    #}
+{#    .price-section {#}
+{#      display: flex;#}
+{#      align-items: center;#}
+{#      gap: 12px;#}
+{#      margin-bottom: 20px;#}
+{#      padding: 12px;#}
+{#      background: #f0f5ff;#}
+{#      border-radius: 4px;#}
+{#    }#}
+{#    #}
+{#    .price-current {#}
+{#      font-size: 24px;#}
+{#      font-weight: 600;#}
+{#      color: #388e3c;#}
+{#    }#}
+{#    #}
+{#    .price-label {#}
+{#      font-size: 12px;#}
+{#      color: #666;#}
+{#      margin-bottom: 4px;#}
+{#    }#}
+{#    #}
+{#    /* Size Selection */#}
+{#    .selection-group {#}
+{#      margin-bottom: 24px;#}
+{#    }#}
+{#    #}
+{#    .selection-label {#}
+{#      font-size: 14px;#}
+{#      font-weight: 600;#}
+{#      color: #0f1419;#}
+{#      margin-bottom: 12px;#}
+{#      display: block;#}
+{#    }#}
+{#    #}
+{#    .sizes-container {#}
+{#      display: flex;#}
+{#      gap: 10px;#}
+{#      flex-wrap: wrap;#}
+{#    }#}
+{#    #}
+{#    .size-item {#}
+{#      position: relative;#}
+{#      padding: 12px 16px;#}
+{#      border: 2px solid #e0e0e0;#}
+{#      border-radius: 4px;#}
+{#      background: white;#}
+{#      cursor: pointer;#}
+{#      font-size: 12px;#}
+{#      font-weight: 600;#}
+{#      color: #333;#}
+{#      transition: all 0.3s ease;#}
+{#      text-align: center;#}
+{#      min-width: 60px;#}
+{#    }#}
+{#    #}
+{#    .size-item.out-of-stock {#}
+{#      background: #f5f5f5;#}
+{#      color: #999;#}
+{#      cursor: not-allowed;#}
+{#      border-color: #e0e0e0;#}
+{#      position: relative;#}
+{#    }#}
+{#    #}
+{#    .size-item.out-of-stock::after {#}
+{#      content: '✕';#}
+{#      position: absolute;#}
+{#      top: 50%;#}
+{#      left: 50%;#}
+{#      transform: translate(-50%, -50%);#}
+{#      font-size: 18px;#}
+{#      color: #ccc;#}
+{#    }#}
+{#    #}
+{#    .size-item:not(.out-of-stock):hover {#}
+{#      border-color: #2196F3;#}
+{#      background: #e3f2fd;#}
+{#    }#}
+{#    #}
+{#    .size-item.selected:not(.out-of-stock) {#}
+{#      border-color: #2196F3;#}
+{#      background: #2196F3;#}
+{#      color: white;#}
+{#    }#}
+{#    #}
+{#    .stock-info {#}
+{#      font-size: 10px;#}
+{#      color: #999;#}
+{#      margin-top: 2px;#}
+{#    }#}
+{#    #}
+{#    .size-item.selected:not(.out-of-stock) .stock-info {#}
+{#      color: #e0e0e0;#}
+{#    }#}
+{#    #}
+{#    /* Quantity Section */#}
+{#    .quantity-section {#}
+{#      display: flex;#}
+{#      align-items: center;#}
+{#      gap: 12px;#}
+{#      margin-bottom: 24px;#}
+{#    }#}
+{#    #}
+{#    .quantity-input {#}
+{#      width: 60px;#}
+{#      padding: 8px;#}
+{#      border: 1px solid #e0e0e0;#}
+{#      border-radius: 4px;#}
+{#      text-align: center;#}
+{#      font-size: 14px;#}
+{#    }#}
+{#    #}
+{#    .quantity-label {#}
+{#      font-size: 12px;#}
+{#      color: #666;#}
+{#    }#}
+{#    #}
+{#    /* Stock Indicator */#}
+{#    .stock-indicator {#}
+{#      font-size: 12px;#}
+{#      padding: 12px;#}
+{#      border-radius: 4px;#}
+{#      margin-bottom: 24px;#}
+{#      text-align: center;#}
+{#    }#}
+{#    #}
+{#    .stock-available {#}
+{#      background: #e8f5e9;#}
+{#      color: #2e7d32;#}
+{#      border: 1px solid #c8e6c9;#}
+{#    }#}
+{#    #}
+{#    .stock-limited {#}
+{#      background: #fff3e0;#}
+{#      color: #e65100;#}
+{#      border: 1px solid #ffe0b2;#}
+{#    }#}
+{#    #}
+{#    .stock-out {#}
+{#      background: #ffebee;#}
+{#      color: #c62828;#}
+{#      border: 1px solid #ffcdd2;#}
+{#    }#}
+{#    #}
+{#    /* Action Buttons */#}
+{#    .action-buttons {#}
+{#      display: grid;#}
+{#      grid-template-columns: 1fr 1fr;#}
+{#      gap: 12px;#}
+{#      margin-top: 24px;#}
+{#    }#}
+{#    #}
+{#    .btn-add-cart {#}
+{#      padding: 14px;#}
+{#      background-color: #ff9800;#}
+{#      color: white;#}
+{#      border: none;#}
+{#      border-radius: 4px;#}
+{#      font-size: 14px;#}
+{#      font-weight: 600;#}
+{#      cursor: pointer;#}
+{#      transition: all 0.3s ease;#}
+{#    }#}
+{#    #}
+{#    .btn-add-cart:hover:not(:disabled) {#}
+{#      background-color: #f57c00;#}
+{#    }#}
+{#    #}
+{#    .btn-add-cart:disabled {#}
+{#      background-color: #ccc;#}
+{#      cursor: not-allowed;#}
+{#      opacity: 0.5;#}
+{#    }#}
+{#    #}
+{#    .btn-back {#}
+{#      padding: 14px;#}
+{#      background-color: #e0e0e0;#}
+{#      color: #333;#}
+{#      border: none;#}
+{#      border-radius: 4px;#}
+{#      font-size: 14px;#}
+{#      font-weight: 600;#}
+{#      cursor: pointer;#}
+{#      transition: all 0.3s ease;#}
+{#    }#}
+{#    #}
+{#    .btn-back:hover {#}
+{#      background-color: #bdbdbd;#}
+{#    }#}
+{#    #}
+{#    .hidden-inputs {#}
+{#      display: none;#}
+{#    }#}
+{#      .customization-textarea {#}
+{#  width: 100%;#}
+{#  padding: 12px;#}
+{#  border: 1px solid #e0e0e0;#}
+{#  border-radius: 4px;#}
+{#  font-size: 13px;#}
+{#  color: #333;#}
+{#  resize: vertical; /* Allows user to resize height only */#}
+{#  transition: border-color 0.3s ease;#}
+{#  background-color: #fff;#}
+{#}#}
+{##}
+{#.customization-textarea:focus {#}
+{#  outline: none;#}
+{#  border-color: #2196F3;#}
+{#  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.1);#}
+{#}#}
+{##}
+{#.char-count {#}
+{#  font-size: 11px;#}
+{#  color: #999;#}
+{#  margin-top: 4px;#}
+{#  text-align: right;#}
+{#}#}
+{#  </style>#}
+{#</head>#}
+{#<body>#}
+{#  <div class="container-custom">#}
+{#    <form id="addToCartForm" method="post" action="/addtocart_buttonclick" onsubmit="return validateForm()">#}
+{#      <div class="product-section">#}
+{#        <!-- Left: Image Section -->#}
+{#        <div class="image-section">#}
+{#          <div class="main-image-container">#}
+{#            <img id="mainImage" src="{{ data.get_primary_image }}" alt="{{ data.name }}" class="main-image">#}
+{#          </div>#}
+{#          #}
+{#          <div class="color-label">Color</div>#}
+{#          <div class="color-name" id="currentColor">{% if stock_by_color %}{{ stock_by_color.0.color }}{% endif %}</div>#}
+{#          #}
+{#          <!-- Thumbnails with Color Labels -->#}
+{#          {% if stock_by_color %}#}
+{#            <div class="thumbnail-scroll-label">Available Variants</div>#}
+{#            <div class="thumbnail-container" id="thumbnailScroll">#}
+{#              {% for colorData in stock_by_color %}#}
+{#                <div class="thumbnail {% if forloop.first %}active{% endif %}" #}
+{#                     onclick="selectColor(this, '{{ colorData.color }}', '{{ colorData.image }}')"#}
+{#                     title="{{ colorData.color }}">#}
+{#                  <img src="{{ colorData.image }}" alt="{{ colorData.color }}">#}
+{#                  <div class="color-badge">{{ colorData.color }}</div>#}
+{#                </div>#}
+{#              {% endfor %}#}
+{#            </div>#}
+{#          {% endif %}#}
+{#        </div>#}
+{#        #}
+{#        <!-- Right: Product Details -->#}
+{#        <div class="product-details">#}
+{#          <h2 class="product-title">{{ data.name }}</h2>#}
+{#          <p class="product-description">{{ data.description }}</p>#}
+{#          #}
+{#          <div class="price-section">#}
+{#            <div>#}
+{#              <div class="price-label">Price</div>#}
+{#              <div class="price-current">₹{{ data.price }}</div>#}
+{#            </div>#}
+{#          </div>#}
+{#          #}
+{#          <!-- Size Selection with Stock Info -->#}
+{#          <div class="selection-group">#}
+{#            <label class="selection-label">Select Size:</label>#}
+{#            <div class="sizes-container" id="sizesContainer">#}
+{#              <!-- Sizes will be populated by JavaScript based on selected color -->#}
+{#            </div>#}
+{#            <input type="hidden" id="selectedSize" name="textfield4" value="">#}
+{#          </div>#}
+{#          #}
+{#          <!-- Quantity -->#}
+{#          <div class="selection-group">#}
+{#            <label class="selection-label">Quantity:</label>#}
+{#            <div class="quantity-section">#}
+{#              <input type="number" class="quantity-input" name="textfield7" id="quantity" min="1" max="10" value="1" required>#}
+{#              <span class="quantity-label">pieces</span>#}
+{#            </div>#}
+{#          </div>#}
+{##}
+{#            <div class="selection-group">#}
+{#              <label class="selection-label">Customization Instructions (Optional):</label>#}
+{#              <textarea#}
+{#                class="customization-textarea"#}
+{#                name="customization"#}
+{#                id="customization"#}
+{#                placeholder="e.g., Please print 'Alex' on the back, or specific gift notes..."#}
+{#                rows="3"#}
+{#              ></textarea>#}
+{#              <div class="char-count">Max 200 characters</div>#}
+{#            </div>#}
+{##}
+{##}
+{#          #}
+{#          <!-- Stock Indicator -->#}
+{#          <div id="stockIndicator" class="stock-indicator stock-available">#}
+{#            ✓ In Stock - Delivery within 7 days#}
+{#          </div>#}
+{#          #}
+{#          <!-- Action Buttons -->#}
+{#          <div class="action-buttons">#}
+{#            <button type="submit" class="btn-add-cart" id="addBtn">Add to Cart</button>#}
+{#            <button type="button" class="btn-back" onclick="window.history.back()">Go Back</button>#}
+{#          </div>#}
+{#        </div>#}
+{#      </div>#}
+{#      #}
+{#      <!-- Hidden input for color -->#}
+{#      <input type="hidden" id="selectedColor" name="textfield5" value="{% if stock_by_color %}{{ stock_by_color.0.color }}{% endif %}">#}
+{#    </form>#}
+{#  </div>#}
+{##}
+{#  <script>#}
+{#    // Store color data#}
+{#    const colorData = {#}
+{#      {% for color in stock_by_color %}#}
+{#        '{{ color.color }}': {#}
+{#          image: '{{ color.image }}',#}
+{#          sizes: [#}
+{#            {% for size in color.sizes %}#}
+{#              {#}
+{#                size: '{{ size.size }}',#}
+{#                stock: {{ size.stock }},#}
+{#                in_stock: {{ size.in_stock|lower }},#}
+{#                id: {{ size.id }}#}
+{#              }{% if not forloop.last %},{% endif %}#}
+{#            {% endfor %}#}
+{#          ]#}
+{#        }{% if not forloop.last %},{% endif %}#}
+{#      {% endfor %}#}
+{#    };#}
+{#    #}
+{#    // Initialize with first color#}
+{#    {% if stock_by_color %}#}
+{#      const firstColor = '{{ stock_by_color.0.color }}';#}
+{#      updateSizes(firstColor);#}
+{#    {% endif %}#}
+{#    #}
+{#    function selectColor(element, color, image) {#}
+{#      // Update thumbnail selection#}
+{#      document.querySelectorAll('.thumbnail').forEach(thumb => {#}
+{#        thumb.classList.remove('active');#}
+{#      });#}
+{#      element.classList.add('active');#}
+{#      #}
+{#      // Update image and color#}
+{#      document.getElementById('mainImage').src = image;#}
+{#      document.getElementById('currentColor').textContent = color;#}
+{#      document.getElementById('selectedColor').value = color;#}
+{#      #}
+{#      // Update sizes#}
+{#      updateSizes(color);#}
+{#    }#}
+{#    #}
+{#    function updateSizes(color) {#}
+{#      const sizesContainer = document.getElementById('sizesContainer');#}
+{#      sizesContainer.innerHTML = '';#}
+{#      #}
+{#      if (colorData[color]) {#}
+{#        const sizes = colorData[color].sizes;#}
+{#        sizes.forEach((sizeItem, index) => {#}
+{#          const sizeBtn = document.createElement('div');#}
+{#          sizeBtn.className = 'size-item';#}
+{#          #}
+{#          if (!sizeItem.in_stock) {#}
+{#            sizeBtn.classList.add('out-of-stock');#}
+{#          }#}
+{#          #}
+{#          sizeBtn.innerHTML = `#}
+{#            <div>${sizeItem.size}</div>#}
+{#            <div class="stock-info">${sizeItem.in_stock ? 'Stock: ' + sizeItem.stock : 'Out of Stock'}</div>#}
+{#          `;#}
+{#          #}
+{#          if (sizeItem.in_stock) {#}
+{#            sizeBtn.onclick = () => selectSize(sizeBtn, sizeItem.size, sizeItem.stock);#}
+{#            if (index === 0) {#}
+{#              sizeBtn.classList.add('selected');#}
+{#              document.getElementById('selectedSize').value = sizeItem.size;#}
+{#              updateStockIndicator(sizeItem.stock);#}
+{#            }#}
+{#          }#}
+{#          #}
+{#          sizesContainer.appendChild(sizeBtn);#}
+{#        });#}
+{#      }#}
+{#    }#}
+{#    #}
+{#    function selectSize(element, size, stock) {#}
+{#      // Remove selection from all size options#}
+{#      document.querySelectorAll('.size-item:not(.out-of-stock)').forEach(opt => {#}
+{#        opt.classList.remove('selected');#}
+{#      });#}
+{#      // Add selection to clicked element#}
+{#      element.classList.add('selected');#}
+{#      document.getElementById('selectedSize').value = size;#}
+{#      updateStockIndicator(stock);#}
+{#    }#}
+{#    #}
+{#    function updateStockIndicator(stock) {#}
+{#      const indicator = document.getElementById('stockIndicator');#}
+{#      indicator.className = 'stock-indicator';#}
+{#      #}
+{#      if (stock > 5) {#}
+{#        indicator.classList.add('stock-available');#}
+{#        indicator.innerHTML = '✓ In Stock - Delivery within 7 days';#}
+{#      } else if (stock > 0) {#}
+{#        indicator.classList.add('stock-limited');#}
+{#        indicator.innerHTML = '⚠ Limited Stock (' + stock + ' pieces) - Order soon!';#}
+{#      } else {#}
+{#        indicator.classList.add('stock-out');#}
+{#        indicator.innerHTML = '✕ Out of Stock';#}
+{#        document.getElementById('addBtn').disabled = true;#}
+{#      }#}
+{#    }#}
+{#    #}
+{#    function validateForm() {#}
+{#      const selectedSize = document.getElementById('selectedSize').value;#}
+{#      if (!selectedSize) {#}
+{#        alert('Please select a size');#}
+{#        return false;#}
+{#      }#}
+{#      return true;#}
+{#    }#}
+{#    #}
+{#    // Prevent going back to this page after form submission#}
+{#    if (window.history && window.history.pushState) {#}
+{#      window.history.pushState(null, null, window.location.href);#}
+{#      window.onpopstate = function(event) {#}
+{#        window.location.href = '/homeuser';#}
+{#      };#}
+{#    }#}
+{#  </script>#}
+{#</body>#}
+{#</html>#}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add to Cart — white & orange</title>
+  <!-- Bootstrap CSS (kept for grid/utilities, but we override with custom styling) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #faf7f2;  /* soft warm white */
+      font-family: 'Roboto', Arial, sans-serif;
+    }
+
+    /* main container – white card with subtle orange accent */
+    .container-custom {
+      background: white;
+      border-radius: 24px;
+      padding: 24px;
+      margin: 30px auto;
+      max-width: 1000px;
+      box-shadow: 0 12px 30px rgba(243, 146, 0, 0.12), 0 4px 10px rgba(0,0,0,0.05);
+      border: 1px solid rgba(255, 152, 0, 0.15);
+      transition: transform 0.25s ease, box-shadow 0.3s ease;
+    }
+    .container-custom:hover {
+      box-shadow: 0 20px 35px rgba(255, 152, 0, 0.18);
+    }
+
+    .product-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .product-section {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+    }
+
+    /* ---------- IMAGE SECTION ---------- */
+    .image-section {
+      position: relative;
+    }
+
+    .main-image-container {
+      background: #fff7ed;  /* very light orange background */
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 14px rgba(255, 152, 0, 0.12);
+      transition: box-shadow 0.3s, transform 0.2s;
+      border: 1px solid #ffe6cc;
+    }
+    .main-image-container:hover {
+      box-shadow: 0 8px 22px rgba(255, 152, 0, 0.25);
+    }
+
+    .main-image {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.1);
+    }
+    .main-image-container:hover .main-image {
+      transform: scale(1.02);
+    }
+
+    .color-label {
+      font-size: 13px;
+      color: #a86000;        /* deep orange for labels */
+      margin-bottom: 4px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+
+    .color-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: #bf4d00;        /* rich orange */
+      background: #fff2e0;
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 30px;
+      margin-bottom: 8px;
+    }
+
+    /* Thumbnail area */
+    .thumbnail-scroll-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #b45a00;
+      margin-top: 20px;
+      margin-bottom: 8px;
+    }
+
+    .thumbnail-container {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 10px 6px;
+      background: #fffaf2;    /* warm white */
+      border-radius: 28px;
+      scroll-behavior: smooth;
+      border: 1px solid #ffd8b0;
+    }
+
+    .thumbnail-container::-webkit-scrollbar {
+      height: 8px;
+    }
+    .thumbnail-container::-webkit-scrollbar-track {
+      background: #ffe3cc;
+      border-radius: 10px;
+    }
+    .thumbnail-container::-webkit-scrollbar-thumb {
+      background: #ff9800;
+      border-radius: 10px;
+    }
+
+    .thumbnail {
+      position: relative;
+      width: 75px;
+      height: 75px;
+      border: 2px solid transparent;
+      border-radius: 16px;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.25s ease;
+      overflow: hidden;
+      background: white;
+      box-shadow: 0 2px 6px rgba(255, 140, 0, 0.15);
+    }
+    .thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.2s;
+    }
+    .thumbnail:hover img {
+      transform: scale(1.08);
+    }
+    .thumbnail:hover,
+    .thumbnail.active {
+      border-color: #ff8800;      /* bright orange */
+      box-shadow: 0 6px 12px rgba(255, 136, 0, 0.35);
+      transform: translateY(-2px);
+    }
+
+    .color-badge {
+      position: absolute;
+      bottom: 2px;
+      left: 2px;
+      right: 2px;
+      font-size: 8px;
+      background: rgba(255, 115, 0, 0.85);  /* orange badge */
+      color: white;
+      padding: 3px 2px;
+      border-radius: 30px;
+      text-align: center;
+      font-weight: 600;
+      backdrop-filter: blur(2px);
+    }
+
+    /* ---------- PRODUCT DETAILS ---------- */
+    .product-details {
+      padding: 0 6px;
+    }
+
+    .product-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #2b1b0e;       /* dark brown for contrast */
+      margin-bottom: 8px;
+      border-left: 5px solid #ff9800;
+      padding-left: 18px;
+    }
+
+    .product-description {
+      font-size: 14px;
+      color: #5e4b38;
+      margin-bottom: 20px;
+      line-height: 1.6;
+      background: #fffcf7;
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid #ffdec2;
+    }
+
+    /* price card – white with orange gradient accent */
+    .price-section {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      padding: 16px 20px;
+      background: white;
+      border-radius: 28px;
+      border: 1px solid #ffb66c;
+      box-shadow: 0 6px 14px rgba(255, 140, 0, 0.1);
+      transition: box-shadow 0.2s;
+    }
+    .price-section:hover {
+      box-shadow: 0 8px 20px rgba(255, 123, 0, 0.2);
+      border-color: #ff9800;
+    }
+    .price-current {
+      font-size: 30px;
+      font-weight: 800;
+      color: #e65100;       /* deep orange */
+    }
+    .price-label {
+      font-size: 13px;
+      color: #b25600;
+      font-weight: 500;
+    }
+
+    /* selection groups */
+    .selection-group {
+      margin-bottom: 28px;
+    }
+    .selection-label {
+      font-size: 15px;
+      font-weight: 700;
+      color: #c25400;        /* orange */
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .selection-label::before {
+      content: "●";
+      color: #ff9800;
+      font-size: 18px;
+    }
+
+    .sizes-container {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* size items with orange/white theme */
+    .size-item {
+      position: relative;
+      padding: 12px 18px;
+      border: 2px solid #ffe0b9;
+      border-radius: 40px;
+      background: white;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      color: #592f00;
+      transition: all 0.2s ease;
+      min-width: 70px;
+      text-align: center;
+      box-shadow: 0 3px 8px rgba(255, 165, 0, 0.1);
+    }
+    .size-item.out-of-stock {
+      background: #fff0e0;
+      color: #cc9f70;
+      border-color: #ffcd94;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+    .size-item.out-of-stock::after {
+      content: '✕';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 22px;
+      color: #ff7d4d;
+      font-weight: bold;
+      opacity: 0.7;
+    }
+    .size-item:not(.out-of-stock):hover {
+      border-color: #ff9800;
+      background: #fff3e0;
+      transform: scale(1.03);
+    }
+    .size-item.selected:not(.out-of-stock) {
+      border-color: #ff6a00;
+      background: #ff9800;
+      color: white;
+      box-shadow: 0 8px 14px #ffb258;
+    }
+    .stock-info {
+      font-size: 10px;
+      color: #895f36;
+      margin-top: 4px;
+    }
+    .size-item.selected:not(.out-of-stock) .stock-info {
+      color: #fff6e0;
+    }
+
+    /* quantity */
+    .quantity-section {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: white;
+      padding: 10px 18px;
+      border-radius: 60px;
+      border: 1px solid #ffcf9f;
+      width: fit-content;
+    }
+    .quantity-input {
+      width: 70px;
+      padding: 10px 8px;
+      border: 2px solid #ffe1c0;
+      border-radius: 40px;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 600;
+      color: #c25800;
+      background: white;
+      transition: 0.15s;
+    }
+    .quantity-input:focus {
+      outline: none;
+      border-color: #ff9800;
+      box-shadow: 0 0 0 3px rgba(255, 171, 64, 0.3);
+    }
+    .quantity-label {
+      font-size: 14px;
+      color: #b45500;
+      font-weight: 500;
+    }
+
+    /* customization textarea */
+    .customization-textarea {
+      width: 100%;
+      padding: 16px 18px;
+      border: 2px solid #ffdbb8;
+      border-radius: 28px;
+      font-size: 14px;
+      color: #452a0b;
+      resize: vertical;
+      background-color: #fffcf9;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .customization-textarea:focus {
+      outline: none;
+      border-color: #ff9800;
+      box-shadow: 0 0 0 4px rgba(255, 179, 71, 0.25);
+      background-color: white;
+    }
+    .char-count {
+      font-size: 12px;
+      color: #d17100;
+      margin-top: 8px;
+      text-align: right;
+      font-weight: 500;
+    }
+
+    /* stock indicator – white/orange variants */
+    .stock-indicator {
+      font-size: 14px;
+      padding: 14px 18px;
+      border-radius: 40px;
+      margin-bottom: 28px;
+      text-align: center;
+      font-weight: 600;
+      transition: 0.3s;
+      animation: gentlePop 0.4s ease;
+    }
+    @keyframes gentlePop {
+      0% { transform: scale(0.96); opacity: 0.7; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .stock-available {
+      background: #fff0d8;
+      color: #b15000;
+      border: 1px solid #ffb66c;
+    }
+    .stock-limited {
+      background: #ffe2c1;
+      color: #b84500;
+      border: 1px solid #ff8c42;
+    }
+    .stock-out {
+      background: #ffe1d6;
+      color: #c13c00;
+      border: 1px solid #ff7548;
+    }
+
+    /* action buttons – orange & white combo with animation */
+    .action-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .btn-add-cart {
+      padding: 16px 12px;
+      background-color: #ff9800;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 10px 18px -6px #ffb86b;
+      letter-spacing: 0.4px;
+    }
+    .btn-add-cart:hover:not(:disabled) {
+      background-color: #f57c00;
+      transform: translateY(-3px);
+      box-shadow: 0 20px 25px -8px #ff8f3f;
+    }
+    .btn-add-cart:active:not(:disabled) {
+      transform: translateY(0);
+      box-shadow: 0 5px 12px #ffa54d;
+    }
+    .btn-add-cart:disabled {
+      background-color: #ffc793;
+      cursor: not-allowed;
+      opacity: 0.5;
+      box-shadow: none;
+    }
+
+    .btn-back {
+      padding: 16px 12px;
+      background-color: white;
+      color: #bf6000;
+      border: 2px solid #ffb155;
+      border-radius: 50px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-back:hover {
+      background-color: #fff3e5;
+      border-color: #ff8800;
+      transform: scale(0.98);
+      box-shadow: 0 4px 12px #ffe0b7;
+    }
+
+    /* hidden fields */
+    .hidden-inputs { display: none; }
+  </style>
+</head>
+<body>
+  <div class="container-custom">
+    <form id="addToCartForm" method="post" action="/addtocart_buttonclick" onsubmit="return validateForm()">
+      <div class="product-section">
+        <!-- Left: Image Section (unchanged structure) -->
+        <div class="image-section">
+          <div class="main-image-container">
+            <img id="mainImage" src="{{ data.get_primary_image }}" alt="{{ data.name }}" class="main-image">
+          </div>
+
+          <div class="color-label">Color</div>
+          <div class="color-name" id="currentColor">{% if stock_by_color %}{{ stock_by_color.0.color }}{% endif %}</div>
+
+          <!-- Thumbnails with Color Labels -->
+          {% if stock_by_color %}
+            <div class="thumbnail-scroll-label">Available Variants</div>
+            <div class="thumbnail-container" id="thumbnailScroll">
+              {% for colorData in stock_by_color %}
+                <div class="thumbnail {% if forloop.first %}active{% endif %}"
+                     onclick="selectColor(this, '{{ colorData.color }}', '{{ colorData.image }}')"
+                     title="{{ colorData.color }}">
+                  <img src="{{ colorData.image }}" alt="{{ colorData.color }}">
+                  <div class="color-badge">{{ colorData.color }}</div>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Right: Product Details -->
+        <div class="product-details">
+          <h2 class="product-title">{{ data.name }}</h2>
+          <p class="product-description">{{ data.description }}</p>
+
+          <div class="price-section">
+            <div>
+              <div class="price-label">Price</div>
+              <div class="price-current">₹{{ data.price }}</div>
+            </div>
+          </div>
+
+          <!-- Size Selection with Stock Info -->
+          <div class="selection-group">
+            <label class="selection-label">Select Size:</label>
+            <div class="sizes-container" id="sizesContainer">
+              <!-- Sizes will be populated by JavaScript based on selected color -->
+            </div>
+            <input type="hidden" id="selectedSize" name="textfield4" value="">
+          </div>
+
+          <!-- Quantity -->
+          <div class="selection-group">
+            <label class="selection-label">Quantity:</label>
+            <div class="quantity-section">
+              <input type="number" class="quantity-input" name="textfield7" id="quantity" min="1" max="10" value="1" required>
+              <span class="quantity-label">pieces</span>
+            </div>
+          </div>
+
+          <div class="selection-group">
+            <label class="selection-label">Customization (Optional):</label>
+            <textarea
+              class="customization-textarea"
+              name="customization"
+              id="customization"
+              placeholder="e.g., Please print 'Alex' on the back, or specific gift notes..."
+              rows="3"
+            ></textarea>
+            <div class="char-count">Max 200 characters</div>
+          </div>
+
+          <!-- Stock Indicator -->
+          <div id="stockIndicator" class="stock-indicator stock-available">
+            ✓ In Stock - Delivery within 7 days
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-buttons">
+            <button type="submit" class="btn-add-cart" id="addBtn">Add to Cart</button>
+            <button type="button" class="btn-back" onclick="window.history.back()">Go Back</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hidden input for color -->
+      <input type="hidden" id="selectedColor" name="textfield5" value="{% if stock_by_color %}{{ stock_by_color.0.color }}{% endif %}">
+    </form>
+  </div>
+
+  <script>
+    // Store color data (exactly the same Django template tags, untouched)
+    const colorData = {
+      {% for color in stock_by_color %}
+        '{{ color.color }}': {
+          image: '{{ color.image }}',
+          sizes: [
+            {% for size in color.sizes %}
+              {
+                size: '{{ size.size }}',
+                stock: {{ size.stock }},
+                in_stock: {{ size.in_stock|lower }},
+                id: {{ size.id }}
+              }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+          ]
+        }{% if not forloop.last %},{% endif %}
+      {% endfor %}
+    };
+
+    // Initialize with first color
+    {% if stock_by_color %}
+      const firstColor = '{{ stock_by_color.0.color }}';
+      updateSizes(firstColor);
+    {% endif %}
+
+    function selectColor(element, color, image) {
+      // Update thumbnail selection
+      document.querySelectorAll('.thumbnail').forEach(thumb => {
+        thumb.classList.remove('active');
+      });
+      element.classList.add('active');
+
+      // Update image and color
+      document.getElementById('mainImage').src = image;
+      document.getElementById('currentColor').textContent = color;
+      document.getElementById('selectedColor').value = color;
+
+      // Update sizes
+      updateSizes(color);
+    }
+
+    function updateSizes(color) {
+      const sizesContainer = document.getElementById('sizesContainer');
+      sizesContainer.innerHTML = '';
+
+      if (colorData[color]) {
+        const sizes = colorData[color].sizes;
+        sizes.forEach((sizeItem, index) => {
+          const sizeBtn = document.createElement('div');
+          sizeBtn.className = 'size-item';
+
+          if (!sizeItem.in_stock) {
+            sizeBtn.classList.add('out-of-stock');
+          }
+
+          sizeBtn.innerHTML = `
+            <div>${sizeItem.size}</div>
+            <div class="stock-info">${sizeItem.in_stock ? 'Stock: ' + sizeItem.stock : 'Out of Stock'}</div>
+          `;
+
+          if (sizeItem.in_stock) {
+            sizeBtn.onclick = () => selectSize(sizeBtn, sizeItem.size, sizeItem.stock);
+            if (index === 0) {
+              sizeBtn.classList.add('selected');
+              document.getElementById('selectedSize').value = sizeItem.size;
+              updateStockIndicator(sizeItem.stock);
+            }
+          }
+
+          sizesContainer.appendChild(sizeBtn);
+        });
+      }
+    }
+
+    function selectSize(element, size, stock) {
+      // Remove selection from all size options
+      document.querySelectorAll('.size-item:not(.out-of-stock)').forEach(opt => {
+        opt.classList.remove('selected');
+      });
+      // Add selection to clicked element
+      element.classList.add('selected');
+      document.getElementById('selectedSize').value = size;
+      updateStockIndicator(stock);
+    }
+
+    function updateStockIndicator(stock) {
+      const indicator = document.getElementById('stockIndicator');
+      indicator.className = 'stock-indicator';
+
+      if (stock > 5) {
+        indicator.classList.add('stock-available');
+        indicator.innerHTML = '✓ In Stock - Delivery within 7 days';
+        document.getElementById('addBtn').disabled = false;
+      } else if (stock > 0) {
+        indicator.classList.add('stock-limited');
+        indicator.innerHTML = '⚠ Limited Stock (' + stock + ' pieces) - Order soon!';
+        document.getElementById('addBtn').disabled = false;
+      } else {
+        indicator.classList.add('stock-out');
+        indicator.innerHTML = '✕ Out of Stock';
+        document.getElementById('addBtn').disabled = true;
+      }
+    }
+
+    function validateForm() {
+      const selectedSize = document.getElementById('selectedSize').value;
+      if (!selectedSize) {
+        alert('Please select a size');
+        return false;
+      }
+      return true;
+    }
+
+    // Prevent going back to this page after form submission (unchanged)
+    if (window.history && window.history.pushState) {
+      window.history.pushState(null, null, window.location.href);
+      window.onpopstate = function(event) {
+        window.location.href = '/homeuser';
+      };
+    }
+  </script>
+</body>
+</html>

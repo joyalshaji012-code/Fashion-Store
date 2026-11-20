@@ -1,0 +1,1594 @@
+{#<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">#}
+{#<html xmlns="http://www.w3.org/1999/xhtml">#}
+{#<head>#}
+{#<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />#}
+{#<title>Untitled Document</title>#}
+{#</head>#}
+{##}
+{#<body><form action="/addproductworker_buttonclick" method="post" enctype="multipart/form-data"><table width="454" border="1"  >#}
+{#  <tr>#}
+{#    <th width="96" scope="row">Name</th>#}
+{#    <td width="342">#}
+{#      <input type="text" name="textfield" id="textfield3" />#}
+{#    </td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <th scope="row">Description</th>#}
+{#    <td>#}
+{#      <label for="textfield4"></label>#}
+{#      <input type="text" name="textfield2" id="textfield4" />#}
+{#   </td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <th scope="row">Price</th>#}
+{#    <td>#}
+{#      <label for="textfield5"></label>#}
+{#      <input type="text" name="textfield3" id="textfield5" />#}
+{#  </td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <th scope="row">Color</th>#}
+{#    <td>#}
+{#      <label for="textfield6"></label>#}
+{#      <input type="text" name="textfield4" id="textfield6" />#}
+{#    </td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <th scope="row">Image</th>#}
+{#    <td>#}
+{#      <input type="file" name="fileField" id="fileField" />#}
+{#   </td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <th scope="row">Size</th>#}
+{#    <td><p>#}
+{#      <label>#}
+{#        <input type="checkbox" name="CheckboxGroup1" value="S" id="CheckboxGroup1_0" />#}
+{#        S</label>#}
+{#      <br />#}
+{#      <label>#}
+{#        <input type="checkbox" name="CheckboxGroup1" value="M" id="CheckboxGroup1_1" />#}
+{#        M</label>#}
+{#      <br />#}
+{#      <label>#}
+{#        <input type="checkbox" name="CheckboxGroup1" value="L" id="CheckboxGroup1_2" />#}
+{#        L</label>#}
+{#      <br />#}
+{#      <label>#}
+{#        <input type="checkbox" name="CheckboxGroup1" value="XL" id="CheckboxGroup1_3" />#}
+{#        XL</label>#}
+{#      <br />#}
+{#      <label>#}
+{#        <input type="checkbox" name="CheckboxGroup1" value="XXL" id="CheckboxGroup1_4" />#}
+{#        XXL</label>#}
+{#      <br />#}
+{#    </p></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <th colspan="2" scope="row">#}
+{#      <input type="submit" name="button" id="button" value="Add" />#}
+{#   </th>#}
+{#  </tr>#}
+{#</table></form>#}
+{##}
+{#</body>#}
+{#</html>#}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Worker - Add Product</title>
+<style>
+    /* Base Reset & Variables */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    :root {
+        --primary-orange: #f97316;
+        --orange-light: #fb923c;
+        --orange-lighter: #fdba74;
+        --orange-dark: #ea580c;
+        --orange-glow: rgba(249, 115, 22, 0.5);
+        --black-bg: #000000;
+        --black-card: #111111;
+        --black-surface: #1a1a1a;
+        --black-border: #2a2a2a;
+        --gray-text: #a0a0a0;
+        --white: #ffffff;
+        --shadow-color: rgba(0, 0, 0, 0.9);
+    }
+
+    body {
+        background-color: var(--black-bg);
+        color: var(--white);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        overflow-x: hidden;
+        position: relative;
+    }
+
+    /* Live Animated Background */
+    .live-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    .energy-wave {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+            circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+            rgba(249, 115, 22, 0.03) 0%,
+            transparent 60%
+        );
+        transition: background 0.3s ease;
+    }
+
+    .dynamic-grid {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-image:
+            linear-gradient(rgba(249, 115, 22, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(249, 115, 22, 0.03) 1px, transparent 1px);
+        background-size: 40px 40px;
+        animation: gridMove 20s linear infinite;
+        opacity: 0.4;
+    }
+
+    @keyframes gridMove {
+        0% { transform: translate(0, 0); }
+        100% { transform: translate(40px, 40px); }
+    }
+
+    .floating-orbs {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+
+    .orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(30px);
+        opacity: 0;
+        animation: orbFloat 15s infinite linear;
+    }
+
+    @keyframes orbFloat {
+        0% {
+            transform: translate(0, 0) scale(0.8);
+            opacity: 0;
+        }
+        10% {
+            opacity: 0.3;
+        }
+        90% {
+            opacity: 0.3;
+        }
+        100% {
+            transform: translate(var(--orb-x, 100vw), var(--orb-y, 100vh)) scale(1.2);
+            opacity: 0;
+        }
+    }
+
+    /* Main Container */
+    .form-container {
+        width: 100%;
+        max-width: 900px;
+        background: var(--black-card);
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow:
+            0 25px 70px rgba(0, 0, 0, 0.8),
+            0 0 0 1px rgba(249, 115, 22, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--black-border);
+        position: relative;
+        z-index: 1;
+        animation:
+            containerAppear 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+            containerGlow 6s infinite alternate;
+        transform: scale(0.9) translateY(50px);
+        opacity: 0;
+    }
+
+    @keyframes containerAppear {
+        to {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes containerGlow {
+        0%, 100% {
+            box-shadow:
+                0 25px 70px rgba(0, 0, 0, 0.8),
+                0 0 0 1px rgba(249, 115, 22, 0.15);
+        }
+        50% {
+            box-shadow:
+                0 25px 90px rgba(0, 0, 0, 0.9),
+                0 0 0 1px rgba(249, 115, 22, 0.3),
+                0 0 60px rgba(249, 115, 22, 0.1);
+        }
+    }
+
+    /* Header with Live Animation */
+    .form-header {
+        background: linear-gradient(135deg,
+            var(--primary-orange) 0%,
+            var(--orange-dark) 100%);
+        padding: 40px 50px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .header-glow {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+            circle at var(--mouse-x-header, 50%) var(--mouse-y-header, 50%),
+            rgba(255, 255, 255, 0.2) 0%,
+            transparent 50%
+        );
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .form-header:hover .header-glow {
+        opacity: 1;
+    }
+
+    .animated-title {
+        font-size: 42px;
+        font-weight: 900;
+        letter-spacing: -1px;
+        color: #000;
+        margin-bottom: 10px;
+        position: relative;
+        z-index: 2;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        animation:
+            titleReveal 1s 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+            titleShimmer 8s infinite linear;
+        background: linear-gradient(
+            90deg,
+            #000 0%,
+            #000 25%,
+            #fff 50%,
+            #000 75%,
+            #000 100%
+        );
+        background-size: 400% 100%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    @keyframes titleReveal {
+        from {
+            transform: translateY(-30px) rotateX(90deg);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0) rotateX(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes titleShimmer {
+        0% { background-position: -200% center; }
+        100% { background-position: 200% center; }
+    }
+
+    .header-subtitle {
+        color: rgba(0, 0, 0, 0.8);
+        font-size: 16px;
+        font-weight: 500;
+        letter-spacing: 1px;
+        position: relative;
+        z-index: 2;
+        animation: subtitleSlide 1s 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+
+    @keyframes subtitleSlide {
+        from {
+            transform: translateX(-50px);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    /* Live Particles in Header */
+    .header-particles {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+    }
+
+    .header-particle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 50%;
+        animation: particleFloat 3s infinite ease-in-out;
+    }
+
+    @keyframes particleFloat {
+        0%, 100% {
+            transform: translateY(0) scale(1);
+            opacity: 0;
+        }
+        10%, 90% {
+            opacity: 1;
+        }
+        50% {
+            transform: translateY(-20px) scale(1.2);
+        }
+    }
+
+    /* Form Table with Live Animations */
+    form table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    form tr {
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: relative;
+    }
+
+    form tr:hover {
+        background: rgba(249, 115, 22, 0.03);
+        transform: translateX(10px);
+    }
+
+    .row-indicator {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 4px;
+        height: 0;
+        background: linear-gradient(to bottom,
+            var(--primary-orange),
+            var(--orange-light));
+        transition: height 0.3s ease;
+        border-radius: 0 2px 2px 0;
+    }
+
+    form tr:hover .row-indicator {
+        height: 100%;
+        animation: indicatorGlow 2s infinite alternate;
+    }
+
+    @keyframes indicatorGlow {
+        0%, 100% {
+            box-shadow: 0 0 10px var(--primary-orange);
+        }
+        50% {
+            box-shadow: 0 0 20px var(--primary-orange);
+        }
+    }
+
+    form th {
+        text-align: left;
+        padding: 30px 40px;
+        font-weight: 700;
+        font-size: 17px;
+        width: 30%;
+        color: var(--primary-orange);
+        background: rgba(249, 115, 22, 0.05);
+        border-right: 1px solid rgba(249, 115, 22, 0.1);
+        position: relative;
+        overflow: hidden;
+        animation: cellSlideIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        opacity: 0;
+    }
+
+    @keyframes cellSlideIn {
+        from {
+            opacity: 0;
+            transform: translateX(-60px) skewX(-10deg);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0) skewX(0);
+        }
+    }
+
+    form td {
+        padding: 28px 40px;
+        animation: cellAppear 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        opacity: 0;
+    }
+
+    @keyframes cellAppear {
+        from {
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    /* Staggered animations */
+    tr:nth-child(1) th { animation-delay: 0.1s; }
+    tr:nth-child(1) td { animation-delay: 0.1s; }
+    tr:nth-child(2) th { animation-delay: 0.2s; }
+    tr:nth-child(2) td { animation-delay: 0.2s; }
+    tr:nth-child(3) th { animation-delay: 0.3s; }
+    tr:nth-child(3) td { animation-delay: 0.3s; }
+    tr:nth-child(4) th { animation-delay: 0.4s; }
+    tr:nth-child(4) td { animation-delay: 0.4s; }
+    tr:nth-child(5) th { animation-delay: 0.5s; }
+    tr:nth-child(5) td { animation-delay: 0.5s; }
+    tr:nth-child(6) th { animation-delay: 0.6s; }
+    tr:nth-child(6) td { animation-delay: 0.6s; }
+    tr:nth-child(7) th { animation-delay: 0.7s; }
+    tr:nth-child(7) td { animation-delay: 0.7s; }
+
+    /* Input Fields with Live Effects */
+    .input-container {
+        position: relative;
+        width: 100%;
+    }
+
+    input[type="text"],select, input[type="file"] {
+        width: 100%;
+        padding: 20px 24px;
+        background: var(--black-surface);
+        border: 2px solid rgba(249, 115, 22, 0.2);
+        border-radius: 16px;
+        color: var(--white);
+        font-size: 16px;
+        font-weight: 500;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        box-shadow:
+            inset 0 2px 10px rgba(0, 0, 0, 0.5),
+            0 5px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    input[type="text"]:focus, input[type="file"]:focus,select:focus {
+        outline: none;
+        border-color: var(--primary-orange);
+        box-shadow:
+            inset 0 2px 10px rgba(0, 0, 0, 0.5),
+            0 0 0 5px rgba(249, 115, 22, 0.2),
+            0 10px 40px rgba(249, 115, 22, 0.3);
+        transform: translateY(-5px);
+        animation: inputFocusPulse 2s infinite;
+    }
+
+    @keyframes inputFocusPulse {
+        0%, 100% {
+            box-shadow:
+                inset 0 2px 10px rgba(0, 0, 0, 0.5),
+                0 0 0 5px rgba(249, 115, 22, 0.2),
+                0 10px 40px rgba(249, 115, 22, 0.3);
+        }
+        50% {
+            box-shadow:
+                inset 0 2px 10px rgba(0, 0, 0, 0.5),
+                0 0 0 5px rgba(249, 115, 22, 0.3),
+                0 10px 50px rgba(249, 115, 22, 0.4);
+        }
+    }
+
+    .live-typing-effect {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg,
+            transparent,
+            var(--primary-orange),
+            transparent);
+        transition: width 0.3s ease;
+    }
+
+    input[type="text"]:focus ~ .live-typing-effect {
+        width: 100%;
+        animation: typingGlow 2s infinite;
+    }
+
+    @keyframes typingGlow {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+
+    /* Checkboxes with Live Selection Animation */
+    .checkbox-group {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+        gap: 15px;
+        padding: 15px;
+        background: rgba(249, 115, 22, 0.02);
+        border-radius: 12px;
+        border: 2px solid rgba(249, 115, 22, 0.1);
+    }
+
+    .checkbox-item {
+        position: relative;
+        padding: 20px;
+        background: rgba(249, 115, 22, 0.05);
+        border-radius: 12px;
+        border: 2px solid rgba(249, 115, 22, 0.1);
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        cursor: pointer;
+        overflow: hidden;
+    }
+
+    .checkbox-item:hover {
+        background: rgba(249, 115, 22, 0.1);
+        border-color: rgba(249, 115, 22, 0.3);
+        transform: translateY(-8px) scale(1.05);
+        box-shadow:
+            0 15px 35px rgba(249, 115, 22, 0.2),
+            0 0 30px rgba(249, 115, 22, 0.1);
+    }
+
+    .checkbox-item input[type="checkbox"] {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .checkbox-item label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        font-weight: 700;
+        font-size: 18px;
+        color: var(--gray-text);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        z-index: 1;
+    }
+
+    .checkbox-item label::before {
+        content: '';
+        width: 26px;
+        height: 26px;
+        border: 2px solid rgba(249, 115, 22, 0.3);
+        border-radius: 8px;
+        background: var(--black-surface);
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .checkbox-item input[type="checkbox"]:checked + label {
+        color: var(--primary-orange);
+        text-shadow: 0 0 10px rgba(249, 115, 22, 0.5);
+    }
+
+    .checkbox-item input[type="checkbox"]:checked + label::before {
+        background: var(--primary-orange);
+        border-color: var(--primary-orange);
+        box-shadow:
+            0 0 25px var(--primary-orange),
+            inset 0 0 15px rgba(255, 255, 255, 0.2);
+        animation: checkboxSelect 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes checkboxSelect {
+        0% {
+            transform: scale(0.5) rotate(-180deg);
+            box-shadow: 0 0 0 0 var(--primary-orange);
+        }
+        70% {
+            transform: scale(1.2) rotate(20deg);
+            box-shadow: 0 0 40px var(--primary-orange);
+        }
+        100% {
+            transform: scale(1) rotate(0);
+            box-shadow: 0 0 25px var(--primary-orange);
+        }
+    }
+
+    .checkbox-item input[type="checkbox"]:checked + label::after {
+        content: '✓';
+        position: absolute;
+        left: 21px;
+        color: var(--black-card);
+        font-weight: 900;
+        font-size: 16px;
+        z-index: 2;
+        animation: checkmarkPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes checkmarkPop {
+        0% { transform: scale(0) rotate(-90deg); }
+        70% { transform: scale(1.3) rotate(10deg); }
+        100% { transform: scale(1) rotate(0); }
+    }
+
+    /* Live Particle Selection Effect */
+    .selection-particles {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+    }
+
+    /* Submit Button with Live Effects */
+    .submit-row {
+        background: linear-gradient(to bottom,
+            transparent,
+            rgba(0, 0, 0, 0.9));
+    }
+
+    .submit-row th {
+        text-align: center;
+        border: none;
+        background: transparent;
+        padding: 50px 40px;
+        animation: none;
+    }
+
+    .submit-btn-container {
+        position: relative;
+        display: inline-block;
+    }
+
+    input[type="submit"] {
+        background: linear-gradient(135deg,
+            var(--primary-orange) 0%,
+            var(--orange-dark) 100%);
+        color: white;
+        border: none;
+        padding: 24px 70px;
+        font-size: 22px;
+        font-weight: 900;
+        border-radius: 18px;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        box-shadow:
+            0 15px 50px rgba(249, 115, 22, 0.5),
+            0 0 0 3px rgba(249, 115, 22, 0.2);
+        letter-spacing: 1.5px;
+        position: relative;
+        overflow: hidden;
+        z-index: 2;
+        animation:
+            buttonReveal 1s 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+            buttonFloat 6s infinite ease-in-out;
+        transform: scale(0.8) rotateX(90deg);
+        opacity: 0;
+    }
+
+    @keyframes buttonReveal {
+        to {
+            transform: scale(1) rotateX(0);
+            opacity: 1;
+        }
+    }
+{##}
+{#    @keyframes buttonFloat {#}
+{#        0%, 100% { transform: translateY(0); }#}
+{#        50% { transform: translateY(-10px); }#}
+{#    }#}
+
+{#    input[type="submit"]::before {#}
+{#        content: '';#}
+{#        position: absolute;#}
+{#        top: 0;#}
+{#        left: -100%;#}
+{#        width: 100%;#}
+{#        height: 100%;#}
+{#        background: linear-gradient(90deg,#}
+{#            transparent,#}
+{#            rgba(255, 255, 255, 0.3),#}
+{#            transparent);#}
+{#        transition: left 0.6s ease;#}
+{#    }#}
+
+{#    input[type="submit"]:hover {#}
+{#        transform: translateY(-8px) scale(1.05);#}
+{#        box-shadow:#}
+{#            0 25px 70px rgba(249, 115, 22, 0.7),#}
+{#            0 0 0 4px rgba(249, 115, 22, 0.3),#}
+{#            0 0 100px rgba(249, 115, 22, 0.5);#}
+{#        animation: buttonHoverPulse 1.5s infinite alternate;#}
+{#    }#}
+
+{#    @keyframes buttonHoverPulse {#}
+{#        0%, 100% {#}
+{#            box-shadow:#}
+{#                0 25px 70px rgba(249, 115, 22, 0.7),#}
+{#                0 0 0 4px rgba(249, 115, 22, 0.3),#}
+{#                0 0 100px rgba(249, 115, 22, 0.5);#}
+{#        }#}
+{#        50% {#}
+{#            box-shadow:#}
+{#                0 25px 80px rgba(249, 115, 22, 0.8),#}
+{#                0 0 0 4px rgba(249, 115, 22, 0.4),#}
+{#                0 0 120px rgba(249, 115, 22, 0.6);#}
+{#        }#}
+{#    }#}
+
+{#    input[type="submit"]:hover::before {#}
+{#        left: 100%;#}
+{#    }#}
+{##}
+{#    input[type="submit"]:active {#}
+{#        transform: translateY(-2px) scale(0.98);#}
+{#        transition: all 0.1s ease;#}
+{#    }#}
+
+    /* Live Button Particles */
+    .live-particles {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    /* Success Animation Overlay */
+    .success-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.95);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        backdrop-filter: blur(10px);
+    }
+
+    .success-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .success-content {
+        background: var(--black-card);
+        padding: 70px;
+        border-radius: 30px;
+        text-align: center;
+        max-width: 600px;
+        transform: scale(0.7) rotateY(90deg);
+        opacity: 0;
+        transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s;
+        border: 2px solid rgba(249, 115, 22, 0.3);
+        box-shadow:
+            0 30px 100px rgba(0, 0, 0, 0.8),
+            0 0 0 1px rgba(249, 115, 22, 0.1),
+            inset 0 0 50px rgba(249, 115, 22, 0.05);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .success-overlay.active .success-content {
+        transform: scale(1) rotateY(0);
+        opacity: 1;
+    }
+
+    .success-icon {
+        width: 120px;
+        height: 120px;
+        background: var(--primary-orange);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 40px;
+        animation:
+            iconLaunch 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s both,
+            iconPulse 2s 1.3s infinite;
+    }
+
+    @keyframes iconLaunch {
+        0% {
+            transform: scale(0) rotate(-180deg);
+            opacity: 0;
+        }
+        70% {
+            transform: scale(1.2) rotate(20deg);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(1) rotate(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes iconPulse {
+        0%, 100% {
+            box-shadow:
+                0 0 0 0 rgba(249, 115, 22, 0.4),
+                0 0 50px rgba(249, 115, 22, 0.2);
+        }
+        50% {
+            box-shadow:
+                0 0 0 40px rgba(249, 115, 22, 0),
+                0 0 80px rgba(249, 115, 22, 0.4);
+        }
+    }
+
+    .success-icon::after {
+        content: '✓';
+        color: #000;
+        font-size: 60px;
+        font-weight: 900;
+        animation: checkBounce 0.6s 1s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+
+    @keyframes checkBounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-20px); }
+        60% { transform: translateY(-10px); }
+    }
+
+    .success-content h2 {
+        font-size: 40px;
+        color: var(--primary-orange);
+        margin-bottom: 20px;
+        font-weight: 900;
+        letter-spacing: -1px;
+        animation: textReveal 0.8s 0.8s both;
+    }
+
+    @keyframes textReveal {
+        from {
+            transform: translateY(30px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    /* Live Progress Bar */
+    .live-progress {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 3px;
+        background: linear-gradient(90deg,
+            transparent,
+            var(--primary-orange),
+            transparent);
+        animation: progressLoad 2s linear infinite;
+    }
+
+    @keyframes progressLoad {
+        0% { left: -100%; width: 100%; }
+        100% { left: 100%; width: 100%; }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .form-container {
+            max-width: 95%;
+            border-radius: 20px;
+        }
+
+        .form-header {
+            padding: 30px 20px;
+        }
+
+        .animated-title {
+            font-size: 32px;
+        }
+
+        form th, form td {
+            display: block;
+            width: 100%;
+            padding: 25px;
+            border: none;
+            animation: none;
+            opacity: 1;
+            transform: none;
+        }
+
+        form th {
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(249, 115, 22, 0.2);
+            background: rgba(249, 115, 22, 0.05);
+        }
+
+        form td {
+            padding-top: 20px;
+        }
+
+        .checkbox-group {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        input[type="submit"] {
+            padding: 20px 50px;
+            font-size: 20px;
+        }
+
+        .success-content {
+            padding: 40px 25px;
+            margin: 20px;
+        }
+    }
+</style>
+</head>
+
+<body>
+    <!-- Live Animated Background -->
+    <div class="live-background">
+        <div class="energy-wave"></div>
+        <div class="dynamic-grid"></div>
+        <div class="floating-orbs" id="floatingOrbs"></div>
+    </div>
+
+    <!-- Success Overlay -->
+    <div class="success-overlay" id="successOverlay">
+        <div class="success-content">
+            <div class="live-progress"></div>
+            <div class="success-icon"></div>
+            <h2>DESIGN ADDED!</h2>
+            <p style="color: var(--gray-text); font-size: 18px; margin-bottom: 30px;">
+                Your new product has been successfully added to the inventory database.
+            </p>
+            <button onclick="hideSuccess()" style="
+                margin-top: 30px;
+                padding: 16px 40px;
+                background: rgba(249, 115, 22, 0.1);
+                border: 2px solid var(--primary-orange);
+                color: var(--primary-orange);
+                border-radius: 12px;
+                font-weight: 700;
+                font-size: 16px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                letter-spacing: 1px;
+            ">ADD ANOTHER</button>
+        </div>
+    </div>
+
+    <!-- Main Form -->
+    <div class="form-container">
+        <div class="form-header" id="formHeader">
+            <div class="header-glow"></div>
+            <div class="header-particles" id="headerParticles"></div>
+            <h1 class="animated-title">ADD NEW DESIGN</h1>
+            <p class="header-subtitle">Complete the form below to add a product to inventory</p>
+        </div>
+
+        <form action="/addproductworker_buttonclick" method="post" enctype="multipart/form-data" id="productForm">
+            <table>
+
+
+
+                <tr>
+                    <th scope="row">Category</th>
+                    <td>
+                         <select name="category">
+                                <option>T-shirt</option>
+                                   <option>Shirts</option>
+                                   <option>Hoodies</option>
+                            </select>
+                    </td>
+                </tr> <tr>
+                    <th scope="row">Product Name</th>
+                    <td>
+                        <div class="input-container">
+                            <input type="text" name="textfield" id="textfield3" placeholder="Enter product name" />
+                            <div class="live-typing-effect"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Description</th>
+                    <td>
+                        <div class="input-container">
+                            <input type="text" name="textfield2" id="textfield4" placeholder="Enter product description" />
+                            <div class="live-typing-effect"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Price (₹)</th>
+                    <td>
+                        <div class="input-container">
+                            <input type="text" name="textfield3" id="textfield5" placeholder="0.00" />
+                            <div class="live-typing-effect"></div>
+                        </div>
+                    </td>
+                </tr>
+{#                <tr>#}
+{#                    <th scope="row">Color</th>#}
+{#                    <td>#}
+{#                        <div class="input-container">#}
+{#                            <input type="text" name="textfield4" id="textfield6" placeholder="Enter color(s)" />#}
+{#                            <div class="live-typing-effect"></div>#}
+{#                        </div>#}
+{#                    </td>#}
+{#                </tr>#}
+                <tr>
+                    <th scope="row">Product Image</th>
+                    <td>
+                        <div class="input-container">
+                            <input type="file" name="fileField" id="fileField" />
+                            <div class="live-typing-effect"></div>
+
+                        </div>
+                    </td>
+                </tr>
+{#                <tr>#}
+{#                    <th scope="row">Available Sizes</th>#}
+{#                    <td>#}
+{#                        <div class="checkbox-group">#}
+{#                            <div class="checkbox-item">#}
+{#                                <input type="checkbox" name="CheckboxGroup1" value="S" id="CheckboxGroup1_0" />#}
+{#                                <label for="CheckboxGroup1_0">SMALL</label>#}
+{#                                <div class="selection-particles" id="particles-0"></div>#}
+{#                            </div>#}
+{#                            <div class="checkbox-item">#}
+{#                                <input type="checkbox" name="CheckboxGroup1" value="M" id="CheckboxGroup1_1" />#}
+{#                                <label for="CheckboxGroup1_1">MEDIUM</label>#}
+{#                                <div class="selection-particles" id="particles-1"></div>#}
+{#                            </div>#}
+{#                            <div class="checkbox-item">#}
+{#                                <input type="checkbox" name="CheckboxGroup1" value="L" id="CheckboxGroup1_2" />#}
+{#                                <label for="CheckboxGroup1_2">LARGE</label>#}
+{#                                <div class="selection-particles" id="particles-2"></div>#}
+{#                            </div>#}
+{#                            <div class="checkbox-item">#}
+{#                                <input type="checkbox" name="CheckboxGroup1" value="XL" id="CheckboxGroup1_3" />#}
+{#                                <label for="CheckboxGroup1_3">XLARGE</label>#}
+{#                                <div class="selection-particles" id="particles-3"></div>#}
+{#                            </div>#}
+{#                            <div class="checkbox-item">#}
+{#                                <input type="checkbox" name="CheckboxGroup1" value="XXL" id="CheckboxGroup1_4" />#}
+{#                                <label for="CheckboxGroup1_4">XXLARGE</label>#}
+{#                                <div class="selection-particles" id="particles-4"></div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </td>#}
+{#                </tr>#}
+                <tr>
+                    <th colspan="2" scope="row">
+
+                        <div align="center">
+                            <div class="live-particles" id="buttonParticles"></div>
+                            <input type="submit" value="ADD PRODUCT NOW" />
+                            <div class="live-progress"></div>
+                        </div>
+                    </th>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+<script>
+    // Initialize live animations
+    document.addEventListener('DOMContentLoaded', function() {
+        // Mouse tracking for live effects
+        setupMouseTracking();
+
+        // Create floating orbs
+        createFloatingOrbs();
+
+        // Create header particles
+        createHeaderParticles();
+
+        // Setup form interactions
+        setupFormInteractions();
+
+        // Setup checkbox animations
+        setupCheckboxAnimations();
+
+        // Setup button effects
+        setupButtonEffects();
+    });
+
+    function setupMouseTracking() {
+        const energyWave = document.querySelector('.energy-wave');
+        const headerGlow = document.querySelector('.header-glow');
+
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth) * 100;
+            const y = (e.clientY / window.innerHeight) * 100;
+
+            // Update energy wave
+            energyWave.style.setProperty('--mouse-x', `${x}%`);
+            energyWave.style.setProperty('--mouse-y', `${y}%`);
+
+            // Update header glow
+            const headerRect = document.querySelector('.form-header').getBoundingClientRect();
+            const headerX = ((e.clientX - headerRect.left) / headerRect.width) * 100;
+            const headerY = ((e.clientY - headerRect.top) / headerRect.height) * 100;
+
+            headerGlow.style.setProperty('--mouse-x-header', `${headerX}%`);
+            headerGlow.style.setProperty('--mouse-y-header', `${headerY}%`);
+        });
+    }
+
+    function createFloatingOrbs() {
+        const orbsContainer = document.getElementById('floatingOrbs');
+        const colors = [
+            'rgba(249, 115, 22, 0.1)',
+            'rgba(251, 146, 60, 0.08)',
+            'rgba(253, 186, 116, 0.06)'
+        ];
+
+        for (let i = 0; i < 5; i++) {
+            const orb = document.createElement('div');
+            orb.className = 'orb';
+            orb.style.background = colors[i % colors.length];
+            orb.style.width = `${100 + Math.random() * 200}px`;
+            orb.style.height = orb.style.width;
+            orb.style.left = `${Math.random() * 100}%`;
+            orb.style.top = `${Math.random() * 100}%`;
+            orb.style.setProperty('--orb-x', `${Math.random() * 100}vw`);
+            orb.style.setProperty('--orb-y', `${Math.random() * 100}vh`);
+            orb.style.animationDelay = `${Math.random() * 15}s`;
+            orb.style.animationDuration = `${20 + Math.random() * 20}s`;
+
+            orbsContainer.appendChild(orb);
+        }
+    }
+
+    function createHeaderParticles() {
+        const particlesContainer = document.getElementById('headerParticles');
+
+        for (let i = 0; i < 15; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'header-particle';
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.top = `${Math.random() * 100}%`;
+            particle.style.animationDelay = `${Math.random() * 3}s`;
+            particle.style.animationDuration = `${2 + Math.random() * 2}s`;
+
+            particlesContainer.appendChild(particle);
+        }
+    }
+
+    function setupFormInteractions() {
+        // Add row indicators
+        const rows = document.querySelectorAll('form tr');
+        rows.forEach(row => {
+            const indicator = document.createElement('div');
+            indicator.className = 'row-indicator';
+            row.appendChild(indicator);
+        });
+
+        // Input focus effects
+        const inputs = document.querySelectorAll('input[type="text"]');
+        inputs.forEach(input => {
+            input.addEventListener('input', function() {
+                if (this.value.length > 0) {
+                    createTypingParticles(this);
+                }
+            });
+
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+            });
+
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+
+        // File input animation
+        const fileInput = document.getElementById('fileField');
+        fileInput.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                createFileUploadEffect(this);
+            }
+        });
+    }
+
+    function createTypingParticles(input) {
+        const rect = input.getBoundingClientRect();
+        const colors = ['#f97316', '#fb923c', '#fdba74'];
+
+        for (let i = 0; i < 3; i++) {
+            const particle = document.createElement('div');
+            particle.style.position = 'fixed';
+            particle.style.width = '4px';
+            particle.style.height = '4px';
+            particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+            particle.style.borderRadius = '50%';
+            particle.style.left = `${rect.right - 10}px`;
+            particle.style.top = `${rect.top + 10}px`;
+            particle.style.zIndex = '1000';
+            particle.style.opacity = '0';
+            particle.style.boxShadow = '0 0 10px currentColor';
+
+            document.body.appendChild(particle);
+
+            const angle = Math.random() * Math.PI - Math.PI/2;
+            const distance = 20 + Math.random() * 30;
+            const duration = 500 + Math.random() * 500;
+
+            const startTime = Date.now();
+
+            function animate() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+
+                const currentX = Math.cos(angle) * distance * progress;
+                const currentY = Math.sin(angle) * distance * progress;
+
+                particle.style.transform = `translate(${currentX}px, ${currentY}px)`;
+                particle.style.opacity = 1 - progress;
+
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    document.body.removeChild(particle);
+                }
+            }
+
+            animate();
+        }
+    }
+
+    function createFileUploadEffect(input) {
+        const rect = input.getBoundingClientRect();
+        createRippleEffect(rect.left + rect.width/2, rect.top + rect.height/2, '#f97316');
+
+        // Show file name with animation
+        const fileName = input.files[0].name;
+        const display = document.createElement('div');
+        display.className = 'file-name-display';
+        display.innerHTML = `
+            <span style="color: #f97316; font-weight: 700;">📁 SELECTED:</span>
+            <span style="color: #a0a0a0; margin-left: 10px;">${fileName}</span>
+        `;
+        display.style.marginTop = '15px';
+        display.style.padding = '12px';
+        display.style.background = 'rgba(249, 115, 22, 0.05)';
+        display.style.borderRadius = '10px';
+        display.style.border = '2px solid rgba(249, 115, 22, 0.1)';
+        display.style.animation = 'fadeIn 0.5s ease';
+
+        const existing = input.parentElement.querySelector('.file-name-display');
+        if (existing) existing.remove();
+
+        input.parentElement.appendChild(display);
+    }
+
+    function setupCheckboxAnimations() {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+        checkboxes.forEach((checkbox, index) => {
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    createCheckboxParticles(index);
+                }
+            });
+        });
+    }
+
+    function createCheckboxParticles(index) {
+        const container = document.getElementById(`particles-${index}`);
+        const colors = ['#f97316', '#fb923c', '#fdba74'];
+
+        for (let i = 0; i < 12; i++) {
+            const particle = document.createElement('div');
+            particle.style.position = 'absolute';
+            particle.style.width = '6px';
+            particle.style.height = '6px';
+            particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+            particle.style.borderRadius = '50%';
+            particle.style.left = '50%';
+            particle.style.top = '50%';
+            particle.style.opacity = '0';
+            particle.style.boxShadow = '0 0 15px currentColor';
+
+            container.appendChild(particle);
+
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 30 + Math.random() * 50;
+            const duration = 800 + Math.random() * 800;
+
+            const startTime = Date.now();
+
+            function animate() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+
+                const currentX = Math.cos(angle) * distance * progress;
+                const currentY = Math.sin(angle) * distance * progress;
+
+                particle.style.transform = `translate(${currentX}px, ${currentY}px)`;
+                particle.style.opacity = 1 - progress;
+
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    particle.remove();
+                }
+            }
+
+            animate();
+        }
+    }
+
+    function setupButtonEffects() {
+        const button = document.getElementById('button');
+        const particlesContainer = document.getElementById('buttonParticles');
+
+        button.addEventListener('mouseenter', () => {
+            createButtonParticles(particlesContainer);
+        });
+
+        // Form submission
+        const form = document.getElementById('productForm');
+        const successOverlay = document.getElementById('successOverlay');
+
+        form.addEventListener('submit', function(e) {
+{#            e.preventDefault();#}
+
+            // Show loading animation
+            button.value = 'PROCESSING...';
+            button.disabled = true;
+
+            // Create processing particles
+            createProcessingParticles();
+
+            // Simulate API call
+            setTimeout(() => {
+                // Show success animation
+                successOverlay.classList.add('active');
+
+                // Create celebration effect
+                createCelebrationEffect();
+
+                // Reset form after delay
+                setTimeout(() => {
+                    form.reset();
+                    button.value = 'ADD PRODUCT NOW';
+                    button.disabled = false;
+                }, 3000);
+            }, 2000);
+        });
+    }
+
+    function createButtonParticles(container) {
+        for (let i = 0; i < 10; i++) {
+            const particle = document.createElement('div');
+            particle.style.position = 'absolute';
+            particle.style.width = '6px';
+            particle.style.height = '6px';
+            particle.style.background = '#f97316';
+            particle.style.borderRadius = '50%';
+            particle.style.left = '50%';
+            particle.style.top = '50%';
+            particle.style.opacity = '0';
+            particle.style.boxShadow = '0 0 20px #f97316';
+
+            container.appendChild(particle);
+
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 40 + Math.random() * 60;
+            const duration = 1000 + Math.random() * 1000;
+
+            const startTime = Date.now();
+
+            function animate() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+
+                const currentX = Math.cos(angle) * distance * progress;
+                const currentY = Math.sin(angle) * distance * progress;
+
+                particle.style.transform = `translate(${currentX}px, ${currentY}px)`;
+                particle.style.opacity = 1 - progress;
+
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    particle.remove();
+                }
+            }
+
+            animate();
+        }
+    }
+
+    function createProcessingParticles() {
+        const button = document.getElementById('button');
+        const rect = button.getBoundingClientRect();
+
+        for (let i = 0; i < 20; i++) {
+            const particle = document.createElement('div');
+            particle.style.position = 'fixed';
+            particle.style.width = '8px';
+            particle.style.height = '8px';
+            particle.style.background = '#f97316';
+            particle.style.borderRadius = '50%';
+            particle.style.left = `${rect.left + rect.width/2}px`;
+            particle.style.top = `${rect.top + rect.height/2}px`;
+            particle.style.zIndex = '1000';
+            particle.style.opacity = '0';
+            particle.style.boxShadow = '0 0 25px #f97316';
+
+            document.body.appendChild(particle);
+
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 100 + Math.random() * 100;
+            const duration = 1500 + Math.random() * 1000;
+
+            const startTime = Date.now();
+
+            function animate() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+
+                const currentX = Math.cos(angle) * distance * progress;
+                const currentY = Math.sin(angle) * distance * progress;
+
+                particle.style.transform = `translate(${currentX}px, ${currentY}px)`;
+                particle.style.opacity = 1 - progress;
+
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    particle.remove();
+                }
+            }
+
+            setTimeout(() => {
+                animate();
+            }, Math.random() * 300);
+        }
+    }
+
+    function createCelebrationEffect() {
+        // Create fireworks
+        for (let i = 0; i < 15; i++) {
+            setTimeout(() => {
+                createFirework();
+            }, i * 100);
+        }
+    }
+
+    function createFirework() {
+        const x = Math.random() * window.innerWidth;
+        const y = window.innerHeight;
+
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.style.position = 'fixed';
+            particle.style.width = '6px';
+            particle.style.height = '6px';
+            particle.style.background = '#f97316';
+            particle.style.borderRadius = '50%';
+            particle.style.left = `${x}px`;
+            particle.style.top = `${y}px`;
+            particle.style.zIndex = '1000';
+            particle.style.opacity = '0';
+            particle.style.boxShadow = '0 0 15px #f97316';
+
+            document.body.appendChild(particle);
+
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 100 + Math.random() * 100;
+            const duration = 1000 + Math.random() * 500;
+
+            const startTime = Date.now();
+
+            function animate() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+
+                const currentX = Math.cos(angle) * distance * progress;
+                const currentY = -distance * progress * (1 + progress);
+
+                particle.style.transform = `translate(${currentX}px, ${currentY}px)`;
+                particle.style.opacity = 1 - progress;
+
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    particle.remove();
+                }
+            }
+
+            setTimeout(animate, Math.random() * 100);
+        }
+    }
+
+    function createRippleEffect(x, y, color) {
+        const ripple = document.createElement('div');
+        ripple.style.position = 'fixed';
+        ripple.style.width = '20px';
+        ripple.style.height = '20px';
+        ripple.style.border = `2px solid ${color}`;
+        ripple.style.borderRadius = '50%';
+        ripple.style.left = `${x - 10}px`;
+        ripple.style.top = `${y - 10}px`;
+        ripple.style.zIndex = '1000';
+        ripple.style.opacity = '0.8';
+        ripple.style.pointerEvents = 'none';
+
+        document.body.appendChild(ripple);
+
+        let size = 20;
+        let opacity = 0.8;
+
+        function expand() {
+            size += 20;
+            opacity -= 0.1;
+
+            ripple.style.width = `${size}px`;
+            ripple.style.height = `${size}px`;
+            ripple.style.left = `${x - size/2}px`;
+            ripple.style.top = `${y - size/2}px`;
+            ripple.style.opacity = opacity;
+
+            if (opacity > 0) {
+                requestAnimationFrame(expand);
+            } else {
+                ripple.remove();
+            }
+        }
+
+        expand();
+    }
+
+    function hideSuccess() {
+        const successOverlay = document.getElementById('successOverlay');
+        successOverlay.classList.remove('active');
+    }
+</script>
+<script>
+// Prevent going back to this page after form submission
+if (window.history && window.history.pushState) {
+    // Add current page to history
+    window.history.pushState(null, null, window.location.href);
+
+    // Listen for back/forward navigation
+    window.onpopstate = function(event) {
+        // Redirect to /rtohome when back button is pressed
+        window.location.href = '/homeworker';
+    };
+}
+</script>
+</body>
+</html>

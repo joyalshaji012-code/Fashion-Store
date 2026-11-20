@@ -1,0 +1,1517 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#  <meta charset="UTF-8">#}
+{#  <title>Registration Data Table</title>#}
+{#  <!-- Bootstrap CSS -->#}
+{#  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">#}
+{#  <!-- DataTables CSS -->#}
+{#  <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">#}
+{#</head>#}
+{#<body>#}
+{#  <div class="container mt-5">#}
+{#    <h2 class="mb-4">View sale request</h2>#}
+{#    <table id="registrationTable" class="table table-striped table-bordered">#}
+{#      <thead>#}
+{#        <tr>#}
+{#          <th>#</th>#}
+{#          <th>Worker Name</th>#}
+{#          <th>Address</th>#}
+{#          <th>Email</th>#}
+{#          <th>Phone</th>#}
+{#          <th>Product Image</th>#}
+{#          <th>Description</th>#}
+{#          <th>Price</th>#}
+{#          <th></th>#}
+{#        </tr>#}
+{#      </thead>#}
+{#      <tbody>#}
+{#        <!-- Sample Data Row -->#}
+{#        {% for i in data %}#}
+{#        <tr>#}
+{#          <td>&nbsp;{{ forloop.counter }}</td>#}
+{#          <td>&nbsp;{{ i.WORKER.name }}</td>#}
+{#          <td>&nbsp;{{ i.WORKER.place }},{{ i.WORKER.post }},{{ i.WORKER.pin }}</td>#}
+{#          <td>&nbsp;{{ i.WORKER.email }}</td>#}
+{#          <td>&nbsp;{{ i.WORKER.phone }}</td>#}
+{#          <td>&nbsp;<img src="{{ i.image }}" height="150" width="150"><br>#}
+{#            <a href="{{ i.image }}" download>Download file</a>#}
+{#          </td>#}
+{#          <td> {{ i.description }}</td>#}
+{#          <td> {{ i.price }}</td>#}
+{#          <td><p><a href="/salerequest_approve/{{ i.id }}">Approve</a></p>#}
+{#            <p><a href="/salerequest_reject/{{ i.id }}">Reject</a></p>#}
+{#        </tr>#}
+{#        {% endfor %}#}
+{#       #}
+{#        <!-- Add more rows dynamically from backend -->#}
+{#      </tbody>#}
+{#    </table>#}
+{#  </div>#}
+{##}
+{#  <!-- Scripts -->#}
+{#  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>#}
+{#  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>#}
+{#  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>#}
+{#  <script>#}
+{#    $(document).ready(function () {#}
+{#      $('#registrationTable').DataTable();#}
+{#    });#}
+{#  </script>#}
+{#</body>#}
+{#</html>#}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sale Requests Dashboard | Premium</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- DataTables CSS -->
+  <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- GSAP Animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <style>
+    /* BLUE AND WHITE COLOR THEME */
+    :root {
+      --primary-blue: #2563eb;
+      --primary-blue-dark: #1d4ed8;
+      --primary-blue-light: #3b82f6;
+      --secondary-blue: #0ea5e9;
+      --light-blue: #60a5fa;
+      --success-blue: #10b981;
+      --warning-blue: #f59e0b;
+      --danger-red: #ef4444;
+      --dark-blue: #1e3a8a;
+      --bg-dark: #0f172a;
+      --bg-light: #ffffff;
+      --glass-white: rgba(255, 255, 255, 0.9);
+      --glass-blue: rgba(37, 99, 235, 0.1);
+      --gradient-blue: linear-gradient(135deg, #2563eb 0%, #0ea5e9 50%, #60a5fa 100%);
+      --gradient-blue-light: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+      --gradient-blue-dark: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%);
+      --shadow-blue: 0 10px 25px rgba(37, 99, 235, 0.2);
+      --shadow-dark: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    body {
+      background: linear-gradient(135deg, #f0f7ff 0%, #e6f2ff 100%);
+      color: #1e293b;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* GLOBAL TEXT STYLING - SIMPLE AND CLEAN */
+    body,
+    body *,
+    h1, h2, h3, h4, h5, h6,
+    p, span, div, a,
+    td, th, tr,
+    li, ul, ol,
+    button, input, select, textarea,
+    label, small,
+    .btn, .form-control, .form-select,
+    .dataTables_info, .dataTables_length, .dataTables_filter,
+    .dataTables_paginate, .dataTables_paginate a,
+    .dropdown-menu, .dropdown-item,
+    .alert, .badge {
+      color: #1e293b;
+      text-shadow: none !important;
+      font-weight: normal;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+      background: #e6f2ff;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--gradient-blue);
+      border-radius: 5px;
+      border: 2px solid #e6f2ff;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-blue);
+    }
+
+    /* Loading Animation */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .loader {
+      width: 80px;
+      height: 80px;
+      position: relative;
+    }
+
+    .loader-dot {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: var(--gradient-blue);
+      border-radius: 50%;
+      animation: loaderAnimation 1.5s infinite;
+    }
+
+    .loader-dot:nth-child(1) { top: 0; left: 0; animation-delay: 0s; }
+    .loader-dot:nth-child(2) { top: 0; right: 0; animation-delay: 0.2s; }
+    .loader-dot:nth-child(3) { bottom: 0; right: 0; animation-delay: 0.4s; }
+    .loader-dot:nth-child(4) { bottom: 0; left: 0; animation-delay: 0.6s; }
+
+    @keyframes loaderAnimation {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.5); opacity: 0.5; }
+    }
+
+    /* Main Container */
+    .dashboard-container {
+      min-height: 100vh;
+      padding: 2rem;
+      position: relative;
+      opacity: 0;
+      background: transparent;
+    }
+
+    /* Animated Background */
+    .animated-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+      background: linear-gradient(135deg, #f0f7ff 0%, #e6f2ff 100%);
+    }
+
+    .floating-shape {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.1;
+      animation: float 20s infinite ease-in-out;
+    }
+
+    .shape-1 {
+      width: 400px;
+      height: 400px;
+      background: var(--primary-blue);
+      top: -200px;
+      right: -100px;
+      animation-delay: 0s;
+    }
+
+    .shape-2 {
+      width: 300px;
+      height: 300px;
+      background: var(--secondary-blue);
+      bottom: -150px;
+      left: -100px;
+      animation-delay: 5s;
+    }
+
+    .shape-3 {
+      width: 250px;
+      height: 250px;
+      background: var(--light-blue);
+      top: 50%;
+      right: 20%;
+      animation-delay: 10s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      33% { transform: translateY(-50px) rotate(120deg); }
+      66% { transform: translateY(50px) rotate(240deg); }
+    }
+
+    /* Header */
+    .dashboard-header {
+      background: var(--glass-white);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(37, 99, 235, 0.1);
+      border-radius: 20px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+      transform: translateY(-50px);
+      opacity: 0;
+      box-shadow: var(--shadow-blue);
+    }
+
+    .header-glow {
+      position: absolute;
+      top: -100px;
+      left: -100px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, var(--primary-blue) 0%, transparent 70%);
+      opacity: 0.05;
+      filter: blur(40px);
+    }
+
+    .header-content h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary-blue);
+      margin-bottom: 1rem;
+      position: relative;
+      letter-spacing: -0.5px;
+    }
+
+    .header-content h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 100px;
+      height: 3px;
+      background: var(--gradient-blue);
+      border-radius: 2px;
+    }
+
+    .header-content p.lead {
+      color: #475569;
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+
+    /* Stats Cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .stat-card {
+      background: var(--glass-white);
+      border: 1px solid rgba(37, 99, 235, 0.1);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(30px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gradient-blue);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-blue);
+      border-color: rgba(37, 99, 235, 0.2);
+    }
+
+    .stat-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .stat-value {
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--primary-blue);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      color: #64748b;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    /* Table Container */
+    .table-section {
+      background: var(--glass-white);
+      border: 1px solid rgba(37, 99, 235, 0.1);
+      border-radius: 20px;
+      padding: 2rem;
+      margin-top: 2rem;
+      opacity: 0;
+      transform: translateY(50px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Modern Table */
+    #registrationTable_wrapper {
+      overflow: visible;
+    }
+
+    #registrationTable {
+      background: transparent;
+      border: none;
+      margin: 0;
+    }
+
+    #registrationTable thead {
+      background: rgba(37, 99, 235, 0.08);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(37, 99, 235, 0.1);
+    }
+
+    #registrationTable thead th {
+      color: var(--primary-blue);
+      font-weight: 600;
+      padding: 1.25rem;
+      border: none;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.85rem;
+      position: relative;
+    }
+
+    #registrationTable thead th::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 25%;
+      height: 50%;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, rgba(37, 99, 235, 0.2), transparent);
+    }
+
+    #registrationTable thead th:last-child::after {
+      display: none;
+    }
+
+    /* Table Rows */
+    #registrationTable tbody tr {
+      background: var(--glass-white);
+      border: 1px solid transparent;
+      border-radius: 12px;
+      margin: 6px 0;
+      transition: all 0.3s ease;
+      position: relative;
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+
+    #registrationTable tbody tr:nth-child(even) {
+      background: rgba(240, 247, 255, 0.7);
+    }
+
+    #registrationTable tbody tr:hover {
+      background: #ffffff;
+      border-color: rgba(37, 99, 235, 0.2);
+      transform: translateY(-3px) scale(1.01);
+      box-shadow: var(--shadow-blue);
+      z-index: 10;
+    }
+
+    #registrationTable tbody td {
+      padding: 1.25rem;
+      border: none;
+      vertical-align: middle;
+      color: #1e293b;
+      position: relative;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    /* Table Cells Styling */
+    .serial-cell {
+      text-align: center;
+    }
+
+    .serial-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background: var(--gradient-blue);
+      color: white;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 1rem;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    #registrationTable tbody tr:hover .serial-badge {
+      transform: rotate(360deg) scale(1.1);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+    }
+
+    .worker-cell {
+      min-width: 220px;
+    }
+
+    .worker-avatar {
+      width: 48px;
+      height: 48px;
+      background: var(--gradient-blue);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-right: 1rem;
+      flex-shrink: 0;
+    }
+
+    .worker-info {
+      display: flex;
+      align-items: center;
+    }
+
+    .worker-name {
+      font-weight: 600;
+      font-size: 1.05rem;
+      color: var(--primary-blue);
+      margin-bottom: 0.25rem;
+    }
+
+    .worker-location {
+      color: #64748b;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+    }
+
+    .worker-location i {
+      color: var(--primary-blue);
+    }
+
+    /* Contact Cell */
+    .contact-cell {
+      min-width: 200px;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      background: rgba(240, 247, 255, 0.8);
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .contact-item:hover {
+      background: rgba(37, 99, 235, 0.1);
+      transform: translateX(5px);
+    }
+
+    .contact-item i {
+      color: var(--primary-blue);
+      font-size: 1rem;
+      width: 20px;
+    }
+
+    .contact-item div:not(.small) {
+      color: #1e293b;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    /* Image Cell */
+    .image-cell {
+      min-width: 180px;
+    }
+
+    .product-image-container {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .product-image-container:hover {
+      transform: perspective(1000px) rotateY(5deg) scale(1.05);
+      box-shadow: 0 15px 35px rgba(37, 99, 235, 0.2);
+    }
+
+    .product-image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .product-image-container:hover img {
+      transform: scale(1.1);
+    }
+
+    .image-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to top, rgba(30, 58, 138, 0.8), transparent);
+      display: flex;
+      align-items: flex-end;
+      padding: 1rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .product-image-container:hover .image-overlay {
+      opacity: 1;
+    }
+
+    .download-btn {
+      background: var(--gradient-blue);
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 20px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+    }
+
+    .download-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(37, 99, 235, 0.4);
+    }
+
+    /* Description Cell */
+    .description-cell {
+      min-width: 250px;
+      max-width: 300px;
+    }
+
+    .description-content {
+      background: rgba(240, 247, 255, 0.8);
+      padding: 1rem;
+      border-radius: 12px;
+      border-left: 3px solid var(--primary-blue);
+      max-height: 140px;
+      overflow-y: auto;
+      transition: all 0.3s ease;
+      position: relative;
+      color: #1e293b;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      font-weight: 400;
+    }
+
+    .description-content:hover {
+      background: rgba(37, 99, 235, 0.05);
+      transform: translateX(5px);
+    }
+
+    /* Price Cell */
+    .price-cell {
+      min-width: 120px;
+    }
+
+    .price-tag {
+      background: var(--gradient-blue);
+      color: white;
+      padding: 0.75rem 1.25rem;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      min-width: 110px;
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .price-tag::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .price-tag:hover::before {
+      left: 100%;
+    }
+
+    .price-tag:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 10px 30px rgba(37, 99, 235, 0.4);
+    }
+
+    /* Action Cell */
+    .action-cell {
+      min-width: 180px;
+    }
+
+    .action-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      min-width: 150px;
+    }
+
+    .action-btn {
+      padding: 0.75rem 1.25rem;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid transparent;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: white;
+    }
+
+    .action-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.5s ease;
+    }
+
+    .action-btn:hover::before {
+      transform: translateX(100%);
+    }
+
+    .approve-btn {
+      background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+    }
+
+    .reject-btn {
+      background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3);
+    }
+
+    .action-btn:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Status Indicator */
+    .status-indicator {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      background: var(--warning-blue);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+      box-shadow: 0 0 15px var(--warning-blue);
+    }
+
+    .status-text {
+      font-size: 0.75rem;
+      color: var(--warning-blue);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.8; transform: scale(1.1); }
+    }
+
+    /* Footer */
+    .dashboard-footer {
+      text-align: center;
+      padding: 2rem;
+      margin-top: 3rem;
+      color: #64748b;
+      font-size: 0.9rem;
+      opacity: 0;
+      font-weight: 400;
+    }
+
+    .footer-glow {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--primary-blue), transparent);
+      margin-bottom: 1rem;
+      opacity: 0.3;
+    }
+
+    /* Form controls */
+    .form-control, .form-select {
+      background: var(--glass-white) !important;
+      color: #1e293b !important;
+      border-color: rgba(37, 99, 235, 0.2) !important;
+    }
+
+    .form-control::placeholder {
+      color: #94a3b8 !important;
+    }
+
+    /* Responsive */
+    @media (max-width: 1400px) {
+      .dashboard-container {
+        padding: 1.5rem;
+      }
+
+      .header-content h1 {
+        font-size: 2rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-container {
+        padding: 1rem;
+      }
+
+      .dashboard-header {
+        padding: 1.5rem;
+      }
+
+      .header-content h1 {
+        font-size: 1.75rem;
+      }
+
+      .header-content p.lead {
+        font-size: 1rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .table-section {
+        padding: 1rem;
+      }
+
+      #registrationTable_wrapper {
+        overflow-x: auto;
+      }
+
+      #registrationTable tbody td,
+      #registrationTable thead th {
+        font-weight: 500 !important;
+        font-size: 0.9rem !important;
+        padding: 1rem !important;
+      }
+
+      .worker-name {
+        font-size: 1rem !important;
+        font-weight: 600 !important;
+      }
+
+      .price-tag {
+        font-size: 1rem !important;
+        padding: 0.6rem 1rem !important;
+        font-weight: 600 !important;
+      }
+
+      .action-btn {
+        padding: 0.6rem 1rem !important;
+        font-size: 0.85rem !important;
+        font-weight: 500 !important;
+      }
+    }
+
+    /* Button Styles */
+    .btn-outline-primary {
+      color: var(--primary-blue) !important;
+      border-color: var(--primary-blue) !important;
+      background: transparent !important;
+    }
+
+    .btn-outline-primary:hover {
+      background: var(--primary-blue) !important;
+      color: white !important;
+    }
+
+    .btn-primary {
+      background: var(--gradient-blue) !important;
+      border: none !important;
+      color: white !important;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-blue);
+    }
+
+    /* DataTables Customization */
+    .dataTables_info, .dataTables_length, .dataTables_filter, .dataTables_paginate {
+      color: #64748b !important;
+      font-weight: 400 !important;
+    }
+
+    .dataTables_filter input, .dataTables_length select {
+      background: var(--glass-white) !important;
+      color: #1e293b !important;
+      border-color: rgba(37, 99, 235, 0.2) !important;
+    }
+
+    .dataTables_paginate .paginate_button {
+      background: var(--glass-white) !important;
+      border-color: rgba(37, 99, 235, 0.2) !important;
+      color: var(--primary-blue) !important;
+    }
+
+    .dataTables_paginate .paginate_button.current {
+      background: var(--gradient-blue) !important;
+      color: white !important;
+      border-color: var(--primary-blue) !important;
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading Animation -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loader">
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+    </div>
+  </div>
+
+  <!-- Animated Background -->
+  <div class="animated-bg">
+    <div class="floating-shape shape-1"></div>
+    <div class="floating-shape shape-2"></div>
+    <div class="floating-shape shape-3"></div>
+  </div>
+
+  <!-- Main Dashboard -->
+  <div class="dashboard-container" id="dashboard">
+    <!-- Header -->
+    <header class="dashboard-header" id="header">
+      <div class="header-glow"></div>
+      <div class="header-content">
+        <h1>
+          <i class="fas fa-gem me-3"></i>
+          Sale Requests Dashboard
+        </h1>
+        <p class="lead mb-4">Premium management interface with real-time analytics and advanced controls</p>
+
+        <!-- Stats -->
+        <div class="stats-grid" id="statsGrid">
+          <div class="stat-card">
+            <div class="stat-value" id="totalRequests">{{ data|length }}</div>
+            <div class="stat-label">Total Requests</div>
+            <div class="mt-3">
+              <div class="progress" style="height: 6px; background: rgba(37, 99, 235, 0.1); border-radius: 3px;">
+                <div class="progress-bar" style="background: var(--gradient-blue); width: 100%; border-radius: 3px;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-value" id="pendingRequests">{{ data|length }}</div>
+            <div class="stat-label">Pending Review</div>
+            <div class="mt-3">
+              <div class="progress" style="height: 6px; background: rgba(37, 99, 235, 0.1); border-radius: 3px;">
+                <div class="progress-bar" style="background: var(--gradient-blue); width: 100%; border-radius: 3px;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-value" id="avgPrice">
+              {% if data|length > 0 %}
+                ₹{% with total=0 %}
+                  {% for i in data %}
+                    {% with total=total|add:i.price %}
+                    {% endwith %}
+                  {% endfor %}
+                  {{ total|floatformat:2 }}
+                {% endwith %}
+              {% else %}
+                ₹0.00
+              {% endif %}
+            </div>
+            <div class="stat-label">Average Price</div>
+            <div class="mt-3">
+              <div class="progress" style="height: 6px; background: rgba(37, 99, 235, 0.1); border-radius: 3px;">
+                <div class="progress-bar" style="background: var(--gradient-blue); width: 75%; border-radius: 3px;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-value" id="responseTime">2.4s</div>
+            <div class="stat-label">Avg. Response Time</div>
+            <div class="mt-3">
+              <div class="progress" style="height: 6px; background: rgba(37, 99, 235, 0.1); border-radius: 3px;">
+                <div class="progress-bar" style="background: var(--gradient-blue); width: 60%; border-radius: 3px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Table Section -->
+    <section class="table-section" id="tableSection" style="overflow: scroll">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h4 mb-0">
+          <i class="fas fa-table-cells me-2"></i>
+          Sale Requests
+        </h2>
+        <div class="d-flex gap-2">
+          <button class="btn btn-sm btn-outline-primary" id="refreshBtn">
+            <i class="fas fa-sync-alt me-2"></i>Refresh
+          </button>
+{#          <button class="btn btn-sm btn-primary" id="exportBtn">#}
+{#            <i class="fas fa-download me-2"></i>Export#}
+{#          </button>#}
+        </div>
+      </div>
+
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Worker Details</th>
+            <th>Contact Information</th>
+            <th>Category</th>
+            <th>Product Image</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in data %}
+          <tr class="table-row" data-id="{{ i.id }}">
+            <!-- Status Indicator -->
+            <div class="status-indicator">
+              <div class="status-dot"></div>
+              <span class="status-text">Pending</span>
+            </div>
+
+            <!-- Serial Number -->
+            <td class="serial-cell">
+              <span class="serial-badge">{{ forloop.counter }}</span>
+            </td>
+
+            <!-- Worker Details -->
+            <td class="worker-cell">
+              <div class="worker-info">
+                <div class="worker-avatar">
+                  {{ i.WORKER.name|first|upper }}
+                </div>
+                <div>
+                  <div class="worker-name">{{ i.WORKER.name }}</div>
+                  <div class="worker-location">
+                    <i class="fas fa-map-marker-alt"></i>
+                    {{ i.WORKER.place }}, {{ i.WORKER.post }} - {{ i.WORKER.pin }}
+                  </div>
+                </div>
+              </div>
+            </td>
+
+            <!-- Contact Information -->
+            <td class="contact-cell">
+              <div class="contact-info">
+                <div class="contact-item">
+                  <i class="fas fa-envelope"></i>
+                  <div>
+                    <div class="small text-muted">Email</div>
+                    <div>{{ i.WORKER.email }}</div>
+                  </div>
+                </div>
+                <div class="contact-item">
+                  <i class="fas fa-phone"></i>
+                  <div>
+                    <div class="small text-muted">Phone</div>
+                    <div>{{ i.WORKER.phone }}</div>
+                  </div>
+                </div>
+              </div>
+            </td>
+
+               <td class="description-cell">
+              <div class="description-content">
+                {{ i.categories }}
+              </div>
+            </td>
+
+            <!-- Product Image -->
+            <td class="image-cell">
+              <div class="product-image-container">
+                <img src="{{ i.image }}"
+                     alt="Product Image"
+                     onerror="this.src='https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=150&h=150&fit=crop'"
+                     loading="lazy">
+                <div class="image-overlay">
+                  <a href="{{ i.image }}" download class="download-btn">
+                    <i class="fas fa-download"></i> Download
+                  </a>
+                </div>
+              </div>
+            </td>
+
+            <!-- Description -->
+            <td class="description-cell">
+              <div class="description-content">
+                {{ i.description }}
+              </div>
+            </td>
+
+            <!-- Price -->
+            <td class="price-cell">
+              <div class="price-tag">
+                <i class="fas fa-inr"></i>
+                <span>{{ i.requested_price }}</span>
+              </div>
+            </td>
+
+            <!-- Actions -->
+            <td class="action-cell">
+              <div class="action-buttons">
+                <a href="/salerequest_approve/{{ i.id }}" class="action-btn approve-btn">
+                  <i class="fas fa-check"></i>
+                  <span>Approve</span>
+                </a>
+                <a href="/salerequest_reject/{{ i.id }}" class="action-btn reject-btn">
+                  <i class="fas fa-times"></i>
+                  <span>Reject</span>
+                </a>
+              </div>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="7" class="text-center py-5">
+              <div class="empty-state py-5">
+                <div class="display-1 mb-4" style="font-size: 4rem; color: #cbd5e1;">
+                  <i class="fas fa-inbox"></i>
+                </div>
+                <h3 class="h4 mb-2" style="color: #475569;">No Sale Requests Found</h3>
+                <p class="mb-4" style="color: #64748b;">There are currently no pending sale requests to display</p>
+                <button class="btn btn-primary btn-lg">
+                  <i class="fas fa-sync-alt me-2"></i>
+                  Refresh Page
+                </button>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Footer -->
+    <footer class="dashboard-footer" id="footer">
+      <div class="footer-glow"></div>
+      <p class="mb-0">
+        <i class="fas fa-shield-alt me-2"></i>
+        Premium Dashboard v2.0 • Real-time Management System
+        <span class="mx-2">•</span>
+        <span id="liveTime"></span>
+      </p>
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Wait for page to load
+    window.addEventListener('load', () => {
+      // Hide loading overlay with animation
+      gsap.to('#loadingOverlay', {
+        duration: 0.8,
+        opacity: 0,
+        onComplete: () => {
+          document.getElementById('loadingOverlay').style.display = 'none';
+          initDashboard();
+        }
+      });
+    });
+
+    function initDashboard() {
+      // Initialize GSAP animations
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Animate dashboard container
+      gsap.to('#dashboard', {
+        duration: 1,
+        opacity: 1,
+        ease: 'power3.out'
+      });
+
+      // Animate header
+      gsap.to('#header', {
+        duration: 1,
+        y: 0,
+        opacity: 1,
+        ease: 'back.out(1.7)',
+        delay: 0.3
+      });
+
+      // Animate stats cards with stagger
+      gsap.to('.stat-card', {
+        duration: 0.8,
+        y: 0,
+        opacity: 1,
+        stagger: 0.1,
+        ease: 'power3.out',
+        delay: 0.5
+      });
+
+      // Animate table section
+      gsap.to('#tableSection', {
+        duration: 1,
+        y: 0,
+        opacity: 1,
+        ease: 'power3.out',
+        delay: 0.8,
+        scrollTrigger: {
+          trigger: '#tableSection',
+          start: 'top 80%'
+        }
+      });
+
+      // Animate table rows
+      gsap.to('.table-row', {
+        duration: 0.6,
+        x: 0,
+        opacity: 1,
+        stagger: 0.05,
+        ease: 'power3.out',
+        delay: 1,
+        scrollTrigger: {
+          trigger: '#registrationTable',
+          start: 'top 90%'
+        }
+      });
+
+      // Animate footer
+      gsap.to('#footer', {
+        duration: 1,
+        opacity: 1,
+        delay: 1.5,
+        scrollTrigger: {
+          trigger: '#footer',
+          start: 'top 90%'
+        }
+      });
+
+      // Initialize DataTable with premium settings
+      const table = $('#registrationTable').DataTable({
+        "pageLength": 10,
+        "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+        "dom": '<"row"<"col-md-6"l><"col-md-6"f>>rt<"row"<"col-md-6"i><"col-md-6"p>>',
+        "language": {
+          "search": '<i class="fas fa-search me-2"></i>',
+          "searchPlaceholder": "Search requests...",
+          "lengthMenu": '<i class="fas fa-list me-2"></i>_MENU_',
+          "info": '<i class="fas fa-info-circle me-2"></i>Showing _START_ to _END_ of _TOTAL_',
+          "paginate": {
+            "first": '<i class="fas fa-angle-double-left"></i>',
+            "last": '<i class="fas fa-angle-double-right"></i>',
+            "next": '<i class="fas fa-angle-right"></i>',
+            "previous": '<i class="fas fa-angle-left"></i>'
+          }
+        },
+        "initComplete": function() {
+          // Style DataTable elements
+          $('.dataTables_info, .dataTables_length, .dataTables_filter, .dataTables_paginate').css({
+            'color': '#64748b'
+          });
+
+          // Style inputs and selects
+          $('.dataTables_filter input, .dataTables_length select').css({
+            'color': '#1e293b',
+            'background-color': 'rgba(255, 255, 255, 0.9)'
+          });
+        }
+      });
+
+      // Update live time
+      function updateLiveTime() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('en-US', {
+          hour12: true,
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        });
+        document.getElementById('liveTime').textContent = timeString;
+      }
+
+      updateLiveTime();
+      setInterval(updateLiveTime, 1000);
+
+      // Refresh button animation
+      $('#refreshBtn').click(function(e) {
+        e.preventDefault();
+        const $btn = $(this);
+        $btn.prop('disabled', true);
+
+        // Animation
+        gsap.to($btn.find('i'), {
+          duration: 0.5,
+          rotation: 360,
+          ease: 'power3.out',
+          onComplete: () => {
+            setTimeout(() => {
+              $btn.prop('disabled', false);
+              // Simulate refresh
+              table.ajax.reload(null, false);
+            }, 500);
+          }
+        });
+      });
+
+      // Export button animation
+      $('#exportBtn').click(function(e) {
+        e.preventDefault();
+        const $btn = $(this);
+
+        gsap.to($btn, {
+          duration: 0.3,
+          scale: 0.95,
+          ease: 'power3.out',
+          yoyo: true,
+          repeat: 1,
+          onComplete: () => {
+            // Trigger download
+            alert('Export functionality would be implemented here');
+          }
+        });
+      });
+
+      // Add hover effects to table rows
+      $('#registrationTable tbody').on('mouseenter', 'tr', function() {
+        gsap.to($(this), {
+          duration: 0.3,
+          scale: 1.01,
+          boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
+          ease: 'power3.out'
+        });
+      }).on('mouseleave', 'tr', function() {
+        gsap.to($(this), {
+          duration: 0.3,
+          scale: 1,
+          boxShadow: 'none',
+          ease: 'power3.out'
+        });
+      });
+
+      // Add click animation to action buttons
+      $('.action-btn').click(function(e) {
+        const $btn = $(this);
+
+        gsap.to($btn, {
+          duration: 0.2,
+          scale: 0.95,
+          ease: 'power3.out',
+          onComplete: () => {
+            gsap.to($btn, {
+              duration: 0.2,
+              scale: 1,
+              ease: 'power3.out'
+            });
+          }
+        });
+      });
+
+      // Animate price tags on hover
+      $('.price-tag').hover(
+        function() {
+          gsap.to($(this), {
+            duration: 0.3,
+            y: -3,
+            scale: 1.05,
+            ease: 'power3.out'
+          });
+        },
+        function() {
+          gsap.to($(this), {
+            duration: 0.3,
+            y: 0,
+            scale: 1,
+            ease: 'power3.out'
+          });
+        }
+      );
+
+      // Add parallax effect to background shapes
+      window.addEventListener('mousemove', (e) => {
+        const x = (e.clientX / window.innerWidth) * 20;
+        const y = (e.clientY / window.innerHeight) * 20;
+
+        gsap.to('.shape-1', {
+          duration: 1,
+          x: x * 0.5,
+          y: y * 0.5,
+          ease: 'power3.out'
+        });
+
+        gsap.to('.shape-2', {
+          duration: 1,
+          x: x * 0.3,
+          y: y * 0.3,
+          ease: 'power3.out'
+        });
+
+        gsap.to('.shape-3', {
+          duration: 1,
+          x: x * 0.7,
+          y: y * 0.7,
+          ease: 'power3.out'
+        });
+      });
+
+      // Add scroll animation for stats
+      ScrollTrigger.create({
+        trigger: '.stats-grid',
+        start: 'top 80%',
+        onEnter: () => {
+          gsap.to('.stat-card', {
+            duration: 0.6,
+            y: -5,
+            stagger: 0.1,
+            ease: 'power3.out'
+          });
+        }
+      });
+
+      // Keyboard shortcuts
+      document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.key === 'k') {
+          e.preventDefault();
+          $('.dataTables_filter input').focus().select();
+        }
+
+        if (e.key === 'Escape') {
+          $('.dataTables_filter input').blur();
+        }
+      });
+
+      // Add confetti effect for approved requests (example)
+      function showConfetti() {
+        const colors = ['#2563eb', '#0ea5e9', '#60a5fa', '#10b981', '#3b82f6'];
+
+        for (let i = 0; i < 100; i++) {
+          const confetti = document.createElement('div');
+          confetti.className = 'confetti';
+          confetti.style.cssText = `
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: ${colors[Math.floor(Math.random() * colors.length)]};
+            border-radius: 50%;
+            top: -20px;
+            left: ${Math.random() * 100}vw;
+            z-index: 9999;
+          `;
+
+          document.body.appendChild(confetti);
+
+          gsap.to(confetti, {
+            duration: Math.random() * 2 + 1,
+            y: window.innerHeight + 20,
+            x: (Math.random() - 0.5) * 200,
+            rotation: Math.random() * 360,
+            ease: 'power2.out',
+            onComplete: () => confetti.remove()
+          });
+        }
+      }
+
+      // Example: Show confetti when approve button is clicked
+      $('.approve-btn').click(function(e) {
+        if (!confirm('Are you sure you want to approve this request?')) {
+          e.preventDefault();
+          return;
+        }
+        showConfetti();
+      });
+    }
+  </script>
+<script>
+// Prevent going back to this page after form submission
+if (window.history && window.history.pushState) {
+    // Add current page to history
+    window.history.pushState(null, null, window.location.href);
+
+    // Listen for back/forward navigation
+    window.onpopstate = function(event) {
+        // Redirect to /rtohome when back button is pressed
+        window.location.href = '/home';
+    };
+}
+</script>
+</body>
+</html>

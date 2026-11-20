@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Other head elements -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+
+    <script>
+        var options = {
+            key: '{{ razorpay_api_key }}',
+            amount: '{{ amount }}',
+            currency: '{{ currency }}',
+            name: 'Cosmic Fashion Store',
+            description: 'Purchase Description',
+            image: 'path_to_logo.png',
+            prefill: {
+                name: 'Your Name',
+                email: 'your_email@example.com',
+            },
+            theme: {
+                color: '#F37254',
+            },
+            handler: function(response) {
+                // This function will be called on successful payment
+                console.log(response);
+                alert('Withdraw successful. Withdraw ID: ' + response.razorpay_payment_id);
+                window.location.href="/paymentsuccess";
+                // You can perform further actions here, like updating your database
+            },
+        };
+
+        var rzp = new Razorpay(options);
+        rzp.open();
+
+    </script>
+<script>
+// Prevent going back to this page after form submission
+if (window.history && window.history.pushState) {
+    // Add current page to history
+    window.history.pushState(null, null, window.location.href);
+
+    // Listen for back/forward navigation
+    window.onpopstate = function(event) {
+        // Redirect to /rtohome when back button is pressed
+        window.location.href = '/homeworker';
+    };
+}
+</script>
+</body>
+</html>

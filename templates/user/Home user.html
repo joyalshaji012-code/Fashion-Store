@@ -1,0 +1,1044 @@
+{#<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">#}
+{#<html xmlns="http://www.w3.org/1999/xhtml">#}
+{#<head>#}
+{#<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />#}
+{#<title>Untitled Document</title>#}
+{#</head>#}
+{##}
+{#<body>#}
+{#<form id="form1" name="form1" method="post" action="">#}
+{#  <table width="230" border="1">#}
+{#    <tr>#}
+{#      <th width="220" scope="row"><a href="/viewandeditprofileuser">Profile</a></th>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th scope="row"><a href="/categoriesuser">View product</a></th>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th scope="row"><a href="/viewcart">View cart</a></th>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th scope="row"><a href="/viewordersanditemsuser">View orders</a></th>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th scope="row"><a href="/sendfeedbackuser">Send feedback</a></th>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th scope="row"><a href="/changepassworduser">Change password</a></th>#}
+{#    </tr> <tr>#}
+{#      <th scope="row"><a href="/logout">Logout</a></th>#}
+{#    </tr>#}
+{#  </table>#}
+{#</form>#}
+{#<script>#}
+{#// Prevent going back to this page after form submission#}
+{#if (window.history && window.history.pushState) {#}
+{#    // Add current page to history#}
+{#    window.history.pushState(null, null, window.location.href);#}
+{##}
+{#    // Listen for back/forward navigation#}
+{#    window.onpopstate = function(event) {#}
+{#        // Redirect to /rtohome when back button is pressed#}
+{#        window.location.href = '/homeuser';#}
+{#    };#}
+{#}#}
+{#</script>#}
+{#</body>#}
+{#</html>#}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Cosmic Fashion Store - Premium Zig Zag Collection</title>
+<style>
+  /* ----- FLIPKART EXACT DESIGN SYSTEM (white + orange) ----- */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  }
+
+  body {
+    background: #f1f3f6;
+  }
+
+  .flipkart-home {
+    max-width: 1680px;
+    margin: 0 auto;
+    padding: 8px 16px 24px 16px;
+  }
+
+  /* ----- ENHANCED FLIPKART HEADER WITH WORKING LINKS ----- */
+  .fk-header {
+    background: #ffffff;
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    border-radius: 0 0 4px 4px;
+    margin-bottom: 12px;
+  }
+
+  .fk-logo-area {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .fk-logo {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+  }
+
+  .fk-logo-main {
+    font-size: 22px;
+    font-weight: 700;
+    color: #212121;
+    line-height: 1.2;
+  }
+  .fk-logo-main span {
+    color: #fb641b;
+  }
+
+  .fk-logo-explore {
+    font-size: 11px;
+    font-style: italic;
+    color: #9e9e9e;
+    margin-top: -2px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .fk-logo-explore .plus {
+    color: #fb641b;
+    font-weight: 600;
+    font-style: normal;
+  }
+
+  .fk-search {
+    flex: 1;
+    max-width: 600px;
+    margin: 0 40px;
+  }
+
+  .fk-search-box {
+    display: flex;
+    background: #f0f5ff;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #e0e0e0;
+  }
+
+  .fk-search-box input {
+    flex: 1;
+    padding: 12px 16px;
+    border: none;
+    background: transparent;
+    font-size: 14px;
+    outline: none;
+  }
+
+  .fk-search-box button {
+    background: #fb641b;
+    border: none;
+    padding: 0 28px;
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .fk-search-box button:hover {
+    background: #e85d1a;
+  }
+
+  .fk-header-right {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .fk-login-link {
+    background: #fb641b;
+    color: white;
+    border: none;
+    padding: 8px 32px;
+    font-weight: 600;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+  .fk-login-link:hover {
+    background: #e85d1a;
+  }
+
+  .fk-seller-link {
+    font-size: 16px;
+    font-weight: 500;
+    color: #212121;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .fk-seller-link:hover {
+    color: #fb641b;
+  }
+
+  .fk-icons {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .fk-icon-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+    color: #212121;
+    cursor: pointer;
+    position: relative;
+    text-decoration: none;
+  }
+  .fk-icon-link:hover {
+    color: #fb641b;
+  }
+  .fk-icon-link .badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #fb641b;
+    color: white;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 50%;
+  }
+
+  /* ----- HORIZONTAL MENU BAR - ORIGINAL 7 LINKS ONLY ----- */
+  .fk-horizontal-menu {
+    background: white;
+    padding: 0 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    border-radius: 4px;
+    border-bottom: 1px solid #eaeaea;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+
+  #form1 {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0;
+    padding: 0;
+  }
+
+  #form1 table {
+    width: 100%;
+    border: none !important;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-collapse: collapse;
+    margin: 0;
+    padding: 0;
+  }
+
+  #form1 table tbody {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  #form1 table tr {
+    display: flex;
+    border: none;
+    margin: 0;
+    padding: 0;
+    flex: 0 1 auto;
+  }
+
+  #form1 table th {
+    padding: 0;
+    background: transparent;
+    border: none;
+    font-weight: 400;
+    display: flex;
+    width: 100%;
+  }
+
+  #form1 table th a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 20px;
+    text-decoration: none;
+    color: #212121;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.2s;
+    white-space: nowrap;
+    border-radius: 0;
+    position: relative;
+    cursor: pointer;
+  }
+
+  #form1 table th a::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 25%;
+    height: 50%;
+    width: 1px;
+    background: #e0e0e0;
+  }
+
+  #form1 table tr:last-child th a::after {
+    display: none;
+  }
+
+  #form1 table th a:hover {
+    color: #fb641b;
+    background: #fff2e6;
+  }
+
+  #form1 table tr:nth-child(1) a::before { content: "👕"; margin-right: 4px; }
+  #form1 table tr:nth-child(2) a::before { content: "🛒"; margin-right: 4px; }
+  #form1 table tr:nth-child(3) a::before { content: "📦"; margin-right: 4px; }
+  #form1 table tr:nth-child(4) a::before { content: "👤"; margin-right: 4px; }
+  #form1 table tr:nth-child(5) a::before { content: "💬"; margin-right: 4px; }
+  #form1 table tr:nth-child(6) a::before { content: "🔒"; margin-right: 4px; }
+  #form1 table tr:nth-child(7) a::before { content: "🚪"; margin-right: 4px; }
+
+  @media (max-width: 1000px) {
+    .fk-horizontal-menu {
+      overflow-x: auto;
+      justify-content: flex-start;
+    }
+    #form1 {
+      min-width: 800px;
+    }
+  }
+
+  .fk-content {
+    width: 100%;
+  }
+
+  /* ===== MOVING BANNER CAROUSEL WITH PICTURES ===== */
+  .fk-banner-row {
+    background: white;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+
+  .banner-carousel {
+    width: 100%;
+    height: 260px;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .carousel-slide {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 50px;
+    color: white;
+    text-decoration: none;
+    animation: fadeEffect 1s ease;
+    position: relative;
+  }
+
+  .carousel-slide::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 1;
+  }
+
+  .carousel-slide .banner-text,
+  .carousel-slide .banner-btn {
+    position: relative;
+    z-index: 2;
+  }
+
+  @keyframes fadeEffect {
+    0% { opacity: 0.8; }
+    100% { opacity: 1; }
+  }
+
+  .carousel-slide .banner-text h2 {
+    font-size: 36px;
+    margin-bottom: 12px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  }
+  .carousel-slide .banner-text p {
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    font-size: 18px;
+  }
+  .carousel-slide .banner-btn {
+    background: white;
+    color: #fb641b;
+    padding: 14px 40px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 18px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    border: none;
+    transition: transform 0.2s;
+  }
+  .carousel-slide .banner-btn:hover {
+    transform: scale(1.05);
+  }
+
+  .carousel-dots {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 5;
+  }
+  .dot {
+    width: 12px;
+    height: 12px;
+    background: rgba(255,255,255,0.6);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s;
+    z-index: 5;
+  }
+  .dot.active {
+    background: #fb641b;
+    transform: scale(1.2);
+  }
+
+  .fk-product-row {
+    background: white;
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+
+  .row-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 12px;
+  }
+  .row-header h3 {
+    font-size: 22px;
+    font-weight: 600;
+  }
+  .view-all {
+    color: #fb641b;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .view-all:hover {
+    text-decoration: underline;
+  }
+
+  .product-grid {
+    display: flex;
+    gap: 24px;
+    overflow-x: auto;
+    padding-bottom: 12px;
+    transition: all 0.3s;
+    scroll-behavior: smooth;
+  }
+
+  .moving-row {
+    background: #fafafa;
+    border: 1px solid #fff2e6;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .moving-row::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50px;
+    height: 100%;
+    background: linear-gradient(to right, #fafafa, transparent);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .moving-row::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50px;
+    height: 100%;
+    background: linear-gradient(to left, #fafafa, transparent);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .auto-scroll-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .auto-scroll-grid {
+    display: flex;
+    gap: 24px;
+    width: max-content;
+    animation: infiniteScroll 60s linear infinite;
+    will-change: transform;
+  }
+
+  .auto-scroll-grid:hover {
+    animation-play-state: paused;
+  }
+
+  @keyframes infiniteScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .product-card {
+    min-width: 190px;
+    text-align: center;
+    transition: transform 0.2s;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    flex-shrink: 0;
+  }
+  .product-card:hover {
+    transform: translateY(-4px);
+  }
+
+  .product-img {
+    width: 170px;
+    height: 170px;
+    border-radius: 8px;
+    margin: 0 auto 12px;
+    overflow: hidden;
+    border: 1px solid #f0f0f0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .product-title {
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: #212121;
+  }
+  .product-price {
+    color: #fb641b;
+    font-weight: 700;
+    font-size: 18px;
+  }
+  .product-price small {
+    font-size: 14px;
+    color: #9e9e9e;
+    text-decoration: line-through;
+    margin-left: 6px;
+  }
+
+  .buy-now-btn {
+    display: inline-block;
+    background: #fb641b;
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 14px;
+    margin-top: 8px;
+    transition: background 0.2s;
+  }
+  .buy-now-btn:hover {
+    background: #e85d1a;
+  }
+
+  .zigzag-section {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  }
+
+  .zigzag-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #fb641b;
+    padding-bottom: 15px;
+  }
+
+  .zigzag-header h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #212121;
+  }
+
+  .zigzag-header h2 span {
+    color: #fb641b;
+    margin-left: 5px;
+  }
+
+  .zigzag-view {
+    color: #fb641b;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 15px;
+  }
+
+  .zigzag-view:hover {
+    text-decoration: underline;
+  }
+
+  .zigzag-container {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+  }
+
+  .zigzag-item {
+    display: flex;
+    align-items: center;
+    background: #fafafa;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid #f0f0f0;
+    text-decoration: none;
+    color: inherit;
+    height: 160px;
+  }
+
+  .zigzag-item:hover {
+    box-shadow: 0 8px 20px rgba(251, 100, 27, 0.15);
+    border-color: #fb641b;
+    background: white;
+  }
+
+  .zigzag-image {
+    width: 160px;
+    height: 160px;
+    background-size: cover;
+    background-position: center;
+    flex-shrink: 0;
+  }
+
+  .zigzag-content {
+    flex: 1;
+    padding: 20px 25px;
+  }
+
+  .zigzag-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #212121;
+    margin-bottom: 5px;
+  }
+
+  .zigzag-price {
+    font-size: 22px;
+    font-weight: 800;
+    color: #fb641b;
+    margin-bottom: 5px;
+  }
+
+  .zigzag-original {
+    font-size: 15px;
+    color: #999;
+    text-decoration: line-through;
+    margin-left: 10px;
+    font-weight: normal;
+  }
+
+  .zigzag-desc {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.4;
+    margin-bottom: 8px;
+  }
+
+  .zigzag-buy-btn {
+    display: inline-block;
+    background: #fb641b;
+    color: white;
+    text-decoration: none;
+    padding: 8px 20px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background 0.2s;
+  }
+  .zigzag-buy-btn:hover {
+    background: #e85d1a;
+  }
+
+  .zigzag-item:nth-child(even) {
+    flex-direction: row-reverse;
+  }
+
+  .zigzag-item:nth-child(even) .zigzag-image {
+    border-left: 3px solid #fb641b;
+    border-right: none;
+  }
+
+  .zigzag-item:nth-child(odd) .zigzag-image {
+    border-right: 3px solid #fb641b;
+  }
+
+  .fk-footer {
+    background: #172337;
+    color: white;
+    padding: 36px 32px;
+    border-radius: 6px;
+    margin-top: 32px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .fk-footer a {
+    color: white;
+    text-decoration: none;
+    margin: 0 8px;
+  }
+  .fk-footer a:hover {
+    color: #fb641b;
+  }
+
+  .no-results {
+    text-align: center;
+    padding: 40px;
+    font-size: 18px;
+    color: #666;
+    width: 100%;
+  }
+</style>
+</head>
+
+<body>
+<div class="flipkart-home">
+    <!-- Flipkart header with WORKING SEARCH and all links -->
+    <header class="fk-header">
+        <div class="fk-logo-area">
+            <div class="fk-logo" onclick="window.location.href='/'">
+                <div class="fk-logo-main">cosmic<span>Fashion</span></div>
+                <div class="fk-logo-explore">STORE <span class="plus">Explore</span> ⭐</div>
+            </div>
+        </div>
+
+        <!-- WORKING SEARCH FORM -->
+        <div class="fk-search">
+            <form id="searchForm" onsubmit="event.preventDefault(); searchProducts();" style="display: flex; width: 100%;">
+                <div class="fk-search-box" style="width: 100%;">
+                    <input type="text" id="searchInput" placeholder="Search for Cosmic products..." />
+                    <button type="submit">🔍 Search</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="fk-header-right">
+{#            <a href="/login" class="fk-login-link">Login ▼</a>#}
+            <a href="/register" class="fk-seller-link">Become a Seller ▼</a>
+
+            <div class="fk-icons">
+                <a href="/viewcart" class="fk-icon-link">
+                    🛒 Cart <span class="badge">2</span>
+                </a>
+{#                <a href="/wishlist" class="fk-icon-link">#}
+{#                    ❤️ Wishlist#}
+{#                </a>#}
+                <a href="/viewandeditprofileuser" class="fk-icon-link">
+                    👤 Account ▼
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- HORIZONTAL MENU - ORIGINAL 7 LINKS ONLY -->
+    <div class="fk-horizontal-menu">
+        <form id="form1" name="form1" method="post" action="">
+            <table width="230" border="1">
+                <tr><th width="220" scope="row"><a href="/categoriesuser">View product</a></th></tr>
+                <tr><th scope="row"><a href="/viewcart">View cart</a></th></tr>
+                <tr><th scope="row"><a href="/viewordersanditemsuser">View orders</a></th></tr>
+                <tr><th scope="row"><a href="/viewandeditprofileuser">Profile</a></th></tr>
+                <tr><th scope="row"><a href="/sendfeedbackuser">Send feedback</a></th></tr>
+                <tr><th scope="row"><a href="/changepassworduser">Change password</a></th></tr>
+                <tr><th scope="row"><a href="/logout">Logout</a></th></tr>
+            </table>
+        </form>
+    </div>
+
+    <!-- Main content -->
+    <main class="fk-content">
+        <!-- MOVING BANNER CAROUSEL WITH PICTURES -->
+        <div class="fk-banner-row">
+            <div class="banner-carousel" id="bannerCarousel">
+                <a href="/categoriesuser" class="carousel-slide" id="slide1" style="background-image: url('https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=1200&h=400&fit=crop'); display: flex;">
+                    <div class="banner-text">
+                        <h2>Men's Fashion Fest</h2>
+                        <p>Min. 50% off on shirts & jeans</p>
+                    </div>
+                    <div class="banner-btn">Grab Now →</div>
+                </a>
+                <a href="/categoriesuser" class="carousel-slide" id="slide2" style="background-image: url('https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1200&h=400&fit=crop'); display: none;">
+                    <div class="banner-text">
+                        <h2>Men's Footwear Sale</h2>
+                        <p>Up to 60% off on sneakers</p>
+                    </div>
+                    <div class="banner-btn">Grab Now →</div>
+                </a>
+                <a href="/categoriesuser" class="carousel-slide" id="slide3" style="background-image: url('https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=1200&h=400&fit=crop'); display: none;">
+                    <div class="banner-text">
+                        <h2>Men's Accessories</h2>
+                        <p>Extra 30% off on watches & wallets</p>
+                    </div>
+                    <div class="banner-btn">Grab Now →</div>
+                </a>
+                <div class="carousel-dots">
+                    <span class="dot active" onclick="showSlide(0)"></span>
+                    <span class="dot" onclick="showSlide(1)"></span>
+                    <span class="dot" onclick="showSlide(2)"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRENDING NOW SECTION -->
+        <div class="fk-product-row" id="trendingSection">
+            <div class="row-header">
+                <h3 id="sectionTitle">Trending Now</h3>
+                <a href="/categoriesuser" class="view-all" id="viewAllLink">View All →</a>
+            </div>
+
+            <div class="product-grid" id="productGrid">
+                {% if data %}
+                    {% for product in data %}
+                    <div class="product-card">
+                        <div class="product-img" style="background-image: url('{{ product.image }}');"></div>
+                        <div class="product-title">{{ product.name }}</div>
+                        <div class="product-price">₹{{ product.price }}</div>
+                        <a href="/addtocart/{{ product.id }}" class="buy-now-btn">Add to Cart</a>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-results">No products available</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- FLASH SALE SECTION - INFINITE SCROLLING -->
+        <div class="fk-product-row moving-row">
+            <div class="row-header">
+                <h3>⚡ Flash Sale - Limited Time Offers</h3>
+                <a href="/categoriesuser" class="view-all">View All →</a>
+            </div>
+            <div class="auto-scroll-container">
+                <div class="auto-scroll-grid" id="movingGrid">
+                    {% if data %}
+                        {% for product in data %}
+                        <div class="product-card">
+                            <div class="product-img" style="background-image: url('{{ product.image }}');"></div>
+                            <div class="product-title">{{ product.name }}</div>
+                            <div class="product-price">₹{{ product.price }}</div>
+                            <a href="/addtocart/{{ product.id }}" class="buy-now-btn">Add to Cart</a>
+                        </div>
+                        {% endfor %}
+                        <!-- Duplicate for seamless loop -->
+                        {% for product in data %}
+                        <div class="product-card">
+                            <div class="product-img" style="background-image: url('{{ product.image }}');"></div>
+                            <div class="product-title">{{ product.name }}</div>
+                            <div class="product-price">₹{{ product.price }}</div>
+                            <a href="/addtocart/{{ product.id }}" class="buy-now-btn">Add to Cart</a>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="no-results">No products available</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- EXCLUSIVE COLLECTION - ZIG ZAG PREMIUM SECTION -->
+        <div class="zigzag-section">
+            <div class="zigzag-header">
+                <h2>EXCLUSIVE <span>COLLECTION</span></h2>
+                <a href="/categoriesuser" class="zigzag-view">View All →</a>
+            </div>
+
+            <div class="zigzag-container">
+                {% if data %}
+                    {% for product in data %}
+                    <div class="zigzag-item">
+                        <div class="zigzag-image" style="background-image: url('{{ product.image }}');"></div>
+                        <div class="zigzag-content">
+                            <div class="zigzag-title">{{ product.name }}</div>
+                            <div class="zigzag-price">₹{{ product.price }}</div>
+                            <div class="zigzag-desc">{{ product.description|truncatewords:5 }}</div>
+                            <a href="/addtocart/{{ product.id }}" class="zigzag-buy-btn">Add to Cart</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-results">No products available</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="fk-footer">
+            <div>© 2025 Cosmic Fashion Store</div>
+            <div>
+                <a href="/aboutus">About Us</a> ·
+                <a href="/contactus">Contact</a> ·
+                <a href="/terms">Terms</a>
+            </div>
+        </footer>
+    </main>
+</div>
+
+<script>
+// Product data array for search functionality - dynamically populated from Django
+const products = [
+    {% for product in data %}
+    { id: {{ product.id }}, name: "{{ product.name }}", image: "{{ product.image }}", price: {{ product.price }}, original: {{ product.price }}, url: "/addtocart?id={{ product.id }}" },
+    {% endfor %}
+];
+
+// Carousel functionality
+let currentSlide = 0;
+const slides = document.querySelectorAll('.carousel-slide');
+const dots = document.querySelectorAll('.dot');
+
+function showSlide(index) {
+    slides.forEach((slide, i) => {
+        slide.style.display = i === index ? 'flex' : 'none';
+    });
+    dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+    });
+    currentSlide = index;
+}
+
+function nextSlide() {
+    currentSlide = (currentSlide + 1) % slides.length;
+    showSlide(currentSlide);
+}
+
+// Auto advance every 4 seconds
+if (slides.length) {
+    setInterval(nextSlide, 4000);
+}
+
+// Dot click handlers
+dots.forEach((dot, idx) => {
+    dot.addEventListener('click', () => showSlide(idx));
+});
+
+// Search function
+function searchProducts() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+    const productGrid = document.getElementById('productGrid');
+    const sectionTitle = document.getElementById('sectionTitle');
+    const viewAllLink = document.getElementById('viewAllLink');
+
+    if (searchTerm === '') {
+        window.location.reload();
+        return;
+    }
+
+    const filteredProducts = products.filter(product =>
+        product.name.toLowerCase().includes(searchTerm)
+    );
+
+    productGrid.innerHTML = '';
+    sectionTitle.textContent = `Search Results for "${searchTerm}"`;
+    viewAllLink.style.display = 'none';
+
+    if (filteredProducts.length > 0) {
+        filteredProducts.forEach(product => {
+            const productCard = document.createElement('div');
+            productCard.className = 'product-card';
+            productCard.innerHTML = `
+                <div class="product-img" style="background-image: url('${product.image}'); background-size: cover; background-position: center;"></div>
+                <div class="product-title">${product.name}</div>
+                <div class="product-price">₹${product.price}</div>
+                <a href="${product.url}" class="buy-now-btn">Add to Cart</a>
+            `;
+            productGrid.appendChild(productCard);
+        });
+    } else {
+        productGrid.innerHTML = '<div class="no-results">No products found matching "' + searchTerm + '"</div>';
+    }
+}
+
+// Event listeners
+document.getElementById('searchInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        searchProducts();
+    }
+});
+
+document.querySelector('.fk-logo').addEventListener('click', function() {
+    window.location.href = '/';
+});
+
+// Ensure infinite scroll works smoothly
+window.addEventListener('load', function() {
+    const movingGrid = document.getElementById('movingGrid');
+    if (movingGrid) {
+        movingGrid.style.animation = 'none';
+        movingGrid.offsetHeight;
+        movingGrid.style.animation = 'infiniteScroll 60s linear infinite';
+    }
+});
+</script>
+</body>
+</html>

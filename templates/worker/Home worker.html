@@ -1,0 +1,1201 @@
+{#<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">#}
+{#<html xmlns="http://www.w3.org/1999/xhtml">#}
+{#<head>#}
+{#<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />#}
+{#<title>Untitled Document</title>#}
+{#</head>#}
+{##}
+{#<body><form action="" method="get">#}
+{#  <table width="200" border="1">#}
+{#    <tr>#}
+{#      <th scope="row"><a href="/viewprofileandupdate">Profile</a></th>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th scope="row"><a href="/addproductworker">Add product</a></th>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th scope="row"><a href="/viewproductworker">View product</a></th>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th scope="row"><a href="/viewsalerequestworker">Sale request</a></th>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th scope="row"><a href="/viewrequesthistoryworker">Sale request history</a></th>#}
+{#    </tr>#}
+{#       <tr>#}
+{#      <th scope="row"><a href="/mybalance">my balance</a></th>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th scope="row"><a href="/viewreviewworker">View review</a></th>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th scope="row"><a href="/viewpaymenthistoryworker">Payment history</a></th>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th scope="row"><a href="/changepasswordworker">Change password</a></th>#}
+{#    </tr>#}
+{#  </table>#}
+{#</form>#}
+{#</body>#}
+{#</html>#}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Worker Dashboard - Custom T-Shirt Printing</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    /* Reset and Base Styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+        background-color: #f5f5f5;
+        color: #333;
+        min-height: 100vh;
+        overflow-x: hidden;
+    }
+
+    /* Particle Background */
+    .particles {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        pointer-events: none;
+    }
+
+    .particle {
+        position: absolute;
+        background-color: rgba(249, 115, 22, 0.1);
+        border-radius: 50%;
+        animation: floatParticle 20s infinite linear;
+    }
+
+    /* Main Container */
+    .dashboard-container {
+        display: flex;
+        min-height: 100vh;
+        animation: fadeIn 1.2s ease-out;
+    }
+
+    /* Sidebar Navigation */
+    .sidebar {
+        width: 270px;
+        background: linear-gradient(180deg, rgba(41, 41, 41, 0.95) 0%, rgba(28, 28, 28, 0.98) 100%);
+        padding: 20px 0;
+        box-shadow: 3px 0 25px rgba(0, 0, 0, 0.2);
+        z-index: 10;
+        position: fixed;
+        height: 100vh;
+        overflow-y: auto;
+        backdrop-filter: blur(10px);
+        border-right: 1px solid rgba(249, 115, 22, 0.2);
+    }
+
+    .logo {
+        text-align: center;
+        padding: 25px 0 35px;
+        color: white;
+        font-size: 28px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        margin-bottom: 20px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .logo:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(249, 115, 22, 0.2), transparent);
+        animation: shine 3s infinite;
+    }
+
+    .logo i {
+        color: #f97316;
+        margin-right: 10px;
+        font-size: 30px;
+        animation: pulse 2s infinite;
+    }
+
+    .nav-links {
+        list-style: none;
+        padding: 0 15px;
+    }
+
+    .nav-links li {
+        margin-bottom: 8px;
+        position: relative;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        transform-origin: left center;
+    }
+
+    .nav-links li:hover {
+        transform: translateX(10px) scale(1.02);
+    }
+
+    .nav-links a {
+        display: flex;
+        align-items: center;
+        padding: 18px 20px;
+        color: #ddd;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 16px;
+        transition: all 0.4s ease;
+        border-left: 4px solid transparent;
+        border-radius: 0 8px 8px 0;
+        background: rgba(50, 50, 50, 0.5);
+        overflow: hidden;
+        position: relative;
+    }
+
+    .nav-links a:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(249, 115, 22, 0.15), transparent);
+        transition: left 0.7s;
+    }
+
+    .nav-links a:hover:before {
+        left: 100%;
+    }
+
+    .nav-links a:hover {
+        background: rgba(249, 115, 22, 0.15);
+        color: white;
+        border-left: 4px solid #f97316;
+        box-shadow: 0 5px 15px rgba(249, 115, 22, 0.2);
+    }
+
+    .nav-icon {
+        width: 24px;
+        margin-right: 15px;
+        text-align: center;
+        font-size: 18px;
+        color: #f97316;
+        transition: all 0.4s ease;
+    }
+
+    .nav-links a:hover .nav-icon {
+        transform: scale(1.2) rotate(5deg);
+        color: white;
+    }
+
+    /* Main Content Area */
+    .main-content {
+        flex: 1;
+        margin-left: 270px;
+        padding: 0;
+        background-color: #f9f9f9;
+        position: relative;
+    }
+
+    /* Header */
+    .header {
+        background: linear-gradient(90deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+        padding: 25px 50px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        backdrop-filter: blur(10px);
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        animation: slideDown 0.8s ease-out;
+    }
+
+    .header h1 {
+        color: #333;
+        font-size: 32px;
+        font-weight: 800;
+        position: relative;
+        padding-left: 15px;
+    }
+
+    .header h1:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 5px;
+        height: 80%;
+        width: 5px;
+        background: linear-gradient(to bottom, #f97316, #ea580c);
+        border-radius: 3px;
+    }
+
+    .welcome-message {
+        color: #666;
+        font-size: 16px;
+        background: rgba(249, 115, 22, 0.1);
+        padding: 10px 20px;
+        border-radius: 50px;
+        border-left: 3px solid #f97316;
+        animation: fadeInRight 1s ease-out 0.3s both;
+    }
+
+    /* Hero Section */
+    .hero-section {
+        background: linear-gradient(135deg, rgba(249, 115, 22, 0.95) 0%, rgba(234, 88, 12, 0.9) 100%);
+        color: white;
+        padding: 70px 50px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-section:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+        background-size: cover;
+        background-position: center;
+        opacity: 0.15;
+        z-index: 1;
+    }
+
+    .hero-content {
+        max-width: 700px;
+        z-index: 2;
+        position: relative;
+        animation: fadeInUp 1s ease-out 0.5s both;
+    }
+
+    .hero-content h2 {
+        font-size: 42px;
+        margin-bottom: 20px;
+        font-weight: 800;
+        line-height: 1.2;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .hero-content p {
+        font-size: 18px;
+        margin-bottom: 30px;
+        line-height: 1.6;
+        opacity: 0.95;
+    }
+
+    .stats {
+        display: flex;
+        gap: 40px;
+        margin-top: 40px;
+        flex-wrap: wrap;
+    }
+
+    .stat-item {
+        text-align: center;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 12px;
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        min-width: 150px;
+        transition: all 0.4s ease;
+        animation: fadeInUp 1s ease-out 0.8s both;
+    }
+
+    .stat-item:hover {
+        transform: translateY(-10px);
+        background: rgba(255, 255, 255, 0.25);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .stat-value {
+        font-size: 40px;
+        font-weight: 800;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .stat-label {
+        font-size: 15px;
+        opacity: 0.9;
+        font-weight: 500;
+    }
+
+    /* T-shirt Gallery */
+    .gallery-section {
+        padding: 80px 50px;
+        background-color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .section-title {
+        font-size: 36px;
+        color: #333;
+        margin-bottom: 50px;
+        text-align: center;
+        position: relative;
+        font-weight: 800;
+    }
+
+    .section-title:after {
+        content: '';
+        position: absolute;
+        width: 100px;
+        height: 5px;
+        background: linear-gradient(to right, #f97316, #ea580c);
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 5px;
+        animation: widthGrow 1.5s ease-out;
+    }
+
+    .gallery-container {
+        position: relative;
+        height: 450px;
+        overflow: hidden;
+        border-radius: 20px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        background: linear-gradient(45deg, #f5f5f5 0%, #e5e5e5 100%);
+        animation: galleryEntrance 1.2s ease-out;
+    }
+
+    .tshirt-slide {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+        padding: 40px;
+    }
+
+    .tshirt-slide.active {
+        opacity: 1;
+    }
+
+    .tshirt-image {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        filter: drop-shadow(10px 10px 20px rgba(0, 0, 0, 0.3));
+        animation: float 8s ease-in-out infinite;
+        transform-origin: center center;
+    }
+
+    .tshirt-details {
+        background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+        padding: 30px;
+        border-radius: 15px;
+        max-width: 450px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        margin-left: 40px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(249, 115, 22, 0.1);
+        animation: slideInRight 1.2s ease-out;
+    }
+
+    .tshirt-details h3 {
+        color: #f97316;
+        margin-bottom: 20px;
+        font-size: 28px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+    }
+
+    .tshirt-details h3 i {
+        margin-right: 10px;
+        font-size: 24px;
+    }
+
+    .tshirt-details p {
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        font-size: 16px;
+    }
+
+    .design-tag {
+        display: inline-flex;
+        align-items: center;
+        background: linear-gradient(to right, #f97316, #ea580c);
+        color: white;
+        padding: 8px 18px;
+        border-radius: 25px;
+        font-size: 14px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        font-weight: 600;
+        box-shadow: 0 5px 15px rgba(249, 115, 22, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .design-tag:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(249, 115, 22, 0.4);
+    }
+
+    .design-tag i {
+        margin-right: 5px;
+        font-size: 12px;
+    }
+
+    /* Dashboard Cards */
+    .dashboard-cards {
+        padding: 80px 50px;
+        background: linear-gradient(180deg, #f9f9f9 0%, #f0f0f0 100%);
+        position: relative;
+    }
+
+    .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 30px;
+    }
+
+    .card {
+        background: linear-gradient(145deg, #ffffff, #f5f5f5);
+        border-radius: 20px;
+        padding: 35px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border-top: 5px solid #f97316;
+        position: relative;
+        overflow: hidden;
+        animation: cardEntrance 0.8s ease-out both;
+        animation-delay: calc(var(--card-index) * 0.1s);
+    }
+
+    .card:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(249, 115, 22, 0.05), transparent);
+        transition: left 0.7s;
+    }
+
+    .card:hover:before {
+        left: 100%;
+    }
+
+    .card:hover {
+        transform: translateY(-15px) scale(1.03);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        border-top: 5px solid #ea580c;
+    }
+
+    .card-icon {
+        font-size: 40px;
+        color: #f97316;
+        margin-bottom: 25px;
+        display: inline-block;
+        transition: all 0.4s ease;
+    }
+
+    .card:hover .card-icon {
+        transform: scale(1.2) rotate(10deg);
+        color: #ea580c;
+    }
+
+    .card h3 {
+        color: #333;
+        margin-bottom: 20px;
+        font-size: 22px;
+        font-weight: 700;
+    }
+
+    .card p {
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 25px;
+        font-size: 15.5px;
+    }
+
+    .card-link {
+        display: inline-flex;
+        align-items: center;
+        color: #f97316;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        position: relative;
+        padding-bottom: 5px;
+    }
+
+    .card-link:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(to right, #f97316, #ea580c);
+        transition: width 0.4s ease;
+    }
+
+    .card-link:hover {
+        color: #ea580c;
+        padding-left: 10px;
+    }
+
+    .card-link:hover:after {
+        width: 100%;
+    }
+
+    .card-link i {
+        margin-left: 8px;
+        transition: transform 0.3s ease;
+    }
+
+    .card-link:hover i {
+        transform: translateX(5px);
+    }
+
+    /* Footer */
+    .footer {
+        background: linear-gradient(90deg, #333 0%, #222 100%);
+        color: #aaa;
+        padding: 30px 50px;
+        text-align: center;
+        font-size: 15px;
+        border-top: 3px solid #f97316;
+    }
+
+    .footer p {
+        margin-bottom: 10px;
+    }
+
+    /* Animation Keyframes */
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0) rotate(0deg);
+        }
+        25% {
+            transform: translateY(-20px) rotate(1deg);
+        }
+        75% {
+            transform: translateY(10px) rotate(-1deg);
+        }
+    }
+
+    @keyframes floatParticle {
+        0% {
+            transform: translateY(0) translateX(0);
+        }
+        100% {
+            transform: translateY(-100vh) translateX(100px);
+        }
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeInRight {
+        from {
+            opacity: 0;
+            transform: translateX(40px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(80px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes pulse {
+        0%, 100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 0.8;
+            transform: scale(1.05);
+        }
+    }
+
+    @keyframes widthGrow {
+        from {
+            width: 0;
+        }
+        to {
+            width: 100px;
+        }
+    }
+
+    @keyframes shine {
+        0% {
+            left: -100%;
+        }
+        100% {
+            left: 100%;
+        }
+    }
+
+    @keyframes galleryEntrance {
+        from {
+            opacity: 0;
+            transform: translateY(60px) scale(0.9);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    @keyframes cardEntrance {
+        from {
+            opacity: 0;
+            transform: translateY(50px) rotateX(30deg);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) rotateX(0);
+        }
+    }
+
+    /* Gallery Controls */
+    .gallery-controls {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 15px;
+        z-index: 3;
+    }
+
+    .gallery-dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .gallery-dot.active {
+        background-color: #f97316;
+        transform: scale(1.3);
+        box-shadow: 0 0 10px rgba(249, 115, 22, 0.8);
+    }
+
+    .gallery-dot:hover {
+        background-color: #f97316;
+        transform: scale(1.2);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+        .sidebar {
+            width: 240px;
+        }
+
+        .main-content {
+            margin-left: 240px;
+        }
+
+        .cards-grid {
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        }
+    }
+
+    @media (max-width: 992px) {
+        .tshirt-slide {
+            flex-direction: column;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .tshirt-details {
+            margin-left: 0;
+            margin-top: 40px;
+            max-width: 90%;
+        }
+
+        .gallery-container {
+            height: 550px;
+        }
+
+        .header, .hero-section, .gallery-section, .dashboard-cards {
+            padding: 40px 30px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-container {
+            flex-direction: column;
+        }
+
+        .sidebar {
+            width: 100%;
+            height: auto;
+            position: static;
+            padding: 15px 0;
+        }
+
+        .logo {
+            padding: 20px;
+            font-size: 24px;
+        }
+
+        .nav-links {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .nav-links li {
+            margin-bottom: 0;
+        }
+
+        .nav-links a {
+            padding: 15px;
+            font-size: 14px;
+            border-radius: 8px;
+            border-left: none;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-links a:hover {
+            border-left: none;
+            border-bottom: 3px solid #f97316;
+            transform: translateY(-5px);
+        }
+
+        .nav-icon {
+            margin-right: 10px;
+            font-size: 16px;
+        }
+
+        .main-content {
+            margin-left: 0;
+        }
+
+        .header {
+            flex-direction: column;
+            text-align: center;
+            gap: 15px;
+        }
+
+        .header h1:before {
+            left: 50%;
+            transform: translateX(-50%);
+            top: auto;
+            bottom: -10px;
+            height: 4px;
+            width: 80px;
+        }
+
+        .stats {
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .stat-item {
+            min-width: 120px;
+            padding: 15px;
+        }
+
+        .cards-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+</head>
+
+<body>
+<!-- Animated Background Particles -->
+<div class="particles" id="particles-container"></div>
+
+<div class="dashboard-container">
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="logo"><i class="fas fa-tshirt"></i> Cosmic Fashion Store</div>
+        <form action="" method="get">
+            <ul class="nav-links">
+                <li><a href="/viewprofileandupdate"><i class="nav-icon fas fa-user-circle"></i> Profile</a></li>
+                <li><a href="/addproductworker"><i class="nav-icon fas fa-plus-circle"></i> Add Designs</a></li>
+                <li><a href="/viewproductworker"><i class="nav-icon fas fa-eye"></i> View Designs</a></li>
+                <li><a href="/mybalance"><i class="nav-icon fas fa-wallet"></i> My Balance</a></li>
+                <li><a href="/viewreviewworker"><i class="nav-icon fas fa-star"></i> View Reviews</a></li>
+                <li><a href="/viewpaymenthistoryworker"><i class="nav-icon fas fa-file-invoice-dollar"></i> Payment History</a></li>
+                <li><a href="/changepasswordworker"><i class="nav-icon fas fa-key"></i> Change Password</a></li>
+               <li><a href="/logout"><i class="nav-icon fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </form>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <h1>Worker Dashboard</h1>
+            <div class="welcome-message">Welcome back! Manage your designs efficiently</div>
+        </div>
+
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="hero-content">
+                <h2>Designing Studio</h2>
+                <p>Design, manage and fulfill ideas with our professional dashboard. Track sales, manage designs, and view your balance all in one place with enhanced animations.</p>
+
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="stat-value">42</span>
+                        <span class="stat-label">My Designs</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">₹2,845</span>
+                        <span class="stat-label">This Month</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">97%</span>
+                        <span class="stat-label">Satisfaction</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">8</span>
+                        <span class="stat-label">Rating</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- T-shirt Gallery -->
+        <div class="gallery-section">
+            <h2 class="section-title">Our Designs</h2>
+            <div class="gallery-container">
+                <!-- Slide 1 -->
+                <div class="tshirt-slide active">
+                    <img src="https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Custom T-Shirt Design" class="tshirt-image">
+                    <div class="tshirt-details">
+                        <h3><i class="fas fa-shapes"></i> Abstract Geometry</h3>
+                        <p>Modern geometric design with vibrant orange and grey color scheme. Perfect for tech events and creative communities. High-quality print with fade-resistant ink.</p>
+                        <div class="design-tag"><i class="fas fa-fire"></i> Best Seller</div>
+                        <div class="design-tag"><i class="fas fa-leaf"></i> Premium Cotton</div>
+                        <div class="design-tag"><i class="fas fa-palette"></i> Custom Colors</div>
+                    </div>
+                </div>
+
+                <!-- Slide 2 -->
+                <div class="tshirt-slide">
+                    <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Custom T-Shirt Design" class="tshirt-image">
+                    <div class="tshirt-details">
+                        <h3><i class="fas fa-font"></i> Vintage Typography</h3>
+                        <p>Retro-inspired typography design with distressed effect. Made with soft blend fabric for maximum comfort. Each print is carefully crafted for authentic vintage look.</p>
+                        <div class="design-tag"><i class="fas fa-history"></i> Vintage</div>
+                        <div class="design-tag"><i class="fas fa-gem"></i> Limited Edition</div>
+                        <div class="design-tag"><i class="fas fa-award"></i> Award Winning</div>
+                    </div>
+                </div>
+
+                <!-- Slide 3 -->
+                <div class="tshirt-slide">
+                    <img src="https://images.unsplash.com/photo-1529374255404-311a2a4f1fd9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Custom T-Shirt Design" class="tshirt-image">
+                    <div class="tshirt-details">
+                        <h3><i class="fas fa-tree"></i> Nature Inspired</h3>
+                        <p>Eco-friendly design with organic patterns. Printed on sustainable materials with water-based inks. Part of our green initiative with portion of proceeds donated to environmental causes.</p>
+                        <div class="design-tag"><i class="fas fa-recycle"></i> Eco-Friendly</div>
+                        <div class="design-tag"><i class="fas fa-seedling"></i> Organic Cotton</div>
+                        <div class="design-tag"><i class="fas fa-heart"></i> Charity Support</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-controls">
+                <div class="gallery-dot active" data-slide="0"></div>
+                <div class="gallery-dot" data-slide="1"></div>
+                <div class="gallery-dot" data-slide="2"></div>
+            </div>
+        </div>
+
+        <!-- Dashboard Cards -->
+        <div class="dashboard-cards">
+            <div class="cards-grid">
+                <div class="card" style="--card-index: 0">
+                    <div class="card-icon"><i class="fas fa-user-edit"></i></div>
+                    <h3>Profile Management</h3>
+                    <p>Update your personal information, contact details, and professional profile to keep your account current.</p>
+                    <a href="/viewprofileandupdate" class="card-link">Update Profile <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="card" style="--card-index: 1">
+                    <div class="card-icon"><i class="fas fa-plus-square"></i></div>
+                    <h3>Add New Designs</h3>
+                    <p>Create new custom T-shirt designs with our easy-to-use product management system. Upload images, set prices, and configure options.</p>
+                    <a href="/addproductworker" class="card-link">Add Product <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="card" style="--card-index: 2">
+                    <div class="card-icon"><i class="fas fa-box-open"></i></div>
+                    <h3>View Designs</h3>
+                    <p>Browse and manage your existing T-shirt designs. Edit details, update inventory, or temporarily disable products.</p>
+                    <a href="/viewproductworker" class="card-link">View Products <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+{#                <div class="card" style="--card-index: 3">#}
+{#                    <div class="card-icon"><i class="fas fa-shopping-bag"></i></div>#}
+{#                    <h3>Sale Requests</h3>#}
+{#                    <p>Manage incoming orders, process sale requests, and coordinate with customers for custom printing requirements.</p>#}
+{#                    <a href="/viewsalerequestworker" class="card-link">View Requests <i class="fas fa-arrow-right"></i></a>#}
+{#                </div>#}
+{##}
+{#                <div class="card" style="--card-index: 4">#}
+{#                    <div class="card-icon"><i class="fas fa-chart-line"></i></div>#}
+{#                    <h3>Sales History</h3>#}
+{#                    <p>Track your sales performance over time with detailed analytics and historical data visualization.</p>#}
+{#                    <a href="/viewrequesthistoryworker" class="card-link">View History <i class="fas fa-arrow-right"></i></a>#}
+{#                </div>#}
+
+                <div class="card" style="--card-index: 5">
+                    <div class="card-icon"><i class="fas fa-credit-card"></i></div>
+                    <h3>Financial Overview</h3>
+                    <p>Check your current balance, view payment history, and track your earnings with comprehensive financial reports.</p>
+                    <a href="/mybalance" class="card-link">View Balance <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="card" style="--card-index: 6">
+                    <div class="card-icon"><i class="fas fa-comment-alt"></i></div>
+                    <h3>Customer Feedback</h3>
+                    <p>Read customer reviews and ratings to improve your products and services. Respond to feedback directly.</p>
+                    <a href="/viewreviewworker" class="card-link">View Reviews <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="card" style="--card-index: 7">
+                    <div class="card-icon"><i class="fas fa-file-invoice"></i></div>
+                    <h3>Payment History</h3>
+                    <p>Access detailed records of all transactions, payments received, and financial activities in your account.</p>
+                    <a href="/viewpaymenthistoryworker" class="card-link">View History <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="card" style="--card-index: 8">
+                    <div class="card-icon"><i class="fas fa-lock"></i></div>
+                    <h3>Security Settings</h3>
+                    <p>Update your password and enhance account security with our advanced protection features and settings.</p>
+                    <a href="/changepasswordworker" class="card-link">Change Password <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="card" style="--card-index: 8">
+                    <div class="card-icon"><i class="fas fa-sign-out-alt"></i></div>
+                    <h3>Logout account</h3>
+                    <a href="/logout" class="card-link">Logout <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>© 2023 Custom T-Shirt Printing Studio. All rights reserved. | Worker Dashboard v3.0</p>
+            <p>Enhanced with Font Awesome Icons & Advanced Animations</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Initialize page with advanced animations
+    document.addEventListener('DOMContentLoaded', function() {
+        // Create animated background particles
+        createParticles();
+
+        // T-shirt gallery slideshow
+        const slides = document.querySelectorAll('.tshirt-slide');
+        const dots = document.querySelectorAll('.gallery-dot');
+        let currentSlide = 0;
+        let slideInterval;
+
+        // Function to show specific slide
+        function showSlide(index) {
+            // Hide current slide
+            slides[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('active');
+
+            // Update current slide
+            currentSlide = index;
+
+            // Show new slide
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+
+            // Restart slideshow timer
+            clearInterval(slideInterval);
+            slideInterval = setInterval(nextSlide, 6000);
+        }
+
+        // Function to show next slide
+        function nextSlide() {
+            let nextIndex = (currentSlide + 1) % slides.length;
+            showSlide(nextIndex);
+        }
+
+        // Add click events to gallery dots
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                showSlide(index);
+            });
+        });
+
+        // Start slideshow
+        slideInterval = setInterval(nextSlide, 6000);
+
+        // Add staggered animation to cards
+        const cards = document.querySelectorAll('.card');
+        cards.forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`;
+
+            // Add hover effect with slight delay
+            card.addEventListener('mouseenter', function() {
+                this.style.zIndex = '10';
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.zIndex = '1';
+            });
+        });
+
+        // Add animation to navigation items
+        const navItems = document.querySelectorAll('.nav-links li');
+        navItems.forEach((item, index) => {
+            item.style.animationDelay = `${index * 0.05}s`;
+            item.style.animation = `fadeInRight 0.5s ease-out ${index * 0.05}s both`;
+        });
+
+        // Add active state to current page in navigation
+        const currentPath = window.location.pathname;
+        const navLinks = document.querySelectorAll('.nav-links a');
+
+        navLinks.forEach(link => {
+            if (link.getAttribute('href') === currentPath) {
+                link.style.background = 'linear-gradient(90deg, rgba(249, 115, 22, 0.3) 0%, rgba(249, 115, 22, 0.2) 100%)';
+                link.style.borderLeft = '4px solid #f97316';
+                link.style.color = 'white';
+                link.style.fontWeight = '600';
+                link.querySelector('.nav-icon').style.color = 'white';
+            }
+        });
+
+        // Add scroll animation to elements
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for scroll animations
+        const animatedElements = document.querySelectorAll('.card, .stat-item, .tshirt-details');
+        animatedElements.forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    });
+
+    // Create animated particles for background
+    function createParticles() {
+        const container = document.getElementById('particles-container');
+        const particleCount = 30;
+
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+
+            // Random size and position
+            const size = Math.random() * 60 + 10;
+            const posX = Math.random() * 100;
+            const posY = Math.random() * 100;
+            const delay = Math.random() * 20;
+            const duration = Math.random() * 30 + 20;
+
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.left = `${posX}%`;
+            particle.style.top = `${posY}%`;
+            particle.style.animationDelay = `${delay}s`;
+            particle.style.animationDuration = `${duration}s`;
+
+            // Random opacity
+            particle.style.opacity = Math.random() * 0.1 + 0.05;
+
+            container.appendChild(particle);
+        }
+    }
+</script>
+<script>
+// Prevent going back to this page after form submission
+if (window.history && window.history.pushState) {
+    // Add current page to history
+    window.history.pushState(null, null, window.location.href);
+
+    // Listen for back/forward navigation
+    window.onpopstate = function(event) {
+        // Redirect to /rtohome when back button is pressed
+        window.location.href = '/homeworker';
+    };
+}
+</script>
+</body>
+</html>

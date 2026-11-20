@@ -1,0 +1,561 @@
+{#<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">#}
+{#<html xmlns="http://www.w3.org/1999/xhtml">#}
+{#<head>#}
+{#<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />#}
+{#<title>Untitled Document</title>#}
+{#</head>#}
+{##}
+{#<body>#}
+{#<form action="/productbycolour_buttonclick" method="post" enctype="multipart/form-data" name="form1" id="form1"><table width="309" border="1">#}
+{#  <tr>#}
+{#    <th width="163" scope="row">Image</th>#}
+{#    <td width="130"><label for="fileField"></label>#}
+{#      <input type="file" name="fileField" id="fileField" /></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <th scope="row">Colour</th>#}
+{#    <td><label for="textfield"></label>#}
+{#      <input type="text" name="textfield" id="textfield" /></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <th colspan="2" scope="row"><input type="submit" name="button" id="button" value="Submit" /></th>#}
+{#    </tr>#}
+{#</table>#}
+{##}
+{#</form>#}
+{#</body>#}
+{#</html>#}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Color Detection Analysis</title>
+<style>
+/* Base reset and body */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #0a192f 0%, #112240 50%, #0a192f 100%);
+    overflow: hidden;
+    position: relative;
+    padding: 20px;
+}
+
+/* Advanced animated background */
+.animated-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+/* Floating geometric shapes */
+.floating-shape {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, rgba(33, 150, 243, 0.15) 0%, transparent 70%);
+    animation: float 25s infinite linear;
+    filter: blur(20px);
+}
+
+.floating-shape:nth-child(1) {
+    width: 300px;
+    height: 300px;
+    top: 10%;
+    left: 5%;
+    animation-delay: 0s;
+}
+
+.floating-shape:nth-child(2) {
+    width: 200px;
+    height: 200px;
+    bottom: 10%;
+    right: 5%;
+    animation-delay: -10s;
+}
+
+.floating-shape:nth-child(3) {
+    width: 150px;
+    height: 150px;
+    top: 50%;
+    left: 80%;
+    animation-delay: -20s;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    25% {
+        transform: translate(30px, 40px) rotate(90deg);
+    }
+    50% {
+        transform: translate(-20px, 60px) rotate(180deg);
+    }
+    75% {
+        transform: translate(40px, -30px) rotate(270deg);
+    }
+}
+
+/* Modern form container */
+.form-wrapper {
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.25),
+        0 0 0 1px rgba(255, 255, 255, 0.15);
+    width: 100%;
+    max-width: 700px;
+    position: relative;
+    overflow: hidden;
+    animation: form-entrance 0.8s ease-out;
+    border: 1px solid rgba(33, 150, 243, 0.2);
+}
+
+.form-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #2196F3, #64B5F6, #2196F3);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite linear;
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+@keyframes form-entrance {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Form header */
+.form-header {
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.form-header h1 {
+    color: #0d47a1;
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #0d47a1 0%, #2196F3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.form-header p {
+    color: #546e7a;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* FIXED TABLE - NO MOVEMENT ON HOVER */
+.form-table-container {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(33, 150, 243, 0.1);
+    border: 1px solid rgba(33, 150, 243, 0.1);
+}
+
+/* Table structure with fixed layout */
+form table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* Prevents column width changes */
+}
+
+form table tr {
+    position: relative;
+    transition: background-color 0.3s ease;
+    border-bottom: 1px solid rgba(33, 150, 243, 0.1);
+}
+
+/* NO TRANSFORM, NO TRANSLATE, NO MOVEMENT - only color change */
+form table tr:hover {
+    background: rgba(33, 150, 243, 0.03);
+}
+
+/* Static indicator - doesn't affect layout */
+form table tr::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0;
+    background: linear-gradient(180deg, #2196F3, #0d47a1);
+    transition: width 0.3s ease;
+    z-index: 1;
+}
+
+form table tr:hover::before {
+    width: 4px;
+}
+
+/* Fixed column widths */
+form table th {
+    text-align: left;
+    padding: 20px;
+    color: #0d47a1;
+    font-weight: 600;
+    font-size: 16px;
+    background: rgba(33, 150, 243, 0.02);
+    border-right: 1px solid rgba(33, 150, 243, 0.08);
+    width: 35%;
+    vertical-align: middle;
+}
+
+form table td {
+    padding: 20px;
+    vertical-align: middle;
+    width: 65%;
+}
+
+/* Input styling - NO movement on focus */
+.input-container {
+    position: relative;
+    width: 100%;
+}
+
+.input-field {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid rgba(33, 150, 243, 0.1);
+    border-radius: 8px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    background: rgba(33, 150, 243, 0.02);
+    color: #0d47a1;
+    font-weight: 500;
+    outline: none;
+}
+
+.input-field::placeholder {
+    color: #90a4ae;
+    font-weight: 400;
+}
+
+/* Only border and shadow change - NO transform */
+.input-field:focus {
+    border-color: #2196F3;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+}
+
+/* File input - NO movement */
+.file-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.file-input-wrapper input[type="file"] {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.file-input-custom {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: rgba(33, 150, 243, 0.05);
+    border: 2px dashed rgba(33, 150, 243, 0.3);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.file-input-wrapper:hover .file-input-custom {
+    border-color: #2196F3;
+    background: rgba(33, 150, 243, 0.1);
+}
+
+.file-icon {
+    width: 24px;
+    height: 24px;
+    background: linear-gradient(135deg, #2196F3, #0d47a1);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 12px;
+}
+
+.file-text {
+    color: #0d47a1;
+    font-weight: 500;
+    flex-grow: 1;
+}
+
+.file-browse {
+    color: #2196F3;
+    font-weight: 600;
+    padding: 6px 12px;
+    background: rgba(33, 150, 243, 0.1);
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+/* Submit button - only vertical movement allowed (natural button behavior) */
+.submit-container {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.submit-btn {
+    background: linear-gradient(135deg, #0d47a1 0%, #2196F3 100%);
+    color: white;
+    border: none;
+    padding: 18px 40px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+}
+
+.submit-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.5s;
+}
+
+.submit-btn:hover::before {
+    left: 100%;
+}
+
+/* Form footer */
+.form-footer {
+    text-align: center;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(33, 150, 243, 0.1);
+    color: #78909c;
+    font-size: 14px;
+}
+
+/* Floating particles - background only */
+.particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background-color: rgba(33, 150, 243, 0.4);
+    border-radius: 50%;
+    animation: particle-float 15s infinite linear;
+}
+
+@keyframes particle-float {
+    0% {
+        transform: translateY(100vh) translateX(0);
+    }
+    100% {
+        transform: translateY(-100px) translateX(100px);
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .form-wrapper {
+        padding: 25px;
+    }
+
+    form table {
+        display: block;
+    }
+
+    form table tr {
+        display: block;
+        padding: 15px;
+    }
+
+    form table th,
+    form table td {
+        display: block;
+        width: 100% !important;
+        padding: 10px 0;
+        border: none;
+    }
+
+    form table th {
+        padding-bottom: 8px;
+        background: none;
+        border-right: none;
+    }
+
+    form table td {
+        padding-top: 8px;
+    }
+
+    .form-header h1 {
+        font-size: 24px;
+    }
+}
+</style>
+</head>
+
+<body>
+<!-- Animated background -->
+<div class="animated-bg">
+    <div class="floating-shape"></div>
+    <div class="floating-shape"></div>
+    <div class="floating-shape"></div>
+</div>
+
+<!-- Modern form wrapper -->
+<div class="form-wrapper">
+    <div class="form-header">
+        <h1>Color Detection Analysis</h1>
+        <p>Upload an image and specify a color to find matching products in our database</p>
+    </div>
+
+    <div class="form-table-container">
+        <form action="/productbycolour_buttonclick" method="post" enctype="multipart/form-data" name="form1" id="form1">
+            <table width="309" border="1">
+              <tr>
+                <th width="163" scope="row">Image Upload</th>
+                <td width="130">
+                    <div class="file-input-wrapper">
+                        <input type="file" name="fileField" id="fileField" />
+                        <div class="file-input-custom">
+                            <div class="file-icon">📁</div>
+                            <div class="file-text">Choose image file</div>
+                            <div class="file-browse">Browse</div>
+                        </div>
+                    </div>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Color Specification</th>
+                <td>
+                    <div class="input-container">
+                        <input type="text" name="textfield" id="textfield" class="input-field" placeholder="Enter color name, HEX code, or RGB value" />
+                    </div>
+                </td>
+              </tr>
+              <tr>
+                <th colspan="2" scope="row">
+                    <div class="submit-container">
+                        <input type="submit" name="button" id="button" value="Add" class="submit-btn" />
+                    </div>
+                </th>
+              </tr>
+            </table>
+        </form>
+    </div>
+
+    <div class="form-footer">
+        <p>Supported formats: JPG, PNG, GIF • Max size: 10MB • Colors detected: HEX, RGB, HSL</p>
+    </div>
+</div>
+
+<!-- Add floating particles -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add floating particles to background
+    const animatedBg = document.querySelector('.animated-bg');
+    for(let i = 0; i < 15; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * -20 + 's';
+        particle.style.animationDuration = Math.random() * 10 + 15 + 's';
+        particle.style.opacity = Math.random() * 0.5 + 0.2;
+
+        animatedBg.appendChild(particle);
+    }
+
+    // File input feedback
+    const fileInput = document.getElementById('fileField');
+    const fileText = document.querySelector('.file-text');
+
+    fileInput.addEventListener('change', function() {
+        if(this.files && this.files[0]) {
+            const fileName = this.files[0].name;
+            fileText.textContent = fileName.length > 20 ?
+                fileName.substring(0, 17) + '...' : fileName;
+        }
+    });
+
+    // Form submission feedback
+    const form = document.getElementById('form1');
+    form.addEventListener('submit', function(e) {
+        const submitBtn = document.getElementById('button');
+        submitBtn.disabled = true;
+        submitBtn.value = 'Analyzing...';
+
+        setTimeout(() => {
+            submitBtn.disabled = false;
+            submitBtn.value = 'Analyze Colors';
+        }, 2000);
+    });
+});
+</script>
+<script>
+// Prevent going back to this page after form submission
+if (window.history && window.history.pushState) {
+    // Add current page to history
+    window.history.pushState(null, null, window.location.href);
+
+    // Listen for back/forward navigation
+    window.onpopstate = function(event) {
+        // Redirect to /rtohome when back button is pressed
+        window.location.href = '/home';
+    };
+}
+</script>
+</body>
+</html>

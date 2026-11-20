@@ -1,0 +1,1303 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#  <meta charset="UTF-8">#}
+{#  <title>Registration Data Table</title>#}
+{#  <!-- Bootstrap CSS -->#}
+{#  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">#}
+{#  <!-- DataTables CSS -->#}
+{#  <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">#}
+{#</head>#}
+{#<body>#}
+{#<div class="container mt-5">#}
+{#  <h2 class="mb-4">View review</h2>#}
+{#  <table id="registrationTable" class="table table-striped table-bordered">#}
+{#    <thead>#}
+{#      <tr>#}
+{#        <th>#</th>#}
+{#        <th>Username</th>#}
+{#        <th>Email</th>#}
+{#        <th>Phone</th>#}
+{#        <th>Review</th>#}
+{#        <th>Rating</th>#}
+{#        <th>Date</th>#}
+{#      </tr>#}
+{#    </thead>#}
+{#    <tbody>#}
+{#      <!-- Sample Data Row -->#}
+{#       {% for i in data %}#}
+{#      <tr>#}
+{#        <td>&nbsp;{{ forloop.counter }}</td>#}
+{#        <td>&nbsp;{{ i.CUSTOMER.name }}</td>#}
+{#        <td>&nbsp;{{ i.CUSTOMER.email }}</td>#}
+{#        <td>&nbsp;{{ i.CUSTOMER.phone }}</td>#}
+{#        <td>&nbsp;{{ i.review }}</td>#}
+{#        <td>&nbsp;{{ i.rating }}</td>#}
+{#        <td>&nbsp;{{ i.date }}</td>#}
+{#      </tr>#}
+{#       {% endfor %}#}
+{#      <!-- Add more rows dynamically from backend -->#}
+{#    </tbody>#}
+{#  </table>#}
+{#  </div>#}
+{##}
+{#  <!-- Scripts -->#}
+{#  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>#}
+{#  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>#}
+{#  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>#}
+{#  <script>#}
+{#    $(document).ready(function () {#}
+{#      $('#registrationTable').DataTable();#}
+{#    });#}
+{#  </script>#}
+{#</body>#}
+{#</html>#}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Premium Review Dashboard</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- DataTables CSS -->
+  <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* STRICTLY ORANGE #F97316 AND BLACK ONLY */
+    :root {
+      --orange-main: #F97316;
+      --orange-dark: #EA580C;
+      --orange-light: #FB923C;
+      --orange-pale: #FDBA74;
+      --black-main: #000000;
+      --black-dark: #0A0A0A;
+      --black-medium: #1A1A1A;
+      --black-light: #2A2A2A;
+      --black-pale: #333333;
+      --white: #FFFFFF;
+      --white-pale: #F0F0F0;
+    }
+
+    /* BETTER FONTS */
+    body {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 400;
+      letter-spacing: 0.3px;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .dashboard-header h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+    }
+
+    #registrationTable thead th {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    #registrationTable tbody td {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 400;
+    }
+
+    .stat-card .stat-number {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+    }
+
+    .quote-container {
+      font-family: 'Poppins', sans-serif;
+      font-style: italic;
+      font-weight: 300;
+    }
+
+    /* Force table text to WHITE */
+    #registrationTable tbody td,
+    #registrationTable tbody td *,
+    .review-cell,
+    .date-cell,
+    .rating-stars span {
+      color: var(--white) !important;
+    }
+
+    /* Force other text to orange */
+    body, div, span, p, th, input, select, button, label, i:not(.rating-stars i) {
+      color: var(--orange-main) !important;
+    }
+
+    /* Override Bootstrap colors */
+    * {
+      --bs-body-color: var(--orange-main) !important;
+      --bs-body-bg: var(--black-main) !important;
+      --bs-border-color: var(--orange-main) !important;
+      --bs-table-bg: var(--black-medium) !important;
+      --bs-table-striped-bg: var(--black-light) !important;
+      --bs-table-hover-bg: var(--black-pale) !important;
+      --bs-table-color: var(--white) !important;
+      --bs-link-color: var(--orange-main) !important;
+    }
+
+    body {
+      background-color: var(--black-main) !important;
+      color: var(--orange-main) !important;
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    .container {
+      padding-top: 20px;
+      padding-bottom: 40px;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* QUOTE CONTAINER */
+    .quote-container {
+      background: var(--black-medium) !important;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 30px;
+      border-left: 6px solid var(--orange-main) !important;
+      border-right: 6px solid var(--orange-main) !important;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8);
+      animation: fadeIn 1s ease-out;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quote-container::before {
+      content: '"';
+      position: absolute;
+      top: -10px;
+      left: 20px;
+      font-size: 5rem;
+      color: var(--orange-main);
+      opacity: 0.1;
+      font-family: serif;
+    }
+
+    .quote-container::after {
+      content: '"';
+      position: absolute;
+      bottom: -30px;
+      right: 20px;
+      font-size: 5rem;
+      color: var(--orange-main);
+      opacity: 0.1;
+      font-family: serif;
+    }
+
+    .quote-text {
+      color: var(--orange-pale) !important;
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      line-height: 1.6;
+    }
+
+    .quote-author {
+      color: var(--orange-light) !important;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    /* LIVE ANIMATION ELEMENTS - POSITIONED ON BOTH SIDES */
+    .live-animation-left, .live-animation-right {
+      position: fixed;
+      top: 0;
+      height: 100vh;
+      width: 200px;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.03;
+    }
+
+    .live-animation-left {
+      left: 0;
+    }
+
+    .live-animation-right {
+      right: 0;
+    }
+
+    /* ANIMATED CLOTHING ITEMS */
+    .clothing-item {
+      position: absolute;
+      font-size: 2rem;
+      color: var(--orange-main) !important;
+      opacity: 0.05;
+    }
+
+    /* Left side animation items */
+    .clothing-item.shirt {
+      top: 20%;
+      left: 10%;
+      animation: floatLeft 8s infinite ease-in-out;
+    }
+
+    .clothing-item.pants {
+      top: 40%;
+      left: 30%;
+      animation: floatLeft 10s infinite ease-in-out;
+      animation-delay: 1s;
+    }
+
+    .clothing-item.dress {
+      top: 60%;
+      left: 20%;
+      animation: floatLeft 12s infinite ease-in-out;
+      animation-delay: 2s;
+    }
+
+    .clothing-item.hat {
+      top: 80%;
+      left: 15%;
+      animation: floatLeft 9s infinite ease-in-out;
+      animation-delay: 0.5s;
+    }
+
+    .clothing-item.jacket {
+      top: 30%;
+      left: 5%;
+      animation: floatLeft 11s infinite ease-in-out;
+      animation-delay: 1.5s;
+    }
+
+    /* Right side animation items */
+    .clothing-item.shirt-right {
+      top: 25%;
+      right: 15%;
+      animation: floatRight 9s infinite ease-in-out;
+      animation-delay: 0.7s;
+    }
+
+    .clothing-item.pants-right {
+      top: 45%;
+      right: 25%;
+      animation: floatRight 11s infinite ease-in-out;
+      animation-delay: 1.2s;
+    }
+
+    .clothing-item.dress-right {
+      top: 65%;
+      right: 20%;
+      animation: floatRight 10s infinite ease-in-out;
+      animation-delay: 2.5s;
+    }
+
+    .clothing-item.hat-right {
+      top: 85%;
+      right: 10%;
+      animation: floatRight 8s infinite ease-in-out;
+      animation-delay: 0.3s;
+    }
+
+    .clothing-item.jacket-right {
+      top: 35%;
+      right: 5%;
+      animation: floatRight 12s infinite ease-in-out;
+      animation-delay: 1.8s;
+    }
+
+    /* ANIMATION KEYFRAMES */
+    @keyframes floatLeft {
+      0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 0.05;
+      }
+      25% {
+        transform: translate(-10px, -15px) rotate(-5deg);
+        opacity: 0.08;
+      }
+      50% {
+        transform: translate(-5px, 10px) rotate(5deg);
+        opacity: 0.03;
+      }
+      75% {
+        transform: translate(5px, -5px) rotate(-3deg);
+        opacity: 0.06;
+      }
+    }
+
+    @keyframes floatRight {
+      0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 0.05;
+      }
+      25% {
+        transform: translate(10px, -15px) rotate(5deg);
+        opacity: 0.08;
+      }
+      50% {
+        transform: translate(5px, 10px) rotate(-5deg);
+        opacity: 0.03;
+      }
+      75% {
+        transform: translate(-5px, -5px) rotate(3deg);
+        opacity: 0.06;
+      }
+    }
+
+    /* PULSING ORANGE GLOW BORDERS */
+    .pulse-border-left {
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 100vh;
+      width: 4px;
+      background: var(--orange-main);
+      opacity: 0.1;
+      z-index: 2;
+      animation: pulseBorderLeft 3s infinite ease-in-out;
+    }
+
+    .pulse-border-right {
+      position: fixed;
+      right: 0;
+      top: 0;
+      height: 100vh;
+      width: 4px;
+      background: var(--orange-main);
+      opacity: 0.1;
+      z-index: 2;
+      animation: pulseBorderRight 3s infinite ease-in-out;
+      animation-delay: 1.5s;
+    }
+
+    @keyframes pulseBorderLeft {
+      0%, 100% {
+        opacity: 0.1;
+        box-shadow: 0 0 5px var(--orange-main);
+      }
+      50% {
+        opacity: 0.3;
+        box-shadow: 0 0 15px var(--orange-main), 0 0 25px var(--orange-main);
+      }
+    }
+
+    @keyframes pulseBorderRight {
+      0%, 100% {
+        opacity: 0.1;
+        box-shadow: 0 0 5px var(--orange-main);
+      }
+      50% {
+        opacity: 0.3;
+        box-shadow: 0 0 15px var(--orange-main), 0 0 25px var(--orange-main);
+      }
+    }
+
+    /* ANIMATED PARTICLES */
+    .particle {
+      position: fixed;
+      width: 3px;
+      height: 3px;
+      background: var(--orange-main);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0;
+    }
+
+    /* Header - ORANGE & BLACK ONLY */
+    .dashboard-header {
+      background: var(--black-medium) !important;
+      border-radius: 16px;
+      padding: 25px;
+      margin-bottom: 30px;
+      border-left: 6px solid var(--orange-main) !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      position: relative;
+      overflow: hidden;
+      animation: fadeInDown 0.8s ease-out;
+    }
+
+    .dashboard-header h2 {
+      color: var(--orange-main) !important;
+      position: relative;
+    }
+
+    .dashboard-header .subtitle {
+      color: var(--orange-pale) !important;
+      font-size: 1rem;
+      position: relative;
+    }
+
+    /* Stats cards - ORANGE & BLACK ONLY */
+    .stats-container {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .stat-card {
+      background: var(--black-medium) !important;
+      border-radius: 12px;
+      padding: 20px;
+      flex: 1;
+      min-width: 200px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
+      transition: all 0.3s ease;
+      border-top: 4px solid var(--orange-main) !important;
+      animation: fadeIn 0.8s ease-out;
+      animation-fill-mode: both;
+    }
+
+    .stat-card:nth-child(1) { animation-delay: 0.1s; }
+    .stat-card:nth-child(2) { animation-delay: 0.2s; }
+    .stat-card:nth-child(3) { animation-delay: 0.3s; }
+    .stat-card:nth-child(4) { animation-delay: 0.4s; }
+
+    .stat-card:hover {
+      transform: translateY(-8px);
+      border-top: 4px solid var(--orange-light) !important;
+    }
+
+    .stat-card i {
+      font-size: 2.5rem;
+      color: var(--orange-main) !important;
+      margin-bottom: 15px;
+    }
+
+    .stat-card .stat-number {
+      font-size: 2.2rem;
+      line-height: 1;
+    }
+
+    .stat-card .stat-label {
+      color: var(--orange-pale) !important;
+      font-size: 0.9rem;
+      margin-top: 8px;
+    }
+
+    /* Table styling - WHITE TEXT INSIDE */
+    .table-container {
+      background: var(--black-medium) !important;
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      animation: fadeInUp 0.8s ease-out;
+      animation-delay: 0.5s;
+      animation-fill-mode: both;
+      border: 2px solid var(--orange-main) !important;
+      position: relative;
+      z-index: 10;
+    }
+
+    #registrationTable {
+      border-collapse: separate;
+      border-spacing: 0;
+      width: 100%;
+      border: 2px solid var(--orange-main) !important;
+    }
+
+    #registrationTable thead {
+      background: var(--orange-main) !important;
+    }
+
+    #registrationTable thead th {
+      background: var(--orange-main) !important;
+      color: var(--white) !important; /* WHITE text in header */
+      border: none;
+      padding: 18px 10px;
+      font-size: 1rem;
+      border-bottom: 3px solid var(--black-main) !important;
+    }
+
+    #registrationTable tbody tr {
+      background-color: var(--black-medium) !important;
+      transition: all 0.3s ease;
+      border-bottom: 1px solid var(--orange-main) !important;
+    }
+
+    #registrationTable tbody tr:nth-child(even) {
+      background-color: var(--black-light) !important;
+    }
+
+    #registrationTable tbody tr:hover {
+      background-color: var(--black-pale) !important;
+      transform: scale(1.005);
+    }
+
+    #registrationTable tbody td {
+      color: var(--white) !important; /* WHITE text in table cells */
+      border: none;
+      padding: 16px 10px;
+      vertical-align: middle;
+      border-right: 1px solid var(--orange-main) !important;
+    }
+
+    #registrationTable tbody td:last-child {
+      border-right: none !important;
+    }
+
+    /* Rating stars - Orange stars with WHITE text */
+    .rating-stars {
+      font-size: 1.1rem;
+    }
+
+    .rating-stars i {
+      color: var(--orange-main) !important; /* Orange stars */
+    }
+
+    .rating-stars .empty {
+      color: var(--black-pale) !important;
+    }
+
+    .rating-stars span {
+      color: var(--white) !important; /* WHITE rating number */
+    }
+
+    /* Review cell styling - WHITE text */
+    .review-cell {
+      max-width: 300px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: var(--white) !important; /* WHITE text */
+    }
+
+    .review-cell:hover {
+      white-space: normal;
+      overflow: visible;
+      position: relative;
+      z-index: 10;
+      background-color: var(--black-main) !important;
+      border-radius: 8px;
+      padding: 15px;
+      border: 1px solid var(--orange-main) !important;
+      color: var(--white) !important; /* WHITE text on hover */
+    }
+
+    /* Date cell styling - WHITE text */
+    .date-cell {
+      font-size: 0.9rem;
+      color: var(--white) !important; /* WHITE text */
+      font-weight: 500;
+    }
+
+    /* Pagination - ORANGE & BLACK ONLY */
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+      background-color: var(--black-main) !important;
+      color: var(--orange-main) !important;
+      border: 1px solid var(--orange-main) !important;
+      margin: 0 2px;
+      border-radius: 6px !important;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+      background: var(--orange-main) !important;
+      color: var(--black-main) !important;
+      border: 1px solid var(--orange-main) !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+      background: var(--orange-main) !important;
+      color: var(--black-main) !important;
+      border: 1px solid var(--orange-main) !important;
+    }
+
+    /* Search and filter */
+    .dataTables_filter input {
+      background-color: var(--black-main) !important;
+      border: 2px solid var(--orange-main) !important;
+      color: var(--orange-main) !important;
+      border-radius: 8px;
+      padding: 10px 15px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .dataTables_filter input::placeholder {
+      color: var(--orange-pale) !important;
+    }
+
+    .dataTables_length select {
+      background-color: var(--black-main) !important;
+      border: 2px solid var(--orange-main) !important;
+      color: var(--orange-main) !important;
+      border-radius: 8px;
+      padding: 8px 15px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    /* DataTables info */
+    .dataTables_info {
+      color: var(--orange-pale) !important;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    /* Override Bootstrap table classes for WHITE text */
+    .table {
+      --bs-table-bg: transparent !important;
+      --bs-table-striped-color: var(--white) !important; /* WHITE text */
+      --bs-table-striped-bg: var(--black-light) !important;
+      --bs-table-active-color: var(--white) !important; /* WHITE text */
+      --bs-table-active-bg: var(--black-pale) !important;
+      --bs-table-hover-color: var(--white) !important; /* WHITE text */
+      --bs-table-hover-bg: var(--black-pale) !important;
+      color: var(--white) !important; /* WHITE text */
+      border-color: var(--orange-main) !important;
+    }
+
+    .table-striped>tbody>tr:nth-of-type(odd)>* {
+      color: var(--white) !important; /* WHITE text */
+      background-color: var(--black-medium) !important;
+    }
+
+    .table-striped>tbody>tr:nth-of-type(even)>* {
+      color: var(--white) !important; /* WHITE text */
+      background-color: var(--black-light) !important;
+    }
+
+    .table-hover>tbody>tr:hover>* {
+      color: var(--white) !important; /* WHITE text */
+      background-color: var(--black-pale) !important;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes quoteChange {
+      0% { opacity: 0; transform: translateY(10px); }
+      10% { opacity: 1; transform: translateY(0); }
+      90% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-10px); }
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      .stats-container {
+        flex-direction: column;
+      }
+
+      .stat-card {
+        width: 100%;
+        margin-bottom: 15px;
+      }
+
+      #registrationTable thead th,
+      #registrationTable tbody td {
+        padding: 12px 8px;
+      }
+
+      .quote-text {
+        font-size: 1rem;
+      }
+
+      /* Hide animations on mobile for better performance */
+      .live-animation-left, .live-animation-right,
+      .pulse-border-left, .pulse-border-right,
+      .clothing-item, .particle {
+        display: none;
+      }
+    }
+
+    /* Force table text to WHITE */
+    #registrationTable tbody *:not(.rating-stars i):not(.empty) {
+      color: var(--white) !important;
+    }
+
+    /* Force table backgrounds to black variations */
+    body, .container, .table-container, .stat-card, .dashboard-header {
+      background-color: var(--black-main) !important;
+    }
+
+    /* Specific overrides for nested elements */
+    .table-container {
+      background-color: var(--black-medium) !important;
+    }
+
+    #registrationTable thead {
+      background-color: var(--orange-main) !important;
+    }
+
+    #registrationTable thead th {
+      background-color: var(--orange-main) !important;
+      color: var(--white) !important; /* WHITE text */
+    }
+
+    #registrationTable tbody tr {
+      background-color: var(--black-medium) !important;
+    }
+
+    #registrationTable tbody tr:nth-child(even) {
+      background-color: var(--black-light) !important;
+    }
+  </style>
+</head>
+<body>
+  <!-- LIVE ANIMATION ELEMENTS -->
+  <div class="live-animation-left">
+    <!-- Left side clothing animations -->
+    <div class="clothing-item shirt"><i class="fas fa-tshirt"></i></div>
+    <div class="clothing-item pants"><i class="fas fa-vest"></i></div>
+    <div class="clothing-item dress"><i class="fas fa-female"></i></div>
+    <div class="clothing-item hat"><i class="fas fa-hat-cowboy"></i></div>
+    <div class="clothing-item jacket"><i class="fas fa-vest-patches"></i></div>
+  </div>
+
+  <div class="live-animation-right">
+    <!-- Right side clothing animations -->
+    <div class="clothing-item shirt-right"><i class="fas fa-tshirt"></i></div>
+    <div class="clothing-item pants-right"><i class="fas fa-vest"></i></div>
+    <div class="clothing-item dress-right"><i class="fas fa-female"></i></div>
+    <div class="clothing-item hat-right"><i class="fas fa-hat-cowboy"></i></div>
+    <div class="clothing-item jacket-right"><i class="fas fa-vest-patches"></i></div>
+  </div>
+
+  <!-- Pulsing borders -->
+  <div class="pulse-border-left"></div>
+  <div class="pulse-border-right"></div>
+
+  <!-- Main Content -->
+  <div class="container mt-4">
+    <!-- Header -->
+    <div class="dashboard-header">
+      <h2><i class="fas fa-star me-2"></i>Customer Reviews Dashboard</h2>
+      <p class="subtitle">Manage and analyze customer feedback for your clothing products</p>
+    </div>
+
+    <!-- Quotes Container -->
+    <div class="quote-container" id="quoteContainer">
+      <p class="quote-text" id="quoteText">"Style is a way to say who you are without having to speak."</p>
+      <p class="quote-author" id="quoteAuthor">- Rachel Zoe</p>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-container">
+      <div class="stat-card">
+        <i class="fas fa-comments"></i>
+        <div class="stat-number" id="total-reviews">0</div>
+        <div class="stat-label">Total Reviews</div>
+      </div>
+      <div class="stat-card">
+        <i class="fas fa-star"></i>
+        <div class="stat-number" id="avg-rating">0.0</div>
+        <div class="stat-label">Average Rating</div>
+      </div>
+      <div class="stat-card">
+        <i class="fas fa-user-friends"></i>
+        <div class="stat-number" id="unique-customers">0</div>
+        <div class="stat-label">Unique Customers</div>
+      </div>
+      <div class="stat-card">
+        <i class="fas fa-calendar-day"></i>
+        <div class="stat-number" id="this-month">0</div>
+        <div class="stat-label">This Month</div>
+      </div>
+    </div>
+
+    <!-- Table Container -->
+    <div class="table-container">
+      <table id="registrationTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Review</th>
+            <th>Rating</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Your original Django data -->
+          {% for i in data %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ i.CUSTOMER.name }}</td>
+            <td>{{ i.CUSTOMER.email }}</td>
+            <td>{{ i.CUSTOMER.phone }}</td>
+            <td class="review-cell">{{ i.comment }}</td>
+            <th>
+              <div class="rating-stars">
+                {% with ''|center:i.rating as range %}
+                {% for _ in range %}
+                <i class="fas fa-star"></i>
+                {% endfor %}
+                {% endwith %}
+                {% if i.rating < 5 %}
+                  {% with ''|center:i.rating as filled %}
+                  {% with ''|center:5 as total %}
+                  {% for _ in total %}
+                    {% if forloop.counter > i.rating %}
+                      <i class="far fa-star empty"></i>
+                    {% endif %}
+                  {% endfor %}
+                  {% endwith %}
+                  {% endwith %}
+                {% endif %}
+                <span class="ms-1">{{ i.rating }}</span>
+              </div>
+            </th>
+            <td class="date-cell">{{ i.date }}</td>
+          </tr>
+          {% endfor %}
+
+          <!-- Sample data -->
+{#          <tr>#}
+{#            <td>1</td>#}
+{#            <td>John Smith</td>#}
+{#            <td>john.smith@example.com</td>#}
+{#            <td>(555) 123-4567</td>#}
+{#            <td class="review-cell">Great quality t-shirt, fits perfectly!</td>#}
+{#            <td>#}
+{#              <div class="rating-stars">#}
+{#                <i class="fas fa-star"></i>#}
+{#                <i class="fas fa-star"></i>#}
+{#                <i class="fas fa-star"></i>#}
+{#                <i class="fas fa-star"></i>#}
+{#                <i class="fas fa-star-half-alt"></i>#}
+{#                <span class="ms-1">4.5</span>#}
+{#              </div>#}
+{#            </td>#}
+{#            <td class="date-cell">2023-10-15</td>#}
+{#          </tr>#}
+{#          <tr>#}
+{#            <td>2</td>#}
+{#            <td>Sarah Johnson</td>#}
+{#            <td>sarah.j@example.com</td>#}
+{#            <td>(555) 987-6543</td>#}
+{#            <td class="review-cell">Love the design but the color faded after wash.</td>#}
+{#            <td>#}
+{#              <div class="rating-stars">#}
+{#                <i class="fas fa-star"></i>#}
+{#                <i class="fas fa-star"></i>#}
+{#                <i class="fas fa-star"></i>#}
+{#                <i class="far fa-star empty"></i>#}
+{#                <i class="far fa-star empty"></i>#}
+{#                <span class="ms-1">3.0</span>#}
+{#              </div>#}
+{#            </td>#}
+{#            <td class="date-cell">2023-10-14</td>#}
+{#          </tr>#}
+{#          <tr>#}
+{#            <td>3</td>#}
+{#            <td>Michael Brown</td>#}
+{#            <td>m.brown@example.com</td>#}
+{#            <td>(555) 456-7890</td>#}
+{#            <td class="review-cell">Excellent hoodie, very warm and comfortable for winter.</td>#}
+{#            <td>#}
+{#              <div class="rating-stars">#}
+{#                <i class="fas fa-star"></i>#}
+{#                <i class="fas fa-star"></i>#}
+{#                <i class="fas fa-star"></i>#}
+{#                <i class="fas fa-star"></i>#}
+{#                <i class="fas fa-star"></i>#}
+{#                <span class="ms-1">5.0</span>#}
+{#              </div>#}
+{#            </td>#}
+{#            <td class="date-cell">2023-10-13</td>#}
+{#          </tr>#}
+{#          <tr>#}
+{#            <td>4</td>#}
+{#            <td>Emily Davis</td>#}
+{#            <td>emily.davis@example.com</td>#}
+{#            <td>(555) 789-0123</td>#}
+{#            <td class="review-cell">Good jeans but sizing was a bit off from what I expected.</td>#}
+{#            <td>#}
+{#              <div class="rating-stars">#}
+{#                <i class="fas fa-star"></i>#}
+{#                <i class="fas fa-star"></i>#}
+{#                <i class="fas fa-star"></i>#}
+{#                <i class="fas fa-star"></i>#}
+{#                <i class="far fa-star empty"></i>#}
+{#                <span class="ms-1">4.0</span>#}
+{#              </div>#}
+{#            </td>#}
+{#            <td class="date-cell">2023-10-12</td>#}
+{#          </tr>#}
+{#          <tr>#}
+{#            <td>5</td>#}
+{#            <td>Robert Wilson</td>#}
+{#            <td>rob.wilson@example.com</td>#}
+{#            <td>(555) 234-5678</td>#}
+{#            <td class="review-cell">The jacket is perfect for rainy days. Waterproof and stylish!</td>#}
+{#            <td>#}
+{#              <div class="rating-stars">#}
+{#                <i class="fas fa-star"></i>#}
+{#                <i class="fas fa-star"></i>#}
+{#                <i class="fas fa-star"></i>#}
+{#                <i class="fas fa-star"></i>#}
+{#                <i class="fas fa-star"></i>#}
+{#                <span class="ms-1">5.0</span>#}
+{#              </div>#}
+{#            </td>#}
+{#            <td class="date-cell">2023-10-10</td>#}
+{#          </tr>#}
+{#        </tbody>#}
+{#      </table>#}
+{#    </div>#}
+{#  </div>#}
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      // Clothing & Review Quotes Array
+      const quotes = [
+        {
+          text: "Style is a way to say who you are without having to speak.",
+          author: "Rachel Zoe"
+        },
+        {
+          text: "Your customer's feedback is the most valuable currency for your business.",
+          author: "Shep Hyken"
+        },
+        {
+          text: "Fashion is about dressing according to what's fashionable. Style is more about being yourself.",
+          author: "Oscar de la Renta"
+        },
+        {
+          text: "Quality in a product is not what you put into it. It is what the customer gets out of it.",
+          author: "Peter Drucker"
+        },
+        {
+          text: "The best advertising is done by satisfied customers.",
+          author: "Philip Kotler"
+        },
+        {
+          text: "Clothes mean nothing until someone lives in them.",
+          author: "Marc Jacobs"
+        },
+        {
+          text: "A brand is defined by the customers' experience. The experience is delivered by the employees.",
+          author: "Shep Hyken"
+        },
+        {
+          text: "Style is something each of us already has, all we need to do is find it.",
+          author: "Diane von Fürstenberg"
+        },
+        {
+          text: "Your most unhappy customers are your greatest source of learning.",
+          author: "Bill Gates"
+        },
+        {
+          text: "Fashion fades, only style remains the same.",
+          author: "Coco Chanel"
+        }
+      ];
+
+      let currentQuoteIndex = 0;
+
+      // Initialize DataTable
+      const table = $('#registrationTable').DataTable({
+        "pageLength": 10,
+        "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+        "order": [[6, 'desc']],
+        "language": {
+          "search": "<i class='fas fa-search me-2'></i>Search reviews:",
+          "lengthMenu": "<i class='fas fa-list me-2'></i>Show _MENU_ reviews",
+          "info": "<i class='fas fa-info-circle me-2'></i>Showing _START_ to _END_ of _TOTAL_ reviews",
+          "paginate": {
+            "previous": "<i class='fas fa-chevron-left'></i>",
+            "next": "<i class='fas fa-chevron-right'></i>"
+          }
+        },
+        "initComplete": function() {
+          // Force colors after DataTable initialization
+          $('.dataTables_filter input').css({
+            'background-color': '#000000',
+            'color': '#F97316',
+            'border': '2px solid #F97316',
+            'font-family': "'Poppins', sans-serif"
+          });
+
+          $('.dataTables_length select').css({
+            'background-color': '#000000',
+            'color': '#F97316',
+            'border': '2px solid #F97316',
+            'font-family': "'Poppins', sans-serif"
+          });
+
+          // Force table text to white
+          $('#registrationTable tbody td').css('color', '#FFFFFF');
+          $('#registrationTable tbody td .review-cell').css('color', '#FFFFFF');
+          $('#registrationTable tbody td .date-cell').css('color', '#FFFFFF');
+          $('#registrationTable tbody td .rating-stars span').css('color', '#FFFFFF');
+
+          // Update stats
+          updateStats();
+
+          // Start live animations
+          startParticleAnimation();
+          startLiveDataUpdates();
+          startRowAnimations();
+          startQuoteRotation();
+        }
+      });
+
+      // Quote rotation function
+      function startQuoteRotation() {
+        setInterval(function() {
+          currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
+          const quote = quotes[currentQuoteIndex];
+
+          // Animate quote change
+          $('#quoteText').css({
+            'animation': 'quoteChange 2s ease-in-out',
+            'opacity': '0'
+          });
+
+          $('#quoteAuthor').css({
+            'animation': 'quoteChange 2s ease-in-out',
+            'opacity': '0'
+          });
+
+          setTimeout(() => {
+            $('#quoteText').text(`"${quote.text}"`);
+            $('#quoteAuthor').text(`- ${quote.author}`);
+
+            $('#quoteText').css({
+              'animation': 'none',
+              'opacity': '1'
+            });
+
+            $('#quoteAuthor').css({
+              'animation': 'none',
+              'opacity': '1'
+            });
+          }, 1000);
+        }, 8000); // Change quote every 8 seconds
+      }
+
+      // Calculate stats
+      function updateStats() {
+        const totalReviews = table.rows().count();
+        $('#total-reviews').text(totalReviews);
+
+        let totalRating = 0;
+        let ratingCount = 0;
+
+        table.rows().every(function() {
+          const ratingText = $(this.node()).find('td').eq(4).text();
+          const ratingMatch = ratingText.match(/(\d+\.?\d*)/);
+          if (ratingMatch) {
+            totalRating += parseFloat(ratingMatch[0]);
+            ratingCount++;
+          }
+        });
+
+        const avgRating = ratingCount > 0 ? (totalRating / ratingCount).toFixed(1) : '0.0';
+        $('#avg-rating').text(avgRating);
+
+        const usernames = new Set();
+        table.rows().every(function() {
+          const username = $(this.node()).find('td').eq(1).text().trim();
+          if (username) usernames.add(username);
+        });
+
+        $('#unique-customers').text(usernames.size);
+        const thisMonthCount = Math.min(5, Math.floor(totalReviews / 3));
+        $('#this-month').text(thisMonthCount);
+      }
+
+      // Update stats on filter/search
+      table.on('draw', function() {
+        updateStats();
+        // Re-apply white text color after DataTable redraw
+        $('#registrationTable tbody td').css('color', '#FFFFFF');
+        $('#registrationTable tbody td .review-cell').css('color', '#FFFFFF');
+        $('#registrationTable tbody td .date-cell').css('color', '#FFFFFF');
+        $('#registrationTable tbody td .rating-stars span').css('color', '#FFFFFF');
+      });
+
+      // Particle animation function
+      function startParticleAnimation() {
+        setInterval(function() {
+          // Create particles on both sides
+          createParticles('left');
+          createParticles('right');
+        }, 500);
+
+        function createParticles(side) {
+          const particleCount = 3;
+
+          for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+
+            // Random position on the side
+            let leftPos;
+            if (side === 'left') {
+              leftPos = Math.random() * 100;
+            } else {
+              leftPos = window.innerWidth - Math.random() * 100;
+            }
+
+            const topPos = Math.random() * window.innerHeight;
+
+            // Set initial position
+            particle.style.left = leftPos + 'px';
+            particle.style.top = topPos + 'px';
+
+            // Add to document
+            document.body.appendChild(particle);
+
+            // Animate particle
+            animateParticle(particle, side);
+
+            // Remove particle after animation
+            setTimeout(() => {
+              if (particle.parentNode) {
+                particle.parentNode.removeChild(particle);
+              }
+            }, 3000);
+          }
+        }
+
+        function animateParticle(particle, side) {
+          // Random movement direction
+          const moveX = side === 'left' ?
+            (Math.random() * 50 + 20) :
+            -(Math.random() * 50 + 20);
+          const moveY = (Math.random() - 0.5) * 100;
+
+          // Animate with jQuery
+          $(particle).animate({
+            left: `+=${moveX}px`,
+            top: `+=${moveY}px`,
+            opacity: 0.3
+          }, 1500, 'linear').animate({
+            opacity: 0
+          }, 1500);
+        }
+      }
+
+      // Live data updates simulation
+      function startLiveDataUpdates() {
+        // Update stats with slight random changes every 10 seconds
+        setInterval(function() {
+          const currentReviews = parseInt($('#total-reviews').text());
+          const currentAvg = parseFloat($('#avg-rating').text());
+
+          // Small random updates to make it feel "live"
+          if (Math.random() > 0.7) { // 30% chance to update
+            $('#total-reviews').text(currentReviews + 1);
+            $('#this-month').text(parseInt($('#this-month').text()) + 1);
+
+            // Slight rating adjustment
+            const newAvg = (currentAvg + (Math.random() - 0.5) * 0.1).toFixed(1);
+            $('#avg-rating').text(Math.max(0, Math.min(5, newAvg)));
+          }
+        }, 10000);
+      }
+
+      // Row animations
+      function startRowAnimations() {
+        // Random row highlight every 15 seconds
+        setInterval(function() {
+          const rows = $('#registrationTable tbody tr');
+          if (rows.length > 0) {
+            const randomRow = Math.floor(Math.random() * rows.length);
+            const row = $(rows[randomRow]);
+
+            // Add temporary orange highlight
+            row.css('background-color', 'rgba(249, 115, 22, 0.2)');
+
+            // Remove highlight after 2 seconds
+            setTimeout(() => {
+              if (randomRow % 2 === 0) {
+                row.css('background-color', '#2A2A2A');
+              } else {
+                row.css('background-color', '#1A1A1A');
+              }
+            }, 2000);
+          }
+        }, 15000);
+
+        // Animate table rows on page load
+        $('tbody tr').each(function(i) {
+          $(this).delay(i * 100).css({
+            'opacity': 0,
+            'transform': 'translateX(-20px)'
+          }).animate({
+            'opacity': 1,
+            'transform': 'translateX(0)'
+          }, 600);
+        });
+      }
+
+      // Add subtle hover animation to table rows
+      $('#registrationTable tbody').on('mouseenter', 'tr', function() {
+        $(this).stop().animate({
+          'padding-left': '15px',
+          'padding-right': '15px'
+        }, 200);
+      }).on('mouseleave', 'tr', function() {
+        $(this).stop().animate({
+          'padding-left': '0px',
+          'padding-right': '0px'
+        }, 200);
+      });
+
+      // Add live counter animation to stats cards
+      function animateCounter(element, start, end, duration) {
+        let startTimestamp = null;
+        const step = (timestamp) => {
+          if (!startTimestamp) startTimestamp = timestamp;
+          const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+          const value = Math.floor(progress * (end - start) + start);
+          element.text(value);
+          if (progress < 1) {
+            window.requestAnimationFrame(step);
+          }
+        };
+        window.requestAnimationFrame(step);
+      }
+
+      // Animate initial stats
+      setTimeout(() => {
+        const totalReviews = parseInt($('#total-reviews').text());
+        if (totalReviews > 0) {
+          animateCounter($('#total-reviews')[0], 0, totalReviews, 2000);
+        }
+      }, 1000);
+    });
+  </script>
+      <script>
+// Prevent going back to this page after form submission
+if (window.history && window.history.pushState) {
+    // Add current page to history
+    window.history.pushState(null, null, window.location.href);
+
+    // Listen for back/forward navigation
+    window.onpopstate = function(event) {
+        // Redirect to /rtohome when back button is pressed
+        window.location.href = '/homeworker';
+    };
+}
+</script>
+</body>
+</html>

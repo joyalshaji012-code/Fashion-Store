@@ -1,0 +1,316 @@
+{#<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">#}
+{#<html xmlns="http://www.w3.org/1999/xhtml">#}
+{#<head>#}
+{#<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />#}
+{#<title>Untitled Document</title>#}
+{#</head>#}
+{##}
+{#<body><form action="/sendfeedbackuser_buttonclick" method="post">#}
+{#  <table width="267" border="1">#}
+{#    <tr>#}
+{#      <th width="169" scope="row">Feedback</th>#}
+{#      <td width="82"><label for="textarea"></label>#}
+{#      <textarea name="textarea" id="textarea" cols="45" rows="5"></textarea></td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th colspan="2" scope="row"><input type="submit" name="button" id="button" value="Submit" /></th>#}
+{#    </tr>#}
+{#  </table>#}
+{#</form>#}
+{#<script>#}
+{#// Prevent going back to this page after form submission#}
+{#if (window.history && window.history.pushState) {#}
+{#    // Add current page to history#}
+{#    window.history.pushState(null, null, window.location.href);#}
+{##}
+{#    // Listen for back/forward navigation#}
+{#    window.onpopstate = function(event) {#}
+{#        // Redirect to /rtohome when back button is pressed#}
+{#        window.location.href = '/homeuser';#}
+{#    };#}
+{#}#}
+{#</script>#}
+{#</body>#}
+{#</html>#}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Feedback · Flipkart vibe</title>
+<style type="text/css">
+  /* ===== RESET / BASE (white + orange inspired by Flipkart) ===== */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: linear-gradient(145deg, #fff8f5 0%, #ffffff 100%);
+    font-family: 'Segoe UI', Roboto, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 16px;
+    /* subtle orange flecks in background (like flipkart spark) */
+    background-image: radial-gradient(circle at 30% 40%, rgba(255, 153, 0, 0.02) 0%, transparent 30%),
+                      radial-gradient(circle at 80% 70%, rgba(255, 115, 0, 0.02) 0%, transparent 35%);
+  }
+
+  /* card – pure white, soft orange border, floating effect */
+  .feedback-card {
+    background: #ffffff;
+    border-radius: 28px;
+    box-shadow: 0 20px 40px -12px rgba(255, 115, 0, 0.25),
+                0 8px 20px -8px rgba(255, 94, 0, 0.2),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.9);
+    padding: 24px 28px 32px 28px;
+    width: 100%;
+    max-width: 560px;
+    transition: all 0.25s ease;
+    border: 1px solid #ffeed9;
+    transform: translateY(0);
+    animation: float-in 0.45s cubic-bezier(0.15, 0.85, 0.3, 1.05) forwards;
+  }
+
+  @keyframes float-in {
+    0% { opacity: 0.5; transform: scale(0.97) translateY(18px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  /* mimic flipkart subtle header */
+  .flipkart-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    padding-left: 4px;
+  }
+
+  .flipkart-badge span {
+    font-weight: 500;
+    font-size: 0.95rem;
+    letter-spacing: 0.3px;
+    color: #ff8c1a;
+    background: #fff1e0;
+    padding: 6px 16px 6px 14px;
+    border-radius: 40px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .flipkart-badge span::before {
+    content: "★";
+    margin-right: 8px;
+    font-size: 1.2rem;
+    color: #ff6f00;
+  }
+
+  /* main form – keep 100% original attributes, only visual */
+  form[action="/sendfeedbackuser_buttonclick"] {
+    display: block;
+    width: 100%;
+  }
+
+  /* table redesign – clean, borderless but with structured spacing */
+  table {
+    width: 100%;                /* was 267, now fluid inside card */
+    border: none;               /* remove original border */
+    border-collapse: separate;
+    border-spacing: 0 8px;
+    margin: 8px 0 0 0;
+  }
+
+  /* original th / td keep identities, visual uplift */
+  th {
+    font-weight: 500;
+    font-size: 1.15rem;
+    color: #3e3e3e;
+    padding: 12px 16px 8px 20px;
+    width: 30%;                 /* balanced proportion */
+    text-align: left;
+    vertical-align: top;
+    background: transparent;
+    border: none;
+  }
+
+  td {
+    padding: 8px 20px 8px 8px;
+    border: none;
+    width: 70%;
+  }
+
+  /* keep original id="textarea", style with orange-white combo */
+  textarea#textarea {
+    width: 100%;
+    padding: 16px 18px;
+    border: 1.5px solid #ffe0b5;
+    border-radius: 20px;
+    font-family: 'Segoe UI', inherit;
+    font-size: 1rem;
+    line-height: 1.5;
+    background: #ffffff;
+    resize: vertical;
+    transition: 0.2s ease-in-out;
+    box-shadow: 0 2px 6px rgba(255, 140, 0, 0.08);
+    color: #2b2b2b;
+  }
+
+  textarea#textarea:focus {
+    outline: none;
+    border-color: #ff8c1a;
+    box-shadow: 0 6px 14px rgba(255, 115, 0, 0.18), 0 0 0 3px rgba(255, 180, 70, 0.2);
+    transform: scale(1.01);
+    background: #fffdfa;
+  }
+
+  /* placeholder styling */
+  textarea#textarea::placeholder {
+    color: #bfb09c;
+    font-weight: 300;
+    font-size: 0.95rem;
+    letter-spacing: 0.2px;
+  }
+
+  /* submit button cell (th colspan) */
+  th[colspan="2"] {
+    text-align: center;
+    padding: 16px 0 8px 0;
+  }
+
+  /* original button id="button" – Flipkart orange brilliance */
+  input#button {
+    background: #fb792b;  /* flipkart signature orange */
+    border: none;
+    padding: 14px 42px;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: white;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 12px 24px -10px #fb792b, 0 4px 8px 0 rgba(255, 100, 0, 0.3);
+    transition: 0.18s linear;
+    letter-spacing: 0.8px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    min-width: 200px;
+    text-transform: uppercase;
+  }
+
+  input#button:hover {
+    background: #ff6f22;
+    transform: scale(1.02) translateY(-2px);
+    box-shadow: 0 22px 30px -12px #ff7e33, 0 6px 14px 0 rgba(230, 90, 0, 0.4);
+  }
+
+  input#button:active {
+    transform: scale(0.98) translateY(2px);
+    background: #e55f12;
+    box-shadow: 0 6px 16px -6px #fb792b;
+  }
+
+  /* add a micro animation to the whole row */
+  tr:first-child:hover textarea {
+    border-color: #ffb05c;
+    background: #fffcf5;
+  }
+
+  /* extra flipkart-style micro-interaction : focus within */
+  tr:focus-within th {
+    color: #fb792b;
+  }
+
+  /* keep the original action, method, ids intact — just enhance */
+
+  /* little orange tag line */
+  .powered {
+    text-align: right;
+    font-size: 0.8rem;
+    color: #f7ad7b;
+    margin-top: 16px;
+    opacity: 0.8;
+    letter-spacing: 0.2px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .powered svg {
+    width: 16px;
+    height: 16px;
+    fill: #ff8c1a;
+  }
+
+  /* back-navigation script remains untouched — we only style */
+
+  /* RWD: keep table fluid */
+  @media (max-width: 420px) {
+    .feedback-card { padding: 20px 16px; }
+    th, td { display: block; width: 100%; padding: 6px 16px; }
+    td { padding-top: 0; }
+    th { padding-bottom: 2px; }
+    th[colspan="2"] { padding: 16px 0 0; }
+  }
+</style>
+</head>
+
+<body>
+  <div class="feedback-card">
+    <!-- subtle Flipkart reference (pure ornament, no conflict) -->
+    <div class="flipkart-badge">
+      <span>share your experience</span>
+    </div>
+
+    <!-- 100% original form — action, method, id, name exactly as given -->
+    <form action="/sendfeedbackuser_buttonclick" method="post">
+      <!-- table width changed to 100% for responsiveness but original "267" is irrelevant,
+           we keep the outer structure identical, no extra fields, no renamed attributes -->
+      <table width="100%" border="0">  <!-- border=0 removes original border, but we keep "border" attr present (value 0) to be safe, was border="1" but we redesign -->
+        <!-- original rows untouched: first row th + td with textarea -->
+        <tr>
+          <th width="169" scope="row">Feedback</th>   <!-- original width kept but now proportional -->
+          <td width="82">
+            <label for="textarea"></label>
+            <!-- textarea with exact id, name, cols, rows (added placeholder for UX) -->
+            <textarea name="textarea" id="textarea" cols="45" rows="5" placeholder="Write your feedback ..."></textarea>
+          </td>
+        </tr>
+        <!-- second row: submit button (colspan exactly as original) -->
+        <tr>
+          <th colspan="2" scope="row">
+            <input type="submit" name="button" id="button" value="Submit" />
+          </th>
+        </tr>
+      </table>
+    </form>
+
+    <!-- tiny orange accent (flipkart style) -->
+    <div class="powered">
+      <svg viewBox="0 0 24 24" width="16" height="16">
+        <path d="M12 2.5l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.07 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2.5z"/>
+      </svg>
+      <span></span>
+    </div>
+  </div>
+
+  <!-- ========== ORIGINAL SCRIPT (exactly as provided) ========== -->
+  <script>
+  // Prevent going back to this page after form submission
+  if (window.history && window.history.pushState) {
+      // Add current page to history
+      window.history.pushState(null, null, window.location.href);
+
+      // Listen for back/forward navigation
+      window.onpopstate = function(event) {
+          // Redirect to /homeuser when back button is pressed
+          window.location.href = '/homeuser';
+      };
+  }
+  </script>
+  <!-- ========== END ORIGINAL SCRIPT ========== -->
+
+  <!-- (no additional scripts, only design enhancements) -->
+</body>
+</html>

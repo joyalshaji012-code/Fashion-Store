@@ -1,0 +1,1458 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#  <meta charset="UTF-8">#}
+{#  <title>Registration Data Table</title>#}
+{#  <!-- Bootstrap CSS -->#}
+{#  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">#}
+{#  <!-- DataTables CSS -->#}
+{#  <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">#}
+{#</head>#}
+{#<body>#}
+{#  <div class="container mt-5">#}
+{#    <h2 class="mb-4">Verify Worker</h2>#}
+{#    <table id="registrationTable" class="table table-striped table-bordered">#}
+{#      <thead>#}
+{#        <tr>#}
+{#          <th>#</th>#}
+{#          <th>Name</th>#}
+{#          <th>Address</th>#}
+{#          <th>Email</th>#}
+{#          <th>Phone</th>#}
+{#          <th>Proof</th>#}
+{#          <th></th>#}
+{#        </tr>#}
+{#      </thead>#}
+{#      <tbody>#}
+{#        <!-- Sample Data Row -->#}
+{#        {% for i in data %}#}
+{#        <tr>#}
+{#          <td>{{ forloop.counter }}</td>#}
+{#          <td>{{ i.name }}</td>#}
+{#          <td>{{ i.place }},{{ i.post }},{{ i.pin }}</td>#}
+{#          <td>{{ i.email }}</td>#}
+{#          <td>{{ i.phone }}</td>#}
+{#          <td><img src="{{ i.proof }}" height="100" width="100"></td>#}
+{#          <td><p><a href="/worker_approve/{{ i.id }}">Approve</a></p>#}
+{#          <p><a href="/worker_reject/{{ i.id }}">Reject</a></p></td>#}
+{#        </tr>#}
+{#        {% endfor %}#}
+{##}
+{#        <!-- Add more rows dynamically from backend -->#}
+{#      </tbody>#}
+{#    </table>#}
+{#  </div>#}
+{##}
+{#  <!-- Scripts -->#}
+{#  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>#}
+{#  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>#}
+{#  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>#}
+{#  <script>#}
+{#    $(document).ready(function () {#}
+{#      $('#registrationTable').DataTable();#}
+{#    });#}
+{#  </script>#}
+{#</body>#}
+{#</html>#}
+{##}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Worker Verification | Admin Dashboard</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- DataTables CSS -->
+  <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy-dark: #0d1b2a;
+      --navy-medium: #1b263b;
+      --navy-light: #415a77;
+      --blue-primary: #1e3a8a;
+      --blue-secondary: #3b82f6;
+      --blue-accent: #60a5fa;
+      --blue-light: #93c5fd;
+      --blue-bg: #eff6ff;
+      --card-bg: #ffffff;
+      --text-dark: #1e293b;
+      --text-medium: #475569;
+      --text-light: #64748b;
+      --pure-white: #ffffff;
+      --off-white: #f8fafc;
+      --accent-teal: #0d9488;
+      --accent-red: #ef4444;
+      --gradient-dark: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%);
+      --gradient-blue: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+      --gradient-light: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
+      --gradient-teal: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
+      --shadow-lg: 0 25px 70px rgba(30, 58, 138, 0.15);
+      --shadow-md: 0 15px 50px rgba(30, 58, 138, 0.1);
+      --radius-lg: 20px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--gradient-light);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+      color: var(--text-dark);
+      padding-bottom: 40px;
+    }
+
+    /* Enhanced Animated Background with More Elements */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    /* Multiple background shapes */
+    .bg-animation::before,
+    .bg-animation::after,
+    .bg-shape-1,
+    .bg-shape-2 {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+      animation: float 25s infinite linear;
+    }
+
+    .bg-animation::before {
+      width: 500px;
+      height: 500px;
+      top: -250px;
+      right: -250px;
+    }
+
+    .bg-animation::after {
+      width: 400px;
+      height: 400px;
+      bottom: -200px;
+      left: -200px;
+      animation: float 20s infinite linear reverse;
+    }
+
+    /* Additional background shapes */
+    .bg-shape-1 {
+      width: 300px;
+      height: 300px;
+      top: 40%;
+      right: 10%;
+      animation: float 30s infinite linear;
+      background: radial-gradient(circle, rgba(30, 58, 138, 0.1) 0%, transparent 70%);
+    }
+
+    .bg-shape-2 {
+      width: 200px;
+      height: 200px;
+      bottom: 30%;
+      left: 10%;
+      animation: float 35s infinite linear reverse;
+      background: radial-gradient(circle, rgba(96, 165, 250, 0.1) 0%, transparent 70%);
+    }
+
+    /* Animated grid lines */
+    .grid-lines {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background-image:
+        linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59, 130, 246, 0.05) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: gridMove 20s linear infinite;
+    }
+
+    @keyframes gridMove {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(25px, 25px); }
+    }
+
+    /* Floating particles */
+    .floating-particles {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .particle {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: var(--blue-accent);
+      border-radius: 50%;
+      opacity: 0.4;
+      animation: particleFloat 20s infinite linear;
+    }
+
+    /* Create multiple particles */
+    .particle:nth-child(1) { top: 15%; left: 5%; animation-delay: 0s; }
+    .particle:nth-child(2) { top: 25%; left: 85%; animation-delay: 2s; }
+    .particle:nth-child(3) { top: 65%; left: 10%; animation-delay: 4s; }
+    .particle:nth-child(4) { top: 75%; left: 90%; animation-delay: 6s; }
+    .particle:nth-child(5) { top: 35%; left: 25%; animation-delay: 8s; }
+    .particle:nth-child(6) { top: 55%; left: 75%; animation-delay: 10s; }
+    .particle:nth-child(7) { top: 85%; left: 45%; animation-delay: 12s; }
+    .particle:nth-child(8) { top: 45%; left: 55%; animation-delay: 14s; }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+      25% {
+        transform: translate(40px, 40px) rotate(90deg);
+      }
+      50% {
+        transform: translate(0, 80px) rotate(180deg);
+      }
+      75% {
+        transform: translate(-40px, 40px) rotate(270deg);
+      }
+    }
+
+    @keyframes particleFloat {
+      0%, 100% {
+        transform: translate(0, 0);
+        opacity: 0.3;
+      }
+      25% {
+        transform: translate(40px, -40px);
+        opacity: 0.6;
+      }
+      50% {
+        transform: translate(80px, 0);
+        opacity: 0.3;
+      }
+      75% {
+        transform: translate(40px, 40px);
+        opacity: 0.6;
+      }
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1400px;
+      padding: 30px 15px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Enhanced Header with More Content */
+    .dashboard-header {
+      background: var(--pure-white);
+      border-radius: var(--radius-lg);
+      padding: 40px 45px;
+      margin-bottom: 40px;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+      animation: slideDown 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border-left: 6px solid var(--blue-primary);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+    /* Animated border */
+    .dashboard-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
+      transform: translate(150px, -150px);
+      animation: pulse 4s infinite ease-in-out;
+    }
+
+    /* Progress bar at bottom */
+    .header-progress {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(59, 130, 246, 0.1);
+      overflow: hidden;
+    }
+
+    .header-progress::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, var(--blue-secondary), transparent);
+      animation: progressSlide 3s infinite linear;
+    }
+
+    .header-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .header-content h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 2.8rem;
+      background: var(--gradient-blue);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 15px;
+      letter-spacing: -0.5px;
+      animation: textGlow 2s infinite alternate;
+    }
+
+    .header-content p {
+      color: var(--text-medium);
+      font-size: 1.15rem;
+      max-width: 600px;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    /* Enhanced Stats Section */
+    .stats-wrapper {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 25px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: var(--pure-white);
+      border-radius: var(--radius-md);
+      padding: 25px;
+      box-shadow: var(--shadow-md);
+      border-top: 5px solid var(--blue-secondary);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(59, 130, 246, 0.15);
+      animation: cardFloat 6s infinite ease-in-out;
+    }
+
+    /* Quick Actions Bar */
+    .quick-actions {
+      display: flex;
+      gap: 15px;
+      margin-top: 25px;
+      flex-wrap: wrap;
+    }
+
+    .quick-action-btn {
+      padding: 12px 20px;
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      border-radius: var(--radius-md);
+      color: var(--blue-primary);
+      font-weight: 600;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .quick-action-btn:hover {
+      background: var(--blue-secondary);
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(59, 130, 246, 0.2);
+    }
+
+    /* Status Indicator */
+    .status-indicator {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(13, 148, 136, 0.1);
+      padding: 8px 15px;
+      border-radius: 20px;
+      border: 1px solid rgba(13, 148, 136, 0.2);
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      background: var(--accent-teal);
+      border-radius: 50%;
+      animation: statusPulse 2s infinite;
+    }
+
+    /* Main Table Container with More Elements */
+    .table-container {
+      background: var(--pure-white);
+      border-radius: var(--radius-lg);
+      padding: 35px;
+      box-shadow: var(--shadow-lg);
+      animation: fadeInUp 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s both;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      margin-bottom: 40px;
+    }
+
+    .table-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: var(--gradient-blue);
+      animation: gradientMove 3s infinite linear;
+    }
+
+    /* Table Controls */
+    .table-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      padding: 15px 20px;
+      background: var(--off-white);
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(59, 130, 246, 0.1);
+    }
+
+    .table-info {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .info-badge {
+      background: rgba(59, 130, 246, 0.1);
+      color: var(--blue-primary);
+      padding: 8px 15px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Enhanced Table Styling */
+    #registrationTable {
+      border: none;
+      margin: 0;
+      color: var(--text-dark);
+      font-size: 1rem;
+    }
+
+    #registrationTable thead {
+      background: var(--gradient-blue);
+      border-radius: var(--radius-md) var(--radius-md) 0 0;
+      overflow: hidden;
+      border-bottom: 3px solid var(--blue-primary);
+      position: relative;
+    }
+
+    /* Row animations */
+    #registrationTable tbody tr {
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      animation: slideInRight 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+      border-bottom: 1px solid rgba(219, 234, 254, 0.8);
+      position: relative;
+    }
+
+    /* Proof Image with Enhanced Animation */
+    .proof-container {
+      position: relative;
+      display: inline-block;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(30, 58, 138, 0.15);
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      cursor: pointer;
+      border: 2px solid rgba(59, 130, 246, 0.3);
+      background: var(--blue-bg);
+    }
+
+    /* Action Buttons */
+    .action-cell {
+      min-width: 200px;
+    }
+
+    .action-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .action-btn {
+      padding: 16px 28px;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+      border: none;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      font-size: 0.95rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Bottom Section - Additional Information */
+    .additional-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      margin-top: 40px;
+    }
+
+    .info-card {
+      background: var(--pure-white);
+      border-radius: var(--radius-md);
+      padding: 25px;
+      box-shadow: var(--shadow-md);
+      border-left: 4px solid var(--blue-secondary);
+      animation: fadeIn 1s ease both;
+    }
+
+    .info-card h5 {
+      color: var(--blue-primary);
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .info-card ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .info-card li {
+      padding: 8px 0;
+      color: var(--text-medium);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .info-card li:last-child {
+      border-bottom: none;
+    }
+
+    /* Activity Log */
+    .activity-log {
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .activity-item {
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      animation: slideInLeft 0.5s ease both;
+    }
+
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+
+    /* Enhanced Footer */
+    .dashboard-footer {
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+
+    .footer-section h5 {
+      color: var(--blue-primary);
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+    }
+
+    .footer-section p {
+      color: var(--text-medium);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-links a {
+      color: var(--text-medium);
+      text-decoration: none;
+      transition: color 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .footer-links a:hover {
+      color: var(--blue-secondary);
+    }
+
+    /* Security Badge */
+    .security-badge {
+      text-align: center;
+      padding: 20px;
+      background: var(--pure-white);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Animations */
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes textGlow {
+      from {
+        filter: drop-shadow(0 0 5px rgba(59, 130, 246, 0.3));
+      }
+      to {
+        filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.6));
+      }
+    }
+
+    @keyframes progressSlide {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 0.8; }
+    }
+
+    @keyframes cardFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    @keyframes statusPulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.5);
+        opacity: 0.7;
+      }
+    }
+
+    @keyframes iconPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .dashboard-header {
+        padding: 30px;
+      }
+
+      .header-content h2 {
+        font-size: 2.4rem;
+      }
+    }
+
+    @media (max-width: 992px) {
+      .stats-wrapper {
+        grid-template-columns: 1fr;
+      }
+
+      .table-container {
+        padding: 25px;
+      }
+
+      .additional-info {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px 10px;
+      }
+
+      .dashboard-header {
+        padding: 25px 20px;
+      }
+
+      .header-content h2 {
+        font-size: 2rem;
+      }
+
+      .table-controls {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+      }
+
+      .action-buttons {
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .action-btn {
+        padding: 14px 20px;
+        font-size: 0.9rem;
+        min-width: 140px;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Enhanced Background with More Elements -->
+  <div class="bg-animation"></div>
+  <div class="grid-lines"></div>
+  <div class="floating-particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
+
+  <!-- Additional Background Shapes -->
+  <div class="bg-shape-1"></div>
+  <div class="bg-shape-2"></div>
+
+  <div class="container">
+    <!-- Enhanced Dashboard Header -->
+    <div class="dashboard-header">
+      <div class="status-indicator">
+        <div class="status-dot"></div>
+        <span>Live System • Auto-save Enabled</span>
+      </div>
+
+      <div class="header-content">
+        <h2>
+          <i class="fas fa-user-shield"></i>
+          Worker Verification Dashboard
+        </h2>
+        <p>Review and manage worker registration requests with precision and security. Each request requires careful verification of credentials and documents.</p>
+
+        <!-- Enhanced Stats Section -->
+        <div class="stats-wrapper">
+          <div class="stat-card" style="animation-delay: 0s;">
+            <i class="fas fa-users"></i>
+            <div class="number">{{ data|length }}</div>
+            <div class="label">Total Requests</div>
+            <div class="stat-progress" style="height: 4px; background: rgba(0,0,0,0.1); border-radius: 2px; margin-top: 10px; overflow: hidden;">
+              <div style="width: 100%; height: 100%; background: var(--blue-secondary); animation: progressSlide 2s infinite linear;"></div>
+            </div>
+          </div>
+
+          <div class="stat-card" style="animation-delay: 0.2s;">
+            <i class="fas fa-clock"></i>
+            <div class="number">Pending</div>
+            <div class="label">Awaiting Review</div>
+            <div class="stat-progress" style="height: 4px; background: rgba(0,0,0,0.1); border-radius: 2px; margin-top: 10px; overflow: hidden;">
+              <div style="width: 75%; height: 100%; background: var(--accent-teal); animation: progressSlide 2s infinite linear reverse;"></div>
+            </div>
+          </div>
+
+          <div class="stat-card" style="animation-delay: 0.4s;">
+            <i class="fas fa-check-circle"></i>
+            <div class="number">Verified</div>
+            <div class="label">Completed Reviews</div>
+            <div class="stat-progress" style="height: 4px; background: rgba(0,0,0,0.1); border-radius: 2px; margin-top: 10px; overflow: hidden;">
+              <div style="width: 60%; height: 100%; background: #10b981; animation: progressSlide 2.5s infinite linear;"></div>
+            </div>
+          </div>
+
+          <div class="stat-card" style="animation-delay: 0.6s;">
+            <i class="fas fa-chart-line"></i>
+            <div class="number">24h</div>
+            <div class="label">Today's Activity</div>
+            <div class="stat-progress" style="height: 4px; background: rgba(0,0,0,0.1); border-radius: 2px; margin-top: 10px; overflow: hidden;">
+              <div style="width: 85%; height: 100%; background: #8b5cf6; animation: progressSlide 1.8s infinite linear;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions Bar -->
+{#        <div class="quick-actions">#}
+{#          <a href="#" class="quick-action-btn">#}
+{#            <i class="fas fa-filter"></i>#}
+{#            Filter Results#}
+{#          </a>#}
+{#          <a href="#" class="quick-action-btn">#}
+{#            <i class="fas fa-download"></i>#}
+{#            Export Data#}
+{#          </a>#}
+{#          <a href="#" class="quick-action-btn">#}
+{#            <i class="fas fa-bell"></i>#}
+{#            Set Reminders#}
+{#          </a>#}
+{#          <a href="#" class="quick-action-btn">#}
+{#            <i class="fas fa-cog"></i>#}
+{#            Settings#}
+{#          </a>#}
+{#        </div>#}
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="header-progress"></div>
+    </div>
+
+    <!-- Main Table Section -->
+    <div class="table-container">
+      <!-- Table Controls -->
+      <div class="table-controls">
+        <div class="table-info">
+          <div class="info-badge">
+            <i class="fas fa-info-circle"></i>
+            Showing {{ data|length }} records
+          </div>
+          <div class="info-badge">
+            <i class="fas fa-sync-alt"></i>
+            Auto-refresh: 30s
+          </div>
+        </div>
+{#        <div class="table-actions">#}
+{#          <button class="btn btn-sm btn-outline-primary me-2">#}
+{#            <i class="fas fa-columns me-1"></i>Columns#}
+{#          </button>#}
+{#          <button class="btn btn-sm btn-outline-primary">#}
+{#            <i class="fas fa-print me-1"></i>Print#}
+{#          </button>#}
+{#        </div>#}
+      </div>
+
+      <!-- Main Table -->
+      <table class="table table-striped table-bordered">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th><i class="fas fa-user me-2"></i>Name</th>
+            <th><i class="fas fa-map-marker-alt me-2"></i>Address</th>
+            <th><i class="fas fa-envelope me-2"></i>Email</th>
+            <th><i class="fas fa-phone me-2"></i>Phone</th>
+            <th><i class="fas fa-id-card me-2"></i>Proof</th>
+            <th><i class="fas fa-cogs me-2"></i>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in data %}
+          <tr style="animation-delay: {{ forloop.counter0|add:1|divisibleby:2|yesno:'0.1s,0.2s' }}">
+            <td><span class="badge rounded-pill px-3 py-2" style="background: var(--gradient-blue);">{{ forloop.counter }}</span></td>
+            <td class="fw-bold">{{ i.name }}</td>
+            <td>{{ i.place }}, {{ i.post }}, {{ i.pin }}</td>
+            <td>
+              <a href="mailto:{{ i.email }}" class="text-decoration-none d-inline-flex align-items-center">
+                <i class="fas fa-envelope me-2"></i>{{ i.email }}
+              </a>
+            </td>
+            <td>
+              <a href="tel:{{ i.phone }}" class="text-decoration-none d-inline-flex align-items-center">
+                <i class="fas fa-phone me-2"></i>{{ i.phone }}
+              </a>
+            </td>
+            <td>
+              <div class="proof-container">
+                <img src="{{ i.proof }}" height="100" width="100" alt="Proof Document">
+                <div class="proof-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(30, 58, 138, 0.9); display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.4s ease; color: white; font-weight: 600;">
+                  <i class="fas fa-search-plus fa-2x mb-2"></i>
+                  <span>View Proof</span>
+                </div>
+              </div>
+            </td>
+            <td class="action-cell">
+              <div class="action-buttons">
+                <a href="/worker_approve/{{ i.id }}" class="action-btn approve" style="background: var(--gradient-blue); color: white;">
+                  <i class="fas fa-check-circle"></i>
+                  Approve
+                </a>
+                <a href="/worker_reject/{{ i.id }}" class="action-btn reject" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white;">
+                  <i class="fas fa-times-circle"></i>
+                  Reject
+                </a>
+              </div>
+            </td>
+          </tr>
+          {% empty %}
+          <!-- Enhanced Empty State -->
+          <tr>
+            <td colspan="7" class="text-center py-5">
+              <div class="empty-state animate__animated animate__pulse" style="padding: 40px;">
+                <i class="fas fa-inbox fa-4x mb-4" style="color: var(--blue-light);"></i>
+                <h4 class="mb-3" style="color: var(--text-dark);">No Worker Requests Found</h4>
+                <p style="color: var(--text-medium); margin-bottom: 25px;">All verification requests have been processed</p>
+                <div class="quick-actions justify-content-center">
+                  <a href="#" class="quick-action-btn">
+                    <i class="fas fa-sync-alt"></i>
+                    Refresh Page
+                  </a>
+                  <a href="#" class="quick-action-btn">
+                    <i class="fas fa-history"></i>
+                    View History
+                  </a>
+                </div>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <!-- Table Footer Info -->
+      <div class="mt-4 pt-3 border-top d-flex justify-content-between align-items-center">
+        <div class="text-muted">
+          <small><i class="fas fa-info-circle me-1"></i> Click on proof images to view full size</small>
+        </div>
+        <div class="text-muted">
+          <small><i class="fas fa-clock me-1"></i> Last updated: Just now</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Additional Information Section -->
+    <div class="additional-info">
+      <div class="info-card" style="animation-delay: 0.1s;">
+        <h5><i class="fas fa-lightbulb"></i> Verification Tips</h5>
+        <ul>
+          <li><i class="fas fa-check-circle text-success"></i> Always verify proof documents carefully</li>
+          <li><i class="fas fa-check-circle text-success"></i> Check contact information validity</li>
+          <li><i class="fas fa-check-circle text-success"></i> Review address details thoroughly</li>
+          <li><i class="fas fa-check-circle text-success"></i> Document any rejection reasons</li>
+          <li><i class="fas fa-check-circle text-success"></i> Follow company verification protocols</li>
+        </ul>
+      </div>
+
+      <div class="info-card" style="animation-delay: 0.3s;">
+        <h5><i class="fas fa-chart-bar"></i> Performance Metrics</h5>
+        <div class="mb-3">
+          <div class="d-flex justify-content-between mb-1">
+            <span>Approval Rate</span>
+            <span class="fw-bold" style="color: var(--blue-primary);">78%</span>
+          </div>
+          <div class="progress" style="height: 8px; border-radius: 4px;">
+            <div class="progress-bar" style="background: var(--gradient-blue); width: 78%;"></div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <div class="d-flex justify-content-between mb-1">
+            <span>Processing Speed</span>
+            <span class="fw-bold" style="color: var(--accent-teal);">4.2min</span>
+          </div>
+          <div class="progress" style="height: 8px; border-radius: 4px;">
+            <div class="progress-bar" style="background: var(--gradient-teal); width: 85%;"></div>
+          </div>
+        </div>
+        <div>
+          <div class="d-flex justify-content-between mb-1">
+            <span>Accuracy Rate</span>
+            <span class="fw-bold" style="color: #10b981;">96%</span>
+          </div>
+          <div class="progress" style="height: 8px; border-radius: 4px;">
+            <div class="progress-bar" style="background: linear-gradient(135deg, #10b981 0%, #34d399 100%); width: 96%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-card activity-log" style="animation-delay: 0.5s;">
+        <h5><i class="fas fa-history"></i> Recent Activity</h5>
+        <div class="activity-item">
+          <div class="d-flex justify-content-between">
+            <span><i class="fas fa-user-check text-success me-2"></i>Worker Approved</span>
+            <small class="text-muted">2 min ago</small>
+          </div>
+          <small class="text-muted">John Doe - Service Technician</small>
+        </div>
+        <div class="activity-item">
+          <div class="d-flex justify-content-between">
+            <span><i class="fas fa-user-times text-danger me-2"></i>Worker Rejected</span>
+            <small class="text-muted">15 min ago</small>
+          </div>
+          <small class="text-muted">Invalid proof document</small>
+        </div>
+        <div class="activity-item">
+          <div class="d-flex justify-content-between">
+            <span><i class="fas fa-user-plus text-primary me-2"></i>New Request</span>
+            <small class="text-muted">25 min ago</small>
+          </div>
+          <small class="text-muted">Sarah Smith - Delivery Executive</small>
+        </div>
+        <div class="activity-item">
+          <div class="d-flex justify-content-between">
+            <span><i class="fas fa-user-edit text-warning me-2"></i>Info Updated</span>
+            <small class="text-muted">1 hour ago</small>
+          </div>
+          <small class="text-muted">Michael Brown - Contact updated</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Enhanced Footer -->
+    <div class="dashboard-footer">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h5>About Verification</h5>
+          <p>Our worker verification system ensures only qualified and authenticated individuals join our platform. All verifications follow strict security protocols.</p>
+        </div>
+
+        <div class="footer-section">
+          <h5>Quick Links</h5>
+          <div class="footer-links">
+            <a href="#"><i class="fas fa-cog me-2"></i>System Settings</a>
+            <a href="#"><i class="fas fa-question-circle me-2"></i>Help & Support</a>
+            <a href="#"><i class="fas fa-file-alt me-2"></i>Documentation</a>
+            <a href="#"><i class="fas fa-shield-alt me-2"></i>Security Policy</a>
+          </div>
+        </div>
+
+        <div class="footer-section">
+          <h5>System Status</h5>
+          <div class="d-flex align-items-center mb-2">
+            <div class="status-dot" style="animation-delay: 0s; margin-right: 10px;"></div>
+            <span>Verification System: <strong class="text-success">Operational</strong></span>
+          </div>
+          <div class="d-flex align-items-center mb-2">
+            <div class="status-dot" style="animation-delay: 0.2s; margin-right: 10px; background: #10b981;"></div>
+            <span>Database: <strong class="text-success">Online</strong></span>
+          </div>
+          <div class="d-flex align-items-center">
+            <div class="status-dot" style="animation-delay: 0.4s; margin-right: 10px; background: var(--blue-secondary);"></div>
+            <span>API Services: <strong class="text-success">Active</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Security Badge -->
+      <div class="security-badge mt-4">
+        <div class="d-flex justify-content-center align-items-center gap-3 mb-3">
+          <i class="fas fa-shield-alt fa-2x" style="color: var(--blue-secondary); animation: iconPulse 3s infinite;"></i>
+          <div>
+            <h5 class="mb-1" style="color: var(--blue-primary);">Secure Verification System</h5>
+            <p class="mb-0" style="color: var(--text-medium); font-size: 0.9rem;">All actions are logged, encrypted, and monitored for security compliance</p>
+          </div>
+        </div>
+        <div class="d-flex justify-content-center gap-4">
+          <small class="text-muted"><i class="fas fa-lock me-1"></i>256-bit Encryption</small>
+          <small class="text-muted"><i class="fas fa-history me-1"></i>Activity Logged</small>
+          <small class="text-muted"><i class="fas fa-user-shield me-1"></i>Role-Based Access</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      // Initialize DataTable with enhanced options
+      var table = $('#registrationTable').DataTable({
+        "pageLength": 10,
+        "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+        "order": [[0, 'asc']],
+        "language": {
+          "search": '<i class="fas fa-search me-2"></i>',
+          "lengthMenu": "Show _MENU_ entries",
+          "info": "Showing _START_ to _END_ of _TOTAL_ entries",
+          "paginate": {
+            "previous": '<i class="fas fa-chevron-left"></i>',
+            "next": '<i class="fas fa-chevron-right"></i>'
+          }
+        },
+        "initComplete": function() {
+          // Add animations to table rows
+          $('#registrationTable tbody tr').each(function(index) {
+            var delay = (index * 0.1);
+            $(this).css('animation-delay', delay + 's');
+          });
+
+          // Add floating particles to table
+          addTableParticles();
+
+          // Initialize tooltips
+          $('[data-bs-toggle="tooltip"]').tooltip();
+
+          // Add auto-refresh timer
+          startAutoRefreshTimer();
+        }
+      });
+
+      // Add floating particles to table area
+      function addTableParticles() {
+        for(let i = 0; i < 8; i++) {
+          $('.table-container').append(`
+            <div class="table-particle" style="
+              position: absolute;
+              width: ${Math.random() * 4 + 2}px;
+              height: ${Math.random() * 4 + 2}px;
+              background: var(--blue-accent);
+              border-radius: 50%;
+              opacity: ${Math.random() * 0.2 + 0.1};
+              top: ${Math.random() * 90 + 5}%;
+              left: ${Math.random() * 90 + 5}%;
+              animation: tableParticleFloat ${Math.random() * 15 + 10}s infinite linear;
+              pointer-events: none;
+            "></div>
+          `);
+        }
+
+        // Add CSS for table particle animation
+        if (!$('#table-particle-animation').length) {
+          $('head').append(`
+            <style id="table-particle-animation">
+              @keyframes tableParticleFloat {
+                0%, 100% {
+                  transform: translate(0, 0) rotate(0deg);
+                  opacity: 0.1;
+                }
+                25% {
+                  transform: translate(${Math.random() * 30 - 15}px, ${Math.random() * 30 - 15}px) rotate(90deg);
+                  opacity: 0.3;
+                }
+                50% {
+                  transform: translate(${Math.random() * 30 - 15}px, ${Math.random() * 30 - 15}px) rotate(180deg);
+                  opacity: 0.1;
+                }
+                75% {
+                  transform: translate(${Math.random() * 30 - 15}px, ${Math.random() * 30 - 15}px) rotate(270deg);
+                  opacity: 0.3;
+                }
+              }
+            </style>
+          `);
+        }
+      }
+
+      // Auto-refresh timer
+      function startAutoRefreshTimer() {
+        let seconds = 30;
+        const timerElement = $('.info-badge:contains("Auto-refresh")');
+
+        setInterval(function() {
+          seconds--;
+          if (seconds <= 0) {
+            seconds = 30;
+            // Simulate refresh animation
+            $('.table-container').addClass('animate__animated animate__flash');
+            setTimeout(() => {
+              $('.table-container').removeClass('animate__animated animate__flash');
+              // In a real app, you would refresh the data here
+              // table.ajax.reload();
+            }, 1000);
+          }
+          timerElement.html(`<i class="fas fa-sync-alt"></i> Auto-refresh: ${seconds}s`);
+        }, 1000);
+      }
+
+      // Enhanced row hover effects
+      $('#registrationTable tbody tr').hover(
+        function() {
+          $(this).addClass('animate__animated animate__headShake');
+          $(this).css('animation-duration', '0.6s');
+
+          // Add glow effect
+          $(this).css('box-shadow', '0 10px 30px rgba(59, 130, 246, 0.2)');
+        },
+        function() {
+          $(this).removeClass('animate__animated animate__headShake');
+          $(this).css('box-shadow', 'none');
+        }
+      );
+
+      // Action button animations
+      $('.action-btn').click(function(e) {
+        e.preventDefault();
+        const url = $(this).attr('href');
+
+        // Button animation
+        $(this).addClass('animate__animated animate__rubberBand');
+
+        // Show confirmation dialog
+        const isApprove = $(this).hasClass('approve');
+        const action = isApprove ? 'approve' : 'reject';
+
+        Swal.fire({
+          title: `Confirm ${action}`,
+          text: `Are you sure you want to ${action} this worker?`,
+          icon: isApprove ? 'question' : 'warning',
+          showCancelButton: true,
+          confirmButtonColor: isApprove ? '#3085d6' : '#d33',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: `Yes, ${action} it!`,
+          cancelButtonText: 'Cancel',
+          background: 'var(--pure-white)',
+          color: 'var(--text-dark)'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // In a real app, you would redirect or make an AJAX call here
+            window.location.href = url;
+
+            // For demo, just show success message
+            Swal.fire({
+              title: `${action.charAt(0).toUpperCase() + action.slice(1)}d!`,
+              text: `Worker has been ${action}d successfully.`,
+              icon: 'success',
+              timer: 2000,
+              showConfirmButton: false
+            });
+
+            // Remove the row after approval/rejection
+            setTimeout(() => {
+              $(this).closest('tr').fadeOut(500, function() {
+                $(this).remove();
+                // Update stats
+                updateStats();
+              });
+            }, 2000);
+          }
+
+          // Remove button animation
+          setTimeout(() => {
+            $(this).removeClass('animate__animated animate__rubberBand');
+          }, 1000);
+        });
+
+        return false;
+      });
+
+      // Update stats function
+      function updateStats() {
+        const totalRows = $('#registrationTable tbody tr:visible').length;
+        $('.stat-card .number').eq(0).text(totalRows).addClass('animate__animated animate__bounce');
+        setTimeout(() => {
+          $('.stat-card .number').eq(0).removeClass('animate__animated animate__bounce');
+        }, 1000);
+      }
+
+      // Proof image modal
+      $('.proof-container').click(function() {
+        const imgSrc = $(this).find('img').attr('src');
+        const workerName = $(this).closest('tr').find('td:nth-child(2)').text();
+
+        // Image click animation
+        $(this).addClass('animate__animated animate__bounce');
+        setTimeout(() => {
+          $(this).removeClass('animate__animated animate__bounce');
+        }, 1000);
+
+        // Create and show modal
+        const modalHtml = `
+          <div class="modal fade" id="proofModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+              <div class="modal-content" style="border-radius: var(--radius-lg); border: 1px solid rgba(59, 130, 246, 0.3);">
+                <div class="modal-header" style="background: var(--gradient-blue); color: white;">
+                  <h5 class="modal-title">
+                    <i class="fas fa-id-card me-2"></i>
+                    Proof Document - ${workerName}
+                  </h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center p-0" style="background: var(--blue-bg);">
+                  <img src="${imgSrc}" class="img-fluid w-100" style="max-height: 70vh; object-fit: contain; padding: 30px;">
+                </div>
+                <div class="modal-footer" style="background: white;">
+                  <a href="${imgSrc}" download class="btn btn-primary">
+                    <i class="fas fa-download me-2"></i>Download
+                  </a>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        $('body').append(modalHtml);
+        const modal = new bootstrap.Modal(document.getElementById('proofModal'));
+        modal.show();
+
+        $('#proofModal').on('hidden.bs.modal', function() {
+          $(this).remove();
+        });
+      });
+
+      // Quick actions
+      $('.quick-action-btn').click(function(e) {
+        e.preventDefault();
+        $(this).addClass('animate__animated animate__pulse');
+        setTimeout(() => {
+          $(this).removeClass('animate__animated animate__pulse');
+        }, 1000);
+
+        // Show toast notification
+        const actionText = $(this).text().trim();
+        showToast(`Action: ${actionText}`, 'info');
+      });
+
+      // Toast notification function
+      function showToast(message, type = 'info') {
+        const toastHtml = `
+          <div class="toast align-items-center text-bg-${type} border-0 show position-fixed"
+               style="bottom: 20px; right: 20px; z-index: 9999;" role="alert">
+            <div class="d-flex">
+              <div class="toast-body">${message}</div>
+              <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+          </div>
+        `;
+
+        $('body').append(toastHtml);
+
+        setTimeout(() => {
+          $('.toast').remove();
+        }, 3000);
+      }
+
+      // Initialize live activity updates
+      setInterval(() => {
+        updateActivityLog();
+      }, 30000); // Update every 30 seconds
+
+      function updateActivityLog() {
+        const activities = [
+          {action: 'approved', name: 'New Worker', time: 'just now'},
+          {action: 'reviewed', name: 'Updated Document', time: '2 min ago'},
+          {action: 'added', name: 'New Request', time: '5 min ago'}
+        ];
+
+        const randomActivity = activities[Math.floor(Math.random() * activities.length)];
+        const activityLog = $('.activity-log');
+
+        const newItem = `
+          <div class="activity-item animate__animated animate__fadeIn">
+            <div class="d-flex justify-content-between">
+              <span><i class="fas fa-user-${randomActivity.action === 'approved' ? 'check text-success' : 'edit text-primary'} me-2"></i>
+              Worker ${randomActivity.action}</span>
+              <small class="text-muted">${randomActivity.time}</small>
+            </div>
+            <small class="text-muted">${randomActivity.name}</small>
+          </div>
+        `;
+
+        // Add new item and remove oldest if more than 4
+        activityLog.prepend(newItem);
+        if (activityLog.find('.activity-item').length > 4) {
+          activityLog.find('.activity-item').last().remove();
+        }
+      }
+
+      // Add SweetAlert if not already loaded
+      if (typeof Swal === 'undefined') {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+        document.head.appendChild(script);
+      }
+    });
+  </script>
+<script>
+// Prevent going back to this page after form submission
+if (window.history && window.history.pushState) {
+    // Add current page to history
+    window.history.pushState(null, null, window.location.href);
+
+    // Listen for back/forward navigation
+    window.onpopstate = function(event) {
+        // Redirect to /rtohome when back button is pressed
+        window.location.href = '/home';
+    };
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,594 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#  <meta charset="UTF-8">#}
+{#  <title>View Products</title>#}
+{#  <!-- Bootstrap CSS -->#}
+{#  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">#}
+{#  <style>#}
+{#    .product-grid {#}
+{#      display: grid;#}
+{#      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));#}
+{#      gap: 20px;#}
+{#      padding: 20px;#}
+{#    }#}
+{##}
+{#    .product-card {#}
+{#      border: 1px solid #e0e0e0;#}
+{#      border-radius: 8px;#}
+{#      overflow: hidden;#}
+{#      transition: all 0.3s ease;#}
+{#      box-shadow: 0 2px 4px rgba(0,0,0,0.1);#}
+{#    }#}
+{##}
+{#    .product-card:hover {#}
+{#      box-shadow: 0 4px 12px rgba(0,0,0,0.2);#}
+{#      transform: translateY(-4px);#}
+{#    }#}
+{##}
+{#    .product-image-container {#}
+{#      position: relative;#}
+{#      width: 100%;#}
+{#      height: 220px;#}
+{#      background-color: #f5f5f5;#}
+{#      overflow: hidden;#}
+{#    }#}
+{##}
+{#    .product-image {#}
+{#      width: 100%;#}
+{#      height: 100%;#}
+{#      object-fit: cover;#}
+{#    }#}
+{##}
+{#    .product-info {#}
+{#      padding: 12px;#}
+{#    }#}
+{##}
+{#    .product-name {#}
+{#      font-weight: 600;#}
+{#      font-size: 14px;#}
+{#      margin-bottom: 6px;#}
+{#      color: #0f1419;#}
+{#      overflow: hidden;#}
+{#      text-overflow: ellipsis;#}
+{#      white-space: nowrap;#}
+{#    }#}
+{##}
+{#    .product-price {#}
+{#      color: #388e3c;#}
+{#      font-size: 16px;#}
+{#      font-weight: 600;#}
+{#      margin-bottom: 8px;#}
+{#    }#}
+{##}
+{#    .product-description {#}
+{#      font-size: 12px;#}
+{#      color: #666;#}
+{#      margin-bottom: 10px;#}
+{#      overflow: hidden;#}
+{#      text-overflow: ellipsis;#}
+{#      display: -webkit-box;#}
+{#      -webkit-line-clamp: 2;#}
+{#      -webkit-box-orient: vertical;#}
+{#    }#}
+{##}
+{#    .sizes-container {#}
+{#      display: flex;#}
+{#      gap: 6px;#}
+{#      margin-bottom: 10px;#}
+{#      flex-wrap: wrap;#}
+{#    }#}
+{##}
+{#    .size-badge {#}
+{#      padding: 4px 8px;#}
+{#      border: 1px solid #ddd;#}
+{#      border-radius: 4px;#}
+{#      font-size: 11px;#}
+{#      background-color: #f9f9f9;#}
+{#      color: #333;#}
+{#    }#}
+{##}
+{#    .product-actions {#}
+{#      display: flex;#}
+{#      gap: 8px;#}
+{#      margin-top: 10px;#}
+{#    }#}
+{##}
+{#    .btn-add-cart {#}
+{#      flex: 1;#}
+{#      padding: 8px 12px;#}
+{#      background-color: #ff9800;#}
+{#      color: white;#}
+{#      border: none;#}
+{#      border-radius: 4px;#}
+{#      font-size: 13px;#}
+{#      font-weight: 600;#}
+{#      cursor: pointer;#}
+{#      text-decoration: none;#}
+{#      display: flex;#}
+{#      align-items: center;#}
+{#      justify-content: center;#}
+{#    }#}
+{##}
+{#    .btn-add-cart:hover {#}
+{#      background-color: #f57c00;#}
+{#      text-decoration: none;#}
+{#      color: white;#}
+{#    }#}
+{##}
+{#    .btn-review {#}
+{#      flex: 1;#}
+{#      padding: 8px 12px;#}
+{#      background-color: #2196F3;#}
+{#      color: white;#}
+{#      border: none;#}
+{#      border-radius: 4px;#}
+{#      font-size: 13px;#}
+{#      font-weight: 600;#}
+{#      cursor: pointer;#}
+{#      text-decoration: none;#}
+{#      display: flex;#}
+{#      align-items: center;#}
+{#      justify-content: center;#}
+{#    }#}
+{##}
+{#    .btn-review:hover {#}
+{#      background-color: #1976D2;#}
+{#      text-decoration: none;#}
+{#      color: white;#}
+{#    }#}
+{##}
+{#    .page-header {#}
+{#      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);#}
+{#      color: white;#}
+{#      padding: 30px 0;#}
+{#      margin-bottom: 30px;#}
+{#    }#}
+{##}
+{#    .page-header h2 {#}
+{#      margin: 0;#}
+{#      font-size: 28px;#}
+{#    }#}
+{#  </style>#}
+{#</head>#}
+{#<body>#}
+{#  <div class="page-header">#}
+{#    <div class="container">#}
+{#      <h2>View Products</h2>#}
+{#    </div>#}
+{#  </div>#}
+{##}
+{#  <div class="container">#}
+{#    {% if data %}#}
+{#      <div class="product-grid">#}
+{#        {% for product in data %}#}
+{#          <div class="product-card">#}
+{#            <div class="product-image-container">#}
+{#              <img src="{{ product.get_primary_image }}" alt="{{ product.name }}" class="product-image">#}
+{#            </div>#}
+{##}
+{#            <div class="product-info">#}
+{#              <div class="product-name">{{ product.name }}</div>#}
+{##}
+{#              <div class="product-price">₹{{ product.price }}</div>#}
+{##}
+{#              <div class="product-description">{{ product.description }}</div>#}
+{##}
+{#              {% if product.get_sizes %}#}
+{#                <div class="sizes-container">#}
+{#                  <span style="font-size: 12px; color: #666; width: 100%;">Sizes:</span>#}
+{#                  {% for size in product.get_sizes %}#}
+{#                    <span class="size-badge">{{ size }}</span>#}
+{#                  {% endfor %}#}
+{#                </div>#}
+{#              {% endif %}#}
+{##}
+{#              <div class="product-actions">#}
+{#                <a href="/addtocart/{{ product.id }}" class="btn-add-cart">Add to Cart</a>#}
+{#                <a href="/viewreviewuser/{{ product.id }}" class="btn-review">Reviews</a>#}
+{#              </div>#}
+{#            </div>#}
+{#          </div>#}
+{#        {% endfor %}#}
+{#      </div>#}
+{#    {% else %}#}
+{#      <div class="alert alert-info text-center" role="alert">#}
+{#        <h4>No products available</h4>#}
+{#        <p>Please check back later for new products.</p>#}
+{#      </div>#}
+{#    {% endif %}#}
+{#  </div>#}
+{##}
+{#  <!-- Scripts -->#}
+{#  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>#}
+{#  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>#}
+{#  <script>#}
+{#    // Prevent going back to this page after form submission#}
+{#    if (window.history && window.history.pushState) {#}
+{#      window.history.pushState(null, null, window.location.href);#}
+{#      window.onpopstate = function(event) {#}
+{#        window.location.href = '/homeuser';#}
+{#      };#}
+{#    }#}
+{#  </script>#}
+{#</body>#}
+{#</html>#}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>View Products · Fresh orange</title>
+  <!-- Bootstrap CSS (keep original) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* ===== ORIGINAL STRUCTURE PRESERVED, ONLY VISUAL UPGRADE ===== */
+    /* white + orange theme, Flipkart-like fresh vibes */
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #fff9f2;  /* warm white with orange kiss */
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+    }
+
+    /* ----- page header – orange gradient (white to orange) ----- */
+    .page-header {
+      background: linear-gradient(105deg, #ffffff 0%, #fff2e0 45%, #ffdec2 100%);
+      color: #bf4800;
+      padding: 28px 0;
+      margin-bottom: 30px;
+      border-bottom: 3px solid #ffb16f;
+      box-shadow: 0 6px 20px rgba(255, 125, 25, 0.12);
+      transition: all 0.2s;
+    }
+
+    .page-header h2 {
+      margin: 0;
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      color: #d85d00;
+      text-shadow: 0 2px 4px rgba(255, 140, 0, 0.12);
+      position: relative;
+      display: inline-block;
+    }
+
+    .page-header h2::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 70px;
+      height: 4px;
+      background: #ff8c42;
+      border-radius: 4px;
+    }
+
+    .container {
+      max-width: 1400px;
+    }
+
+    /* ----- product grid – smooth cards with orange accents ----- */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 28px;
+      padding: 16px 8px 32px 8px;
+    }
+
+    /* card design – clean white, orange borderline, subtle float */
+    .product-card {
+      border: none;
+      border-radius: 28px;
+      background: #ffffff;
+      overflow: hidden;
+      transition: all 0.35s cubic-bezier(0.15, 0.75, 0.3, 1.05);
+      box-shadow: 0 6px 18px rgba(255, 140, 0, 0.08), 0 0 0 1px #ffeee2 inset;
+      transform: translateY(0);
+      animation: cardGlide 0.5s ease forwards;
+      opacity: 0; /* overwritten by animation */
+    }
+
+    @keyframes cardGlide {
+      0% { opacity: 0; transform: translateY(24px) scale(0.98); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* staggered animation for grid children (pure css) */
+    .product-card:nth-child(1) { animation-delay: 0.02s; }
+    .product-card:nth-child(2) { animation-delay: 0.06s; }
+    .product-card:nth-child(3) { animation-delay: 0.10s; }
+    .product-card:nth-child(4) { animation-delay: 0.14s; }
+    .product-card:nth-child(5) { animation-delay: 0.18s; }
+    .product-card:nth-child(6) { animation-delay: 0.22s; }
+    .product-card:nth-child(7) { animation-delay: 0.26s; }
+    .product-card:nth-child(8) { animation-delay: 0.30s; }
+
+    .product-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 28px 38px -16px rgba(255, 110, 0, 0.35), 0 0 0 2px #ffb471 inset;
+    }
+
+    /* image container – keeps original dimensions, but with orange tint on hover */
+    .product-image-container {
+      position: relative;
+      width: 100%;
+      height: 220px;
+      background: #fceae3;  /* soft orange background while loading */
+      overflow: hidden;
+      border-bottom: 2px solid #ffb27e;
+    }
+
+    .product-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease, filter 0.4s;
+    }
+
+    .product-card:hover .product-image {
+      transform: scale(1.06) rotate(0.5deg);
+      filter: brightness(1.02) contrast(1.02);
+    }
+
+    /* product info area – extra spacing, orange details */
+    .product-info {
+      padding: 18px 16px 20px 16px;
+      background: #ffffff;
+    }
+
+    .product-name {
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 6px;
+      color: #2c2c2c;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      letter-spacing: 0.2px;
+    }
+
+    /* price – classic orange e‑commerce green replaced by orange (like Flipkart) */
+    .product-price {
+      color: #e65c1e;   /* deep orange */
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .product-price::before {
+      content: '₹';
+      font-size: 1rem;
+      color: #ff8c42;
+    }
+
+    /* description – softer */
+    .product-description {
+      font-size: 0.85rem;
+      color: #5f5f5f;
+      margin-bottom: 14px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      line-height: 1.5;
+    }
+
+    /* sizes container – with orange badges */
+    .sizes-container {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .sizes-container span[style*="font-size: 12px"] {
+      font-size: 0.8rem !important;
+      color: #b45a2b !important;
+      font-weight: 500;
+      width: 100%;
+      margin-bottom: 2px;
+    }
+
+    .size-badge {
+      padding: 6px 14px;
+      border: 1px solid #ffc79e;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      background: #fff4e9;
+      color: #b14700;
+      transition: all 0.1s;
+      box-shadow: 0 2px 6px rgba(255, 165, 0, 0.1);
+    }
+
+    .size-badge:hover {
+      background: #ffdec2;
+      border-color: #ff8a3c;
+      transform: scale(1.04);
+    }
+
+    /* ----- buttons – orange & white (flipkart style)  ----- */
+    .product-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    /* add to cart – solid orange */
+    .btn-add-cart {
+      flex: 1;
+      padding: 12px 10px;
+      background: #fb8b2c;
+      color: white;
+      border: none;
+      border-radius: 60px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s ease;
+      box-shadow: 0 10px 18px -8px #fb8b2c;
+      border: 1px solid rgba(255,255,255,0.3);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .btn-add-cart:hover {
+      background: #ff7518;
+      transform: scale(1.02) translateY(-2px);
+      box-shadow: 0 18px 28px -10px #ff8220;
+      text-decoration: none;
+      color: white;
+    }
+
+    .btn-add-cart:active {
+      transform: scale(0.98);
+      background: #e56600;
+      box-shadow: 0 5px 12px -4px #fb8b2c;
+    }
+
+    /* review button – white with orange border & text */
+    .btn-review {
+      flex: 1;
+      padding: 12px 10px;
+      background: #ffffff;
+      color: #e65c00;
+      border: 2px solid #ffbd7f;
+      border-radius: 60px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s;
+      box-shadow: 0 6px 12px rgba(255, 175, 75, 0.15);
+    }
+
+    .btn-review:hover {
+      background: #fff6ec;
+      border-color: #ff8f42;
+      color: #c44b00;
+      transform: translateY(-2px);
+      box-shadow: 0 16px 24px -10px #ffb67a;
+      text-decoration: none;
+    }
+
+    .btn-review:active {
+      transform: translateY(2px);
+      background: #ffe4d0;
+      border-color: #ff8124;
+    }
+
+    /* no products block – white & orange */
+    .alert.alert-info {
+      background: #fffaf5;
+      border: 2px dashed #ffb370;
+      color: #a64b00;
+      border-radius: 56px;
+      padding: 48px 32px;
+      box-shadow: 0 20px 30px -10px #ffe0c0;
+      font-size: 1.2rem;
+    }
+
+    .alert.alert-info h4 {
+      color: #d45d00;
+      font-weight: 700;
+    }
+
+    /* legacy original classes untouched — only beautify */
+    /* page-header, container, product-grid all retain original behaviour */
+
+    /* little orange accent for fun */
+    .container:after {
+      display: none;  /* keep clean */
+    }
+
+    /* responsive love */
+    @media (max-width: 580px) {
+      .product-actions { flex-direction: column; }
+      .btn-add-cart, .btn-review { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <!-- ORIGINAL PAGE HEADER (same classes, now with orange-white gradient) -->
+  <div class="page-header">
+    <div class="container">
+      <h2>View Products</h2>
+    </div>
+  </div>
+
+  <div class="container">
+    {% if data %}
+      <div class="product-grid">
+        {% for product in data %}
+          <!-- product card – original structure, all IDs, classes intact -->
+          <div class="product-card">
+            <div class="product-image-container">
+              <img src="{{ product.get_primary_image }}" alt="{{ product.name }}" class="product-image">
+            </div>
+
+            <div class="product-info">
+              <div class="product-name">{{ product.name }}</div>
+
+              <div class="product-price">{{ product.price }}</div>   <!-- ₹ is added via pseudo, but number remains -->
+
+              <div class="product-description">{{ product.description }}</div>
+
+              {% if product.get_sizes %}
+                <div class="sizes-container">
+                  <span style="font-size: 12px; color: #666; width: 100%;">Sizes:</span>
+                  {% for size in product.get_sizes %}
+                    <span class="size-badge">{{ size }}</span>
+                  {% endfor %}
+                </div>
+              {% endif %}
+
+              <div class="product-actions">
+                <a href="/addtocart/{{ product.id }}" class="btn-add-cart">Add to Cart</a>
+                <a href="/viewreviewuser/{{ product.id }}" class="btn-review">Reviews</a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <!-- original "no products" block – now styled with orange attitude -->
+      <div class="alert alert-info text-center" role="alert">
+        <h4>No products available</h4>
+        <p>Please check back later for new products.</p>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Scripts (original – jQuery, Bootstrap, history guard) -->
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Prevent going back to this page after form submission
+    if (window.history && window.history.pushState) {
+      window.history.pushState(null, null, window.location.href);
+      window.onpopstate = function(event) {
+        window.location.href = '/homeuser';
+      };
+    }
+  </script>
+
+  <!-- small design footnote (no functionality added) -->
+</body>
+</html>

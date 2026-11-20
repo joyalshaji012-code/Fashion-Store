@@ -1,0 +1,408 @@
+{#<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">#}
+{#<html xmlns="http://www.w3.org/1999/xhtml">#}
+{#<head>#}
+{#<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />#}
+{#<title>Untitled Document</title>#}
+{#</head>#}
+{##}
+{#<body>#}
+{#<form action="/editstock_buttonclick" method="post" enctype="multipart/form-data" name="form1" id="form1">#}
+{#  <table width="485" border="1">#}
+{#    <tr>#}
+{#      <th width="163" scope="row">Size</th>#}
+{#      <td width="306"><input type="radio" name="radio" id="radio" value="S" {% if stock.size == "S" %}checked{% endif %} />#}
+{#      <label for="radio">S<br />#}
+{#        <input type="radio" name="radio" id="radio2" value="M" {% if stock.size == "M" %}checked{% endif %} />#}
+{#      M      <br />#}
+{#      <input type="radio" name="radio" id="radio3" value="L" {% if stock.size == "L" %}checked{% endif %} />#}
+{#      L      <br />#}
+{#      <input type="radio" name="radio" id="radio4" value="XL" {% if stock.size == "XL" %}checked{% endif %} />#}
+{#      XL      <br />#}
+{#      <input type="radio" name="radio" id="radio5" value="XXL" {% if stock.size == "XXL" %}checked{% endif %} />#}
+{#      XXL      </label></td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th scope="row">Stock</th>#}
+{#      <td><label for="textfield2"></label>#}
+{#      <input type="text" name="textfield" id="textfield2" value="{{ stock.stock }}" /></td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th scope="row">Colour</th>#}
+{#      <td><label for="textfield3"></label>#}
+{#      <input type="text" name="textfield2" id="textfield3" value="{{ stock.color }}" /></td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th height="157" scope="row">Image</th>#}
+{#      <td><label for="fileField"></label>#}
+{#      {% if stock.image %}<p>Current Image: <img src="{{ stock.image }}" width="100" /></p>{% endif %}#}
+{#      <input type="file" name="fileField" id="fileField" /></td>#}
+{#    </tr>#}
+{#       <tr>#}
+{#    <th colspan="2" scope="row"> <input type="submit" name="button" id="button" value="Update" />#}
+{#    </th>#}
+{##}
+{#    </tr>#}
+{#  </table>#}
+{#</form>#}
+{#</body>#}
+{#</html>#}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Edit Stock · White & Blue</title>
+<style type="text/css">
+  /* === WHITE & BLUE THEME — FRESH, CLEAN, ANIMATED === */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e6f2fa 100%);
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin: 0;
+  }
+
+  /* main card – crisp white, blue accents, floating */
+  .stock-card {
+    background: #ffffff;
+    border-radius: 36px;
+    box-shadow: 0 30px 60px -20px #1e4f7a, 0 0 0 1px rgba(0, 112, 243, 0.12) inset;
+    padding: 28px 30px 38px 30px;
+    width: 100%;
+    max-width: 650px;
+    transition: all 0.3s ease;
+    border: 1px solid #d9ebff;
+    animation: slideUp 0.5s cubic-bezier(0.12, 0.75, 0.3, 1.05) forwards;
+    transform-origin: center;
+  }
+
+  @keyframes slideUp {
+    0% { opacity: 0; transform: translateY(40px) scale(0.96); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* header like flipkart but with blue soul */
+  .blue-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 22px;
+    padding-left: 6px;
+  }
+
+  .blue-badge span {
+    background: #ecf5ff;
+    color: #0066c0;
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 8px 22px 8px 20px;
+    border-radius: 40px;
+    border: 1px solid #b8d6ff;
+    box-shadow: 0 2px 8px rgba(0, 85, 204, 0.1);
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .blue-badge span::before {
+    content: "✦";
+    margin-right: 10px;
+    font-size: 1.4rem;
+    color: #2b7fe0;
+  }
+
+  /* original form – structure unchanged */
+  form#form1 {
+    display: block;
+    width: 100%;
+  }
+
+  /* table redesign – clean, borderless, with spacing */
+  table {
+    width: 100%;                /* was 485, now fluid */
+    border: none;               /* remove original border */
+    border-collapse: separate;
+    border-spacing: 0 12px;
+    margin: 0;
+  }
+
+  /* table rows cells – white/blue modern */
+  th {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #10437c;
+    padding: 14px 20px 10px 20px;
+    width: 30%;
+    text-align: left;
+    vertical-align: top;
+    background: #f5fbff;
+    border-radius: 20px 0 0 20px;
+    border: 1px solid #dae9ff;
+    border-right: none;
+    letter-spacing: 0.3px;
+  }
+
+  td {
+    padding: 12px 22px 12px 16px;
+    background: #ffffff;
+    border: 1px solid #dae9ff;
+    border-left: none;
+    border-radius: 0 20px 20px 0;
+    width: 70%;
+  }
+
+  /* special touch: first row gets blue background on radio group */
+  tr:first-of-type th {
+    background: #ecf3ff;
+  }
+
+  /* radio buttons – fresh blue style */
+  input[type="radio"] {
+    accent-color: #1a73e8;
+    width: 1.1rem;
+    height: 1.1rem;
+    margin-right: 6px;
+    transition: 0.1s;
+  }
+
+  input[type="radio"]:checked {
+    box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.15);
+  }
+
+  td label {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.95rem;
+    color: #163a5f;
+    margin-right: 16px;
+    cursor: pointer;
+    background: #f6faff;
+    padding: 6px 16px 6px 8px;
+    border-radius: 40px;
+    border: 1px solid #c3dbff;
+    transition: 0.1s;
+  }
+
+  td label:hover {
+    background: #e1efff;
+    border-color: #2b7fe0;
+    transform: scale(1.02);
+  }
+
+  /* text inputs – blue border, smooth animation */
+  input[type="text"] {
+    width: 100%;
+    padding: 15px 18px;
+    border: 1.5px solid #c5dfff;
+    border-radius: 24px;
+    font-size: 1rem;
+    background: #ffffff;
+    transition: 0.2s;
+    box-shadow: 0 2px 6px rgba(0, 85, 204, 0.03);
+    color: #0a2a44;
+  }
+
+  input[type="text"]:focus {
+    border-color: #1e88e5;
+    outline: none;
+    box-shadow: 0 8px 18px -8px #3f8cff, 0 0 0 3px rgba(30, 136, 229, 0.15);
+    transform: scale(1.01);
+    background: #fbfdff;
+  }
+
+  /* file input – styled blue */
+  input[type="file"] {
+    width: 100%;
+    padding: 12px 0;
+    border: 2px dashed #7bb3ff;
+    border-radius: 30px;
+    background: #f3f9ff;
+    color: #0e4580;
+    font-size: 0.9rem;
+    padding-left: 18px;
+    transition: 0.2s;
+    cursor: pointer;
+  }
+
+  input[type="file"]:hover {
+    border-color: #1e6bc7;
+    background: #e2f0ff;
+  }
+
+  input[type="file"]::file-selector-button {
+    background: #d1e5ff;
+    border: none;
+    border-radius: 40px;
+    padding: 10px 24px;
+    margin-right: 18px;
+    color: #004e9e;
+    font-weight: 600;
+    border: 1px solid #4890ff;
+    transition: 0.1s;
+  }
+
+  input[type="file"]::file-selector-button:hover {
+    background: #b5d4ff;
+    transform: scale(1.02);
+  }
+
+  /* existing image preview (django: stock.image) */
+  td p {
+    margin: 0 0 10px 0;
+    font-size: 0.9rem;
+    color: #0261b4;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f0f7ff;
+    padding: 8px 14px;
+    border-radius: 60px;
+  }
+
+  td p img {
+    border-radius: 16px;
+    border: 3px solid white;
+    box-shadow: 0 6px 12px rgba(0,90,180,0.2);
+    background: #f1f9ff;
+  }
+
+  /* update button – blue masterpiece */
+  th[colspan="2"] {
+    text-align: center;
+    background: transparent;
+    border: none;
+    padding: 16px 0 0 0;
+  }
+
+  input#button {
+    background: #1a73e8;
+    border: none;
+    padding: 16px 50px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: white;
+    border-radius: 60px;
+    cursor: pointer;
+    box-shadow: 0 18px 32px -12px #1a73e8, 0 4px 12px 0 rgba(0, 70, 200, 0.3);
+    transition: 0.2s ease;
+    letter-spacing: 1.1px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    min-width: 240px;
+    text-transform: uppercase;
+    margin-top: 10px;
+  }
+
+  input#button:hover {
+    background: #0f5fd1;
+    transform: scale(1.04) translateY(-3px);
+    box-shadow: 0 28px 42px -14px #1967d2;
+  }
+
+  input#button:active {
+    transform: scale(0.97) translateY(3px);
+    background: #0b4caa;
+    box-shadow: 0 8px 16px -6px #1a73e8;
+  }
+
+  /* micro-animations on row hover */
+  tr:hover th {
+    background: #e2efff;
+    transition: 0.1s;
+  }
+
+  /* keep the 'current image' text within flow */
+  td p span {
+    background: #ffffff;
+    padding: 4px 12px;
+    border-radius: 30px;
+    color: #0253a0;
+  }
+
+  /* all original ids, names, django tags untouched */
+  /* responsive */
+  @media (max-width: 500px) {
+    .stock-card { padding: 20px 16px; }
+    th, td { display: block; width: 100%; border-radius: 20px; border: 1px solid #dae9ff; }
+    td { border-top: none; }
+    th { border-bottom: none; }
+    td label { margin-bottom: 6px; }
+  }
+</style>
+</head>
+
+<body>
+<div class="stock-card">
+  <!-- fresh blue badge (just ornament) -->
+  <div class="blue-badge">
+    <span>edit stock · blue edition</span>
+  </div>
+
+  <!-- 100% original form – action, method, enctype, name, id exactly as given -->
+  <form action="/editstock_buttonclick" method="post" enctype="multipart/form-data" name="form1" id="form1">
+    <!-- table width changed to 100% for responsiveness, but we keep attribute "width" with original value (preserved) -->
+    <table width="485" border="0">  <!-- border set to 0 (was 1) – we use CSS for design, original border removed visually -->
+      <tr>
+        <th width="163" scope="row">Size</th>
+        <td width="306">
+          <!-- all radio buttons with exact names, ids, values and django conditionals untouched -->
+          <input type="radio" name="radio" id="radio" value="S" {% if stock.size == "S" %}checked{% endif %} />
+          <label for="radio">S</label>
+          <input type="radio" name="radio" id="radio2" value="M" {% if stock.size == "M" %}checked{% endif %} />
+          <label for="radio2">M</label>
+          <input type="radio" name="radio" id="radio3" value="L" {% if stock.size == "L" %}checked{% endif %} />
+          <label for="radio3">L</label>
+          <input type="radio" name="radio" id="radio4" value="XL" {% if stock.size == "XL" %}checked{% endif %} />
+          <label for="radio4">XL</label>
+          <input type="radio" name="radio" id="radio5" value="XXL" {% if stock.size == "XXL" %}checked{% endif %} />
+          <label for="radio5">XXL</label>
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">Stock</th>
+        <td>
+          <label for="textfield2"></label>
+          <!-- textfield with exact id, name, value from django -->
+          <input type="text" name="textfield" id="textfield2" value="{{ stock.stock }}" />
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">Colour</th>
+        <td>
+          <label for="textfield3"></label>
+          <!-- second text field (colour) – id="textfield3", name="textfield2" as original -->
+          <input type="text" name="textfield2" id="textfield3" value="{{ stock.color }}" />
+        </td>
+      </tr>
+      <tr>
+        <th height="157" scope="row">Image</th>
+        <td>
+          <label for="fileField"></label>
+          {% if stock.image %}<p>Current Image: <img src="{{ stock.image }}" width="100" /></p>{% endif %}
+          <!-- file field with original id/name -->
+          <input type="file" name="fileField" id="fileField" />
+        </td>
+      </tr>
+      <tr>
+        <th colspan="2" scope="row">
+          <!-- submit button exactly as original name="button" id="button" value="Update" -->
+          <input type="submit" name="button" id="button" value="Update" />
+        </th>
+      </tr>
+    </table>
+  </form>
+
+  <!-- subtle blue note (pure design) -->
+  <div style="text-align: right; margin-top: 16px; font-size: 0.8rem; color: #6b9fd1; opacity: 0.7;">blue · white refresh</div>
+</div>
+
+<!-- no extra scripts, just the pure design (original body had no script, so we keep minimal) -->
+<!-- but if any future script needed, we preserve original content -->
+</body>
+</html>

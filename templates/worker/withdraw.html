@@ -1,0 +1,713 @@
+{#<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">#}
+{#<html xmlns="http://www.w3.org/1999/xhtml">#}
+{#<head>#}
+{#<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />#}
+{#<title>Untitled Document</title>#}
+{#</head>#}
+{##}
+{#<body><form action="/withdraw_buttonclick" method="post">#}
+{#  <table width="373" border="1">#}
+{#    <tr>#}
+{#      <th width="173" scope="row">Enter amount</th>#}
+{#      <td width="184"><label for="textfield"></label>#}
+{#      <input type="number" min="100" name="textfield" id="textfield" placeholder="{{ data }}" required max="{{ data }}" /></td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th colspan="2" scope="row"><input type="submit" name="button" id="button" value="Withdraw" /></th>#}
+{#    </tr>#}
+{#  </table>#}
+{#</form>#}
+{#</body>#}
+{#</html>#}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Withdraw Funds</title>
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    :root {
+        --pure-black: #000000;
+        --dark-black: #0a0a0a;
+        --medium-black: #111111;
+        --accent-orange: #f97316;
+        --dark-orange: #c2410c;
+        --light-orange: #fb923c;
+        --pale-orange: #fed7aa;
+        --glow-orange: rgba(249, 115, 22, 0.3);
+        --content-white: #ffffff;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: var(--pure-black);
+        color: var(--content-white);
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        overflow-x: hidden;
+        position: relative;
+        padding: 20px;
+    }
+
+    /* Animated Money Background */
+    .money-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        overflow: hidden;
+    }
+
+    /* Animated Cash Flow */
+    .cash-flow {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+
+    .cash {
+        position: absolute;
+        font-size: 30px;
+        color: rgba(249, 115, 22, 0.2);
+        animation: cashFlow 15s infinite linear;
+        opacity: 0;
+    }
+
+    /* Centering Container */
+    .center-wrapper {
+        width: 100%;
+        max-width: 500px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Keyframe Animations */
+    @keyframes cashFlow {
+        0% {
+            transform: translateY(100vh) rotate(0deg);
+            opacity: 0;
+        }
+        10% {
+            opacity: 0.4;
+        }
+        90% {
+            opacity: 0.4;
+        }
+        100% {
+            transform: translateY(-100px) rotate(360deg);
+            opacity: 0;
+        }
+    }
+
+    @keyframes formGlow {
+        0%, 100% {
+            box-shadow:
+                0 0 30px rgba(249, 115, 22, 0.3),
+                inset 0 0 20px rgba(249, 115, 22, 0.1);
+        }
+        50% {
+            box-shadow:
+                0 0 50px rgba(249, 115, 22, 0.5),
+                inset 0 0 30px rgba(249, 115, 22, 0.2),
+                0 0 80px rgba(249, 115, 22, 0.2);
+        }
+    }
+
+    @keyframes borderFlow {
+        0%, 100% {
+            border-color: rgba(249, 115, 22, 0.3);
+        }
+        25% {
+            border-color: rgba(251, 146, 60, 0.4);
+        }
+        50% {
+            border-color: rgba(249, 115, 22, 0.5);
+        }
+        75% {
+            border-color: rgba(194, 65, 12, 0.3);
+        }
+    }
+
+    @keyframes fadeInUp {
+        from {
+            transform: translateY(40px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes shine {
+        0% { left: -100%; }
+        100% { left: 100%; }
+    }
+
+    /* Main Form Container - Perfectly Centered */
+    .withdraw-container {
+        background: rgba(17, 17, 17, 0.92);
+        border-radius: 30px;
+        padding: 50px;
+        width: 100%;
+        max-width: 500px;
+        border: 2px solid rgba(249, 115, 22, 0.3);
+        backdrop-filter: blur(15px);
+        animation:
+            fadeInUp 1s ease-out,
+            formGlow 4s ease-in-out infinite;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .withdraw-container:before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(45deg,
+            transparent,
+            rgba(249, 115, 22, 0.15),
+            transparent);
+        z-index: -1;
+        border-radius: 32px;
+        animation: borderFlow 6s linear infinite;
+    }
+
+    /* Header Section - Centered */
+    .page-header {
+        text-align: center;
+        margin-bottom: 40px;
+        position: relative;
+        animation: fadeInUp 0.8s ease-out 0.2s both;
+        width: 100%;
+    }
+
+    .page-header h1 {
+        font-size: 2.8rem;
+        font-weight: 800;
+        letter-spacing: 2px;
+        color: var(--light-orange);
+        text-shadow: 0 0 25px rgba(249, 115, 22, 0.6);
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    .page-header .subtitle {
+        color: var(--pale-orange);
+        font-size: 1.1rem;
+        opacity: 0.8;
+        letter-spacing: 1px;
+        text-align: center;
+    }
+
+    .page-header:after {
+        content: '';
+        position: absolute;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 200px;
+        height: 3px;
+        background: linear-gradient(90deg,
+            transparent,
+            var(--accent-orange),
+            transparent);
+    }
+
+    /* Balance Info - Centered */
+    .balance-info {
+        background: linear-gradient(135deg,
+            rgba(249, 115, 22, 0.1),
+            rgba(30, 30, 30, 0.8));
+        border-radius: 20px;
+        padding: 25px;
+        margin-bottom: 30px;
+        border: 1px solid rgba(249, 115, 22, 0.2);
+        animation: fadeInUp 0.8s ease-out 0.4s both;
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        text-align: center;
+    }
+
+    .balance-info:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.1),
+            transparent);
+        animation: shine 4s infinite;
+    }
+
+    .available-balance {
+        color: var(--content-white);
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .balance-amount {
+        color: var(--light-orange);
+        font-size: 2.2rem;
+        font-weight: 800;
+        text-shadow: 0 0 15px rgba(249, 115, 22, 0.4);
+        text-align: center;
+    }
+
+    /* Form Styling - Centered */
+    #form1 {
+        animation: fadeInUp 0.8s ease-out 0.6s both;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Input Field Styling - Centered */
+    .input-group {
+        margin-bottom: 30px;
+        animation: fadeInUp 0.8s ease-out 0.8s both;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .input-label {
+        display: flex;
+        align-items: center;
+        color: var(--light-orange);
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        letter-spacing: 1px;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .input-label i {
+        color: var(--accent-orange);
+        margin-right: 12px;
+        font-size: 20px;
+    }
+
+    #textfield {
+        width: 100%;
+        padding: 20px;
+        background: rgba(26, 26, 26, 0.8);
+        border: 2px solid rgba(249, 115, 22, 0.3);
+        border-radius: 15px;
+        color: var(--content-white);
+        font-size: 1.3rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        outline: none;
+        display: block;
+        text-align: center;
+    }
+
+    #textfield:focus {
+        border-color: var(--accent-orange);
+        background: rgba(30, 30, 30, 0.9);
+        transform: translateY(-3px);
+        box-shadow: 0 0 50px rgba(249, 115, 22, 0.4);
+    }
+
+    #textfield::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+        font-weight: 400;
+        text-align: center;
+    }
+
+    /* Amount Limits - Centered */
+    .amount-limits {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+        font-size: 0.9rem;
+        color: var(--pale-orange);
+        opacity: 0.7;
+        animation: fadeInUp 0.8s ease-out 1s both;
+        width: 100%;
+    }
+
+    .min-amount, .max-amount {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    /* Submit Button - Perfectly Centered */
+    .submit-section {
+        animation: fadeInUp 0.8s ease-out 1.2s both;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 30px;
+    }
+
+    #button {
+        background: linear-gradient(135deg,
+            var(--accent-orange),
+            var(--dark-orange));
+        color: var(--content-white);
+        border: none;
+        padding: 22px 60px;
+        font-size: 1.4rem;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        animation:
+            borderFlow 4s linear infinite,
+            fadeInUp 0.8s ease-out 1.4s both;
+        box-shadow:
+            0 15px 40px rgba(249, 115, 22, 0.4),
+            0 8px 25px rgba(249, 115, 22, 0.3);
+        display: inline-block;
+        min-width: 250px;
+    }
+
+    #button:hover {
+        background: linear-gradient(135deg,
+            var(--light-orange),
+            var(--accent-orange));
+        transform: translateY(-10px) scale(1.08);
+        box-shadow:
+            0 25px 60px rgba(249, 115, 22, 0.6),
+            0 15px 40px rgba(249, 115, 22, 0.4),
+            0 0 80px rgba(249, 115, 22, 0.3);
+        letter-spacing: 3px;
+    }
+
+    #button:active {
+        transform: translateY(-5px) scale(1.04);
+    }
+
+    /* Security Note - Centered */
+    .security-note {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(249, 115, 22, 0.1);
+        color: var(--pale-orange);
+        font-size: 0.9rem;
+        opacity: 0.7;
+        animation: fadeInUp 0.8s ease-out 1.6s both;
+        width: 100%;
+        text-align: center;
+    }
+
+    .security-note i {
+        color: var(--accent-orange);
+        margin-right: 8px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 600px) {
+        body {
+            padding: 15px;
+        }
+
+        .withdraw-container {
+            padding: 30px;
+            max-width: 400px;
+        }
+
+        .page-header h1 {
+            font-size: 2.2rem;
+        }
+
+        .balance-info {
+            padding: 20px;
+        }
+
+        .balance-amount {
+            font-size: 2rem;
+        }
+
+        #textfield {
+            padding: 18px;
+            font-size: 1.1rem;
+        }
+
+        #button {
+            padding: 20px 40px;
+            font-size: 1.2rem;
+            min-width: 200px;
+        }
+
+        .amount-limits {
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .withdraw-container {
+            padding: 25px;
+            max-width: 350px;
+        }
+
+        .page-header h1 {
+            font-size: 1.8rem;
+        }
+
+        .balance-amount {
+            font-size: 1.8rem;
+        }
+
+        #button {
+            padding: 18px 30px;
+            font-size: 1.1rem;
+            min-width: 180px;
+        }
+    }
+</style>
+</head>
+
+<body>
+    <!-- Animated Money Background -->
+    <div class="money-background">
+        <div class="cash-flow" id="cashFlow"></div>
+    </div>
+
+    <!-- Centered Wrapper -->
+    <div class="center-wrapper">
+        <form action="/withdraw_buttonclick" method="post" id="form1" name="form1">
+            <div class="withdraw-container">
+                <!-- Header - Centered -->
+                <div class="page-header">
+                    <h1>
+                        <i class="fas fa-money-bill-transfer"></i>
+                        WITHDRAW FUNDS
+                    </h1>
+                    <div class="subtitle">
+                        Secure & Instant Withdrawal System
+                    </div>
+                </div>
+
+                <!-- Balance Information - Centered -->
+                <div class="balance-info">
+                    <div class="available-balance">
+                        <i class="fas fa-wallet"></i>
+                        Available Balance:
+                    </div>
+                    <div class="balance-amount">
+                        ₹{{ data }}
+                    </div>
+                </div>
+
+                <!-- Form Input - Centered -->
+                <div class="input-group">
+                    <div class="input-label">
+                        <i class="fas fa-money-bill-wave"></i>
+                        Enter Amount
+                    </div>
+                    <input type="number"
+                           min="100"
+                           name="textfield"
+                           id="textfield"
+                           placeholder="Enter amount between 100 and {{ data }}"
+                           required
+                           max="{{ data }}"
+                           step="10" />
+                </div>
+
+                <!-- Amount Limits - Centered -->
+                <div class="amount-limits">
+                    <div class="min-amount">
+                        <i class="fas fa-arrow-down"></i>
+                        Min: ₹100
+                    </div>
+                    <div class="max-amount">
+                        <i class="fas fa-arrow-up"></i>
+                        Max: ₹{{ data }}
+                    </div>
+                </div>
+
+                <!-- Submit Button - Perfectly Centered -->
+                <div class="submit-section">
+                    <input type="submit"
+                           name="button"
+                           id="button"
+                           value="Withdraw Now" />
+                </div>
+
+                <!-- Security Note - Centered -->
+                <div class="security-note">
+                    <i class="fas fa-shield-alt"></i>
+                    Transactions are secured with 256-bit encryption
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create cash flow animation
+            function createCashFlow() {
+                const container = document.getElementById('cashFlow');
+                const cashSymbols = ['💵', '💰', '💸', '💲'];
+
+                for (let i = 0; i < 15; i++) {
+                    const cash = document.createElement('div');
+                    cash.className = 'cash';
+
+                    const symbolIndex = Math.floor(Math.random() * cashSymbols.length);
+                    const posX = Math.random() * 100;
+                    const delay = Math.random() * 15;
+                    const duration = Math.random() * 8 + 12;
+                    const fontSize = Math.random() * 20 + 25;
+
+                    cash.innerHTML = cashSymbols[symbolIndex];
+                    cash.style.left = `${posX}%`;
+                    cash.style.animationDelay = `${delay}s`;
+                    cash.style.animationDuration = `${duration}s`;
+                    cash.style.fontSize = `${fontSize}px`;
+                    cash.style.top = `${Math.random() * 100 + 100}%`;
+
+                    container.appendChild(cash);
+                }
+            }
+
+            // Initialize animations
+            createCashFlow();
+
+            // Button click animation
+            const submitButton = document.getElementById('button');
+            if (submitButton) {
+                submitButton.addEventListener('click', function(e) {
+                    // Create ripple effect
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    ripple.style.cssText = `
+                        position: absolute;
+                        border-radius: 50%;
+                        background: rgba(255, 255, 255, 0.6);
+                        transform: scale(0);
+                        animation: ripple 0.6s linear;
+                        width: 20px;
+                        height: 20px;
+                        top: ${y}px;
+                        left: ${x}px;
+                        pointer-events: none;
+                        z-index: 1;
+                    `;
+
+                    this.appendChild(ripple);
+
+                    // Add sending animation
+                    const originalText = this.value;
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                    this.value = '';
+
+                    // Add CSS for animations
+                    if (!document.getElementById('ripple-style')) {
+                        const style = document.createElement('style');
+                        style.id = 'ripple-style';
+                        style.textContent = `
+                            @keyframes ripple {
+                                to {
+                                    transform: scale(15);
+                                    opacity: 0;
+                                }
+                            }
+                            @keyframes spin {
+                                from { transform: rotate(0deg); }
+                                to { transform: rotate(360deg); }
+                            }
+                        `;
+                        document.head.appendChild(style);
+                    }
+
+                    // Reset button after 2 seconds if form doesn't submit
+                    setTimeout(() => {
+                        this.innerHTML = originalText;
+                        ripple.remove();
+                    }, 2000);
+                });
+            }
+
+            // Add floating effect to container
+            const container = document.querySelector('.withdraw-container');
+            let floatY = 0;
+            let floatDirection = 1;
+
+            function floatContainer() {
+                floatY += 0.08 * floatDirection;
+                if (floatY > 4 || floatY < -4) {
+                    floatDirection *= -1;
+                }
+                container.style.transform = `translateY(${floatY}px)`;
+                requestAnimationFrame(floatContainer);
+            }
+
+            floatContainer();
+
+            // Center input text on focus
+            const amountInput = document.getElementById('textfield');
+            if (amountInput) {
+                amountInput.addEventListener('focus', function() {
+                    this.style.textAlign = 'center';
+                });
+
+                amountInput.addEventListener('blur', function() {
+                    if (!this.value) {
+                        this.style.textAlign = 'center';
+                    }
+                });
+            }
+        });
+    </script>
+<script>
+// Prevent going back to this page after form submission
+if (window.history && window.history.pushState) {
+    // Add current page to history
+    window.history.pushState(null, null, window.location.href);
+
+    // Listen for back/forward navigation
+    window.onpopstate = function(event) {
+        // Redirect to /rtohome when back button is pressed
+        window.location.href = '/homeworker';
+    };
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,710 @@
+{#<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">#}
+{#<html xmlns="http://www.w3.org/1999/xhtml">#}
+{#<head>#}
+{#<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />#}
+{#<title>Untitled Document</title>#}
+{#</head>#}
+{##}
+{#<body><form action="/makepayment_buttonclick" method="post">#}
+{#  <table width="371" border="1">#}
+{#    <tr>#}
+{##}
+{#</tr>#}
+{##}
+{#      <tr>#}
+{#          <th height="58" scope="row"#}
+{#              <p>Address</p>#}
+{#          <td><p>#}
+{#              <label for="textfield4"></label>#}
+{#              <input type="text" name="textfield4" id="textfield4">#}
+{#          </p>#}
+{##}
+{#          </td>#}
+{#      </tr>#}
+{#    <tr>#}
+{#      <th height="58" scope="row">#}
+{##}
+{##}
+{#          <p>Latitude</p>#}
+{#      <p>Longitude</p></th>#}
+{#      <td><p>#}
+{##}
+{#        <label for="textfield"></label>#}
+{#        <label for="textfield2"></label>#}
+{#        <input type="text" name="textfield" id="latitude" />#}
+{#      </p>#}
+{#      <p>#}
+{#        <label for="textfield3"></label>#}
+{#        <input type="text" name="textfield2" id="longitude" />#}
+{#      </p>#}
+{#       <div id="gmap"></div>#}
+{#      </td>#}
+{#    </tr>#}
+{#    <tr>#}
+{##}
+{#      <th width="92" height="58" scope="row">Make payment</th>#}
+{#      <td width="180"><p>#}
+{#        <label>#}
+{#          <input type="radio" name="RadioGroup1" value="online" id="RadioGroup1_0" />#}
+{#          Online</label>#}
+{#        <br />#}
+{#        <label>#}
+{#          <input type="radio" name="RadioGroup1" value="offline" id="RadioGroup1_1" />#}
+{#          Offline</label>#}
+{#        <br />#}
+{#      </p></td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th height="43" colspan="2" scope="row"><input type="submit" name="button" id="button" value="Submit" /></th>#}
+{#    </tr>#}
+{#  </table>#}
+{#</form>#}
+{#<div id="map" style="height: 300px; width: 100%; border-radius: 10px; margin-bottom: 10px;"></div>#}
+{#<input type="hidden" name="latitude" id="latitude" required />#}
+{#<input type="hidden" name="longitude" id="longitude" required />#}
+{##}
+{#<script>#}
+{#  let map, marker;#}
+{##}
+{#  function initMap() {#}
+{#    // Default location (Kannur, Kerala fallback)#}
+{#    const defaultLocation = { lat: 11.868536, lng: 75.363197 };#}
+{##}
+{#    map = new google.maps.Map(document.getElementById("map"), {#}
+{#      center: defaultLocation,#}
+{#      zoom: 14,  // default zoom#}
+{#    });#}
+{##}
+{#    marker = new google.maps.Marker({#}
+{#      position: defaultLocation,#}
+{#      map: map,#}
+{#      draggable: true,#}
+{#    });#}
+{##}
+{#    // Try to get current location#}
+{#    if (navigator.geolocation) {#}
+{#      navigator.geolocation.getCurrentPosition(#}
+{#        function (position) {#}
+{#          const currentLocation = {#}
+{#            lat: position.coords.latitude,#}
+{#            lng: position.coords.longitude,#}
+{#          };#}
+{##}
+{#          map.setCenter(currentLocation);#}
+{#          map.setZoom(17);  // ✅ zoom closer to current location#}
+{#          marker.setPosition(currentLocation);#}
+{##}
+{#          // Update hidden fields#}
+{#          document.getElementById("latitude").value = currentLocation.lat;#}
+{#          document.getElementById("longitude").value = currentLocation.lng;#}
+{#        },#}
+{#        function () {#}
+{#          // If user denies location, use default#}
+{#          document.getElementById("latitude").value = defaultLocation.lat;#}
+{#          document.getElementById("longitude").value = defaultLocation.lng;#}
+{#        }#}
+{#      );#}
+{#    } else {#}
+{#      // Browser doesn’t support Geolocation#}
+{#      document.getElementById("latitude").value = defaultLocation.lat;#}
+{#      document.getElementById("longitude").value = defaultLocation.lng;#}
+{#    }#}
+{##}
+{#    // Update hidden fields on marker drag#}
+{#    google.maps.event.addListener(marker, 'dragend', function (event) {#}
+{#      document.getElementById("latitude").value = event.latLng.lat();#}
+{#      document.getElementById("longitude").value = event.latLng.lng();#}
+{#    });#}
+{##}
+{#    // Update hidden fields on map click#}
+{#    map.addListener("click", (e) => {#}
+{#      placeMarker(e.latLng);#}
+{#    });#}
+{#  }#}
+{##}
+{#  function placeMarker(location) {#}
+{#    marker.setPosition(location);#}
+{#    document.getElementById("latitude").value = location.lat();#}
+{#    document.getElementById("longitude").value = location.lng();#}
+{#  }#}
+{#</script>#}
+{##}
+{#<!-- Load Google Maps API -->#}
+{#<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC6v5-2uaq_wusHDktM9ILcqIrlPtnZgEk&callback=initMap"#}
+{#        async defer></script>#}
+{#<script>#}
+{#// Prevent going back to this page after form submission#}
+{#if (window.history && window.history.pushState) {#}
+{#    // Add current page to history#}
+{#    window.history.pushState(null, null, window.location.href);#}
+{##}
+{#    // Listen for back/forward navigation#}
+{#    window.onpopstate = function(event) {#}
+{#        // Redirect to /rtohome when back button is pressed#}
+{#        window.location.href = '/homeuser';#}
+{#    };#}
+{#}#}
+{#</script>#}
+{#</body>#}
+{#</html>#}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Payment | Multi-line Address</title>
+<!-- Font & fresh style – no changes to id/name/django variables -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    background: #fef8f0;  /* soft orange-white */
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 20px;
+  }
+  /* main card – white with orange accents */
+  .payment-card {
+    background: white;
+    max-width: 800px;
+    width: 100%;
+    border-radius: 40px;
+    padding: 30px 32px;
+    box-shadow: 0 25px 45px -12px rgba(255, 140, 0, 0.28), 0 8px 18px rgba(0,0,0,0.05);
+    border: 1px solid #ffdec4;
+    transition: transform 0.25s ease, box-shadow 0.3s;
+  }
+  .payment-card:hover {
+    box-shadow: 0 32px 55px -10px #ffb672;
+  }
+  form {
+    width: 100%;
+  }
+  .form-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  /* each row card – white with orange detail */
+  .row-card {
+    background: #ffffff;
+    border-radius: 28px;
+    padding: 18px 24px;
+    border: 1px solid #ffe0bc;
+    box-shadow: 0 6px 16px #ffeee0;
+    transition: all 0.2s;
+  }
+  .row-card:hover {
+    border-color: #ffa53e;
+    box-shadow: 0 12px 24px -8px #ffc994;
+  }
+  .row-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .row-label {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #c24f00;
+    min-width: 120px;
+    letter-spacing: -0.2px;
+  }
+  .row-label span {
+    background: #fff2e5;
+    padding: 5px 14px;
+    border-radius: 40px;
+    font-size: 0.9rem;
+    color: #b44700;
+  }
+  .field-group {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: flex-start; /* align to top for textarea */
+  }
+  /* address wrapper with icon and multi-line textarea */
+  .address-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+  }
+  .address-icon {
+    position: absolute;
+    left: 18px;
+    top: 18px;  /* align with textarea top padding */
+    color: #ff8c42;
+    font-size: 1.2rem;
+    z-index: 2;
+    pointer-events: none;
+  }
+  /* real multi-line address textarea - expands while typing */
+  #textfield4 {
+    background: #fffcf7;
+    border: 2px solid #ffe2c1;
+    border-radius: 30px;
+    padding: 16px 22px 16px 50px;  /* left padding for icon */
+    font-size: 1rem;
+    width: 100%;
+    min-height: 80px;
+    max-height: 200px;
+    resize: vertical;  /* user can also drag to resize */
+    transition: all 0.15s;
+    color: #2e1c0b;
+    font-weight: 500;
+    outline: none;
+    font-family: 'Inter', sans-serif;
+    line-height: 1.5;
+    overflow-y: auto;
+  }
+  #textfield4:focus {
+    border-color: #ff9800;
+    box-shadow: 0 0 0 5px rgba(255, 179, 71, 0.25);
+    background: white;
+  }
+  /* suggestion dropdown (still works with textarea) */
+  .suggestions-box {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 20px 35px -8px rgba(255, 115, 0, 0.3);
+    border: 1px solid #ffc793;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+  }
+  .suggestions-box div {
+    padding: 14px 22px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: #4f2d0a;
+    border-bottom: 1px solid #ffebd2;
+    transition: background 0.1s;
+  }
+  .suggestions-box div:last-child {
+    border-bottom: none;
+  }
+  .suggestions-box div:hover,
+  .suggestions-box div.selected-suggestion {
+    background: #fff1e0;
+    color: #b64700;
+    font-weight: 500;
+  }
+  /* coordinates inputs */
+  .latlng-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+  .latlng-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .latlng-label {
+    font-weight: 600;
+    color: #b2561a;
+    min-width: 80px;
+  }
+  input[type="text"].coord-input {
+    background: #fffcf7;
+    border: 2px solid #ffe2c1;
+    border-radius: 60px;
+    padding: 12px 20px;
+    font-size: 0.95rem;
+    flex: 1;
+    min-width: 180px;
+    outline: none;
+  }
+  input[type="text"].coord-input:focus {
+    border-color: #ff9800;
+    box-shadow: 0 0 0 4px rgba(255, 179, 71, 0.2);
+  }
+  /* map container */
+  #map {
+    height: 260px;
+    width: 100%;
+    border-radius: 40px;
+    border: 3px solid #ffb978;
+    box-shadow: 0 12px 28px rgba(255, 136, 0, 0.15);
+    margin: 18px 0 8px;
+    transition: 0.2s;
+  }
+  #map:hover {
+    border-color: #ff7b1c;
+  }
+  .map-hint {
+    font-size: 0.85rem;
+    color: #b45b1c;
+    background: #ffeedb;
+    padding: 8px 18px;
+    border-radius: 40px;
+    display: inline-block;
+    margin: 8px 0 0;
+    font-weight: 500;
+    animation: gentleFade 2s infinite alternate;
+  }
+  @keyframes gentleFade {
+    0% { opacity: 0.8; background: #ffe7d1; }
+    100% { opacity: 1; background: #ffdbb8; }
+  }
+  /* radio group */
+  .radio-group {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+    flex-wrap: wrap;
+    background: #fffcf5;
+    padding: 10px 22px;
+    border-radius: 60px;
+    border: 1px solid #ffdbb5;
+  }
+  .radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    color: #61360c;
+    cursor: pointer;
+  }
+  input[type="radio"] {
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    border: 2px solid #ffb56b;
+    border-radius: 50%;
+    transition: 0.1s;
+    position: relative;
+    cursor: pointer;
+  }
+  input[type="radio"]:checked {
+    border-color: #ff8800;
+    background: #ff8800;
+    box-shadow: inset 0 0 0 5px white, 0 0 0 2px #ffbd79;
+  }
+  /* submit button */
+  .submit-area {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+  }
+  input[type="submit"] {
+    background: #ff9800;
+    border: none;
+    color: white;
+    font-size: 1.4rem;
+    font-weight: 800;
+    padding: 18px 48px;
+    border-radius: 80px;
+    width: auto;
+    min-width: 260px;
+    letter-spacing: 1px;
+    box-shadow: 0 18px 28px -10px #ffa84d;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    border: 2px solid transparent;
+  }
+  input[type="submit"]:hover {
+    background: #f57c00;
+    transform: scale(1.02) translateY(-3px);
+    box-shadow: 0 28px 38px -12px #ff7f2a;
+  }
+  input[type="submit"]:active {
+    transform: scale(0.98);
+    box-shadow: 0 10px 18px -5px #ffa033;
+  }
+  /* hidden gmap div */
+  #gmap {
+    display: none;
+  }
+  /* small helper */
+  .address-hint {
+    font-size: 0.8rem;
+    color: #b45b1c;
+    margin-top: 6px;
+    margin-left: 12px;
+  }
+</style>
+</head>
+
+<body>
+<div class="payment-card">
+  <form action="/makepayment_buttonclick" method="post">
+    <div class="form-grid">
+
+      <!-- Address row with MULTI-LINE textarea (real address entry, goes to next line) -->
+      <div class="row-card">
+        <div class="row-header">
+          <div class="row-label"><span>📍 Address</span></div>
+          <div class="field-group" style="width:100%;">
+            <div class="address-wrapper">
+              <i class="fas fa-map-pin address-icon"></i>
+              <!-- original id=textfield4, name=textfield4, now as TEXTAREA for multi-line -->
+              <textarea
+                name="textfield4"
+                id="textfield4"
+                placeholder="Start typing your address... (Enter for new line)"
+                rows="2"
+              ></textarea>
+              <div id="suggestions" class="suggestions-box"></div>
+            </div>
+            <div class="address-hint">↵ Enter goes to next line</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Latitude & Longitude row + map (unchanged) -->
+      <div class="row-card">
+        <div class="row-header" style="margin-bottom: 6px;">
+          <div class="row-label"><span>🗺️ Coordinates</span></div>
+          <div class="address-badge" style="background:#ffe8d6; border-radius:18px; padding:5px 15px; color:#ad4f00;">drag the marker or tap map</div>
+        </div>
+        <div class="latlng-group">
+          <div class="latlng-row">
+            <span class="latlng-label">Latitude</span>
+            <input type="text" name="textfield" id="latitude" class="coord-input" placeholder="12.345678" />
+          </div>
+          <div class="latlng-row">
+            <span class="latlng-label">Longitude</span>
+            <input type="text" name="textfield2" id="longitude" class="coord-input" placeholder="75.123456" />
+          </div>
+        </div>
+        <div id="map"></div>
+        <div id="gmap"></div> <!-- kept for legacy -->
+        <div class="map-hint">✨ Drag marker or click map to update coordinates</div>
+      </div>
+
+      <!-- Payment radio row -->
+      <div class="row-card">
+        <div class="row-header">
+          <div class="row-label"><span>💳 Payment mode</span></div>
+          <div class="radio-group">
+            <label>
+              <input type="radio" name="RadioGroup1" value="online" id="RadioGroup1_0" />
+              <span>Online</span>
+            </label>
+            <label>
+              <input type="radio" name="RadioGroup1" value="offline" id="RadioGroup1_1" />
+              <span>Offline</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit button -->
+      <div class="submit-area">
+        <input type="submit" name="button" id="button" value="Submit" />
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- Google Maps script with original logic + address autocomplete (adapted for textarea) -->
+<script>
+  // ---------- real address autocomplete (using Google Places JS) for TEXTAREA ----------
+  let autocompleteSessionToken;
+  let selectedIndex = -1;
+  let suggestionsList = [];
+
+  // Initialize Places Autocomplete for address textarea (textfield4)
+  function initAutocomplete() {
+    const addressInput = document.getElementById('textfield4');
+    const suggestionsBox = document.getElementById('suggestions');
+
+    // Use Places API if available (loaded via the same map script)
+    if (window.google && google.maps && google.maps.places) {
+      const autocomplete = new google.maps.places.AutocompleteService();
+      const placesService = new google.maps.places.PlacesService(document.createElement('div'));
+
+      addressInput.addEventListener('input', function() {
+        const query = addressInput.value.trim();
+        if (query.length < 3) {
+          suggestionsBox.style.display = 'none';
+          return;
+        }
+
+        // Request autocomplete predictions
+        autocomplete.getPlacePredictions(
+          { input: query, componentRestrictions: { country: 'in' } }, // restrict to India (optional)
+          (predictions, status) => {
+            if (status !== google.maps.places.PlacesServiceStatus.OK || !predictions) {
+              suggestionsBox.style.display = 'none';
+              return;
+            }
+
+            suggestionsList = predictions;
+            // Render dropdown
+            suggestionsBox.innerHTML = '';
+            predictions.forEach((place, idx) => {
+              const div = document.createElement('div');
+              div.textContent = place.description;
+              div.setAttribute('data-idx', idx);
+              div.onclick = () => selectSuggestion(place);
+              div.onmouseover = () => { selectedIndex = idx; highlightSuggestion(); };
+              suggestionsBox.appendChild(div);
+            });
+            suggestionsBox.style.display = 'block';
+            selectedIndex = -1;
+          }
+        );
+      });
+
+      // Keyboard navigation (optional)
+      addressInput.addEventListener('keydown', (e) => {
+        const items = suggestionsBox.children;
+        // Don't interfere with Enter for new line if no suggestion selected
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          selectedIndex = (selectedIndex + 1) % items.length;
+          highlightSuggestion();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          selectedIndex = (selectedIndex - 1 + items.length) % items.length;
+          highlightSuggestion();
+        } else if (e.key === 'Enter' && selectedIndex >= 0 && items[selectedIndex]) {
+          e.preventDefault();  // prevent new line in textarea when selecting suggestion
+          const place = suggestionsList[selectedIndex];
+          if (place) selectSuggestion(place);
+        }
+        // Otherwise Enter will create new line in textarea (default behavior)
+      });
+
+      function highlightSuggestion() {
+        const items = suggestionsBox.children;
+        Array.from(items).forEach((item, i) => {
+          if (i === selectedIndex) item.classList.add('selected-suggestion');
+          else item.classList.remove('selected-suggestion');
+        });
+      }
+
+      function selectSuggestion(place) {
+        addressInput.value = place.description;
+        suggestionsBox.style.display = 'none';
+        // Optionally fetch lat/lng from place details and update map (bonus)
+        if (window.google && google.maps) {
+          const placesService = new google.maps.places.PlacesService(document.createElement('div'));
+          placesService.getDetails({ placeId: place.place_id }, (details, status) => {
+            if (status === google.maps.places.PlacesServiceStatus.OK && details.geometry) {
+              const location = details.geometry.location;
+              document.getElementById('latitude').value = location.lat();
+              document.getElementById('longitude').value = location.lng();
+              if (marker && map) {
+                marker.setPosition(location);
+                map.setCenter(location);
+                map.setZoom(17);
+              }
+            }
+          });
+        }
+      }
+
+      // Hide suggestions when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!addressInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
+          suggestionsBox.style.display = 'none';
+        }
+      });
+    }
+  }
+
+  // ---------- Original map logic (exactly as before) ----------
+  let map, marker;
+
+  function initMap() {
+    // Default location (Kannur, Kerala fallback)
+    const defaultLocation = { lat: 11.868536, lng: 75.363197 };
+
+    map = new google.maps.Map(document.getElementById("map"), {
+      center: defaultLocation,
+      zoom: 14,
+    });
+
+    marker = new google.maps.Marker({
+      position: defaultLocation,
+      map: map,
+      draggable: true,
+    });
+
+    // Try to get current location
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          const currentLocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          map.setCenter(currentLocation);
+          map.setZoom(17);
+          marker.setPosition(currentLocation);
+          document.getElementById("latitude").value = currentLocation.lat;
+          document.getElementById("longitude").value = currentLocation.lng;
+        },
+        function () {
+          document.getElementById("latitude").value = defaultLocation.lat;
+          document.getElementById("longitude").value = defaultLocation.lng;
+        }
+      );
+    } else {
+      document.getElementById("latitude").value = defaultLocation.lat;
+      document.getElementById("longitude").value = defaultLocation.lng;
+    }
+
+    // Update fields on marker drag
+    google.maps.event.addListener(marker, 'dragend', function (event) {
+      document.getElementById("latitude").value = event.latLng.lat();
+      document.getElementById("longitude").value = event.latLng.lng();
+    });
+
+    // Update fields on map click
+    map.addListener("click", (e) => {
+      placeMarker(e.latLng);
+    });
+
+    // Initialize address autocomplete now that google is loaded
+    if (google.maps.places) {
+      initAutocomplete();
+    }
+  }
+
+  function placeMarker(location) {
+    marker.setPosition(location);
+    document.getElementById("latitude").value = location.lat();
+    document.getElementById("longitude").value = location.lng();
+  }
+</script>
+
+<!-- Load Google Maps API with Places library (added 'places' to libraries) -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC6v5-2uaq_wusHDktM9ILcqIrlPtnZgEk&libraries=places&callback=initMap"
+        async defer></script>
+
+<!-- Prevent back navigation – same as original -->
+<script>
+if (window.history && window.history.pushState) {
+    window.history.pushState(null, null, window.location.href);
+    window.onpopstate = function(event) {
+        window.location.href = '/homeuser';
+    };
+}
+</script>
+
+<!-- original comments left intact -->
+{#<input type="hidden" name="latitude" id="latitude" required />#}
+{#<input type="hidden" name="longitude" id="longitude" required />#}
+</body>
+</html>

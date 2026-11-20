@@ -1,0 +1,1378 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#  <meta charset="UTF-8">#}
+{#  <title>Registration Data Table</title>#}
+{#  <!-- Bootstrap CSS -->#}
+{#  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">#}
+{#  <!-- DataTables CSS -->#}
+{#  <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">#}
+{#</head>#}
+{#<body>#}
+{#  <div class="container mt-5">#}
+{#    <h2 class="mb-4">View Users</h2>#}
+{#    <table id="registrationTable" class="table table-striped table-bordered">#}
+{#      <thead>#}
+{#        <tr>#}
+{#          <th>#</th>#}
+{#          <th>Name</th>#}
+{#          <th>Email</th>#}
+{#          <th>Phone number</th>#}
+{#        </tr>#}
+{#      </thead>#}
+{#      <tbody>#}
+{#        <!-- Sample Data Row -->#}
+{#        {% for i in data %}#}
+{#        <tr>#}
+{#          <td>{{ forloop.counter }}</td>#}
+{#          <td>{{ i.name }}</td>#}
+{#          <td>{{ i.email }}</td>#}
+{#          <td>{{ i.phone }}</td>#}
+{#        </tr>#}
+{#        {% endfor %}#}
+{##}
+{#        <!-- Add more rows dynamically from backend -->#}
+{#      </tbody>#}
+{#    </table>#}
+{#  </div>#}
+{##}
+{#  <!-- Scripts -->#}
+{#  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>#}
+{#  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>#}
+{#  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>#}
+{#  <script>#}
+{#    $(document).ready(function () {#}
+{#      $('#registrationTable').DataTable();#}
+{#    });#}
+{#  </script>#}
+{#</body>#}
+{#</html>#}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Management | E-Shopping Admin</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- DataTables CSS -->
+  <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #3b82f6;
+      --primary-dark: #2563eb;
+      --secondary-color: #8b5cf6;
+      --success-color: #10b981;
+      --warning-color: #f59e0b;
+      --danger-color: #ef4444;
+      --light-bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text-dark: #1e293b;
+      --text-medium: #475569;
+      --text-light: #64748b;
+      --border-color: #e2e8f0;
+      --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+      --gradient-success: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+      --shadow-lg: 0 20px 40px rgba(30, 58, 138, 0.1);
+      --shadow-md: 0 10px 30px rgba(30, 58, 138, 0.08);
+      --radius-lg: 20px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+      color: var(--text-dark);
+    }
+
+    /* Enhanced Animated Background */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .bg-animation::before,
+    .bg-animation::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
+      animation: float 30s infinite linear;
+    }
+
+    .bg-animation::before {
+      width: 500px;
+      height: 500px;
+      top: -250px;
+      right: -250px;
+    }
+
+    .bg-animation::after {
+      width: 400px;
+      height: 400px;
+      bottom: -200px;
+      left: -200px;
+      animation: float 25s infinite linear reverse;
+    }
+
+    /* Animated Grid Lines */
+    .grid-lines {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background-image:
+        linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: gridMove 40s linear infinite;
+    }
+
+    /* Floating Particles Container */
+    .floating-elements {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .floating-element {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+      animation: floatElement 20s infinite linear;
+    }
+
+    .element-1 { width: 100px; height: 100px; top: 20%; left: 15%; animation-delay: 0s; }
+    .element-2 { width: 150px; height: 150px; top: 60%; left: 80%; animation-delay: 5s; }
+    .element-3 { width: 80px; height: 80px; top: 80%; left: 10%; animation-delay: 10s; }
+    .element-4 { width: 120px; height: 120px; top: 30%; left: 75%; animation-delay: 15s; }
+
+    /* Main Container */
+    .container {
+      max-width: 1400px;
+      padding: 30px 15px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Premium Dashboard Header */
+    .dashboard-header {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: 40px 45px;
+      margin-bottom: 40px;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+      animation: slideDown 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border-left: 6px solid var(--primary-color);
+      border: 1px solid var(--border-color);
+    }
+
+    .dashboard-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.05) 0%, transparent 70%);
+      transform: translate(150px, -150px);
+      animation: pulseGlow 4s infinite ease-in-out;
+    }
+
+    .header-content h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 2.8rem;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+
+    .header-content h2 i {
+      color: var(--primary-color);
+      animation: iconSpin 10s infinite linear;
+    }
+
+    .header-content p {
+      color: var(--text-medium);
+      font-size: 1.15rem;
+      max-width: 600px;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    /* Animated Status Indicator */
+    .status-indicator {
+      position: absolute;
+      top: 25px;
+      right: 25px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(16, 185, 129, 0.1);
+      padding: 10px 18px;
+      border-radius: 25px;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      animation: indicatorPulse 3s infinite;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      background: var(--success-color);
+      border-radius: 50%;
+      animation: dotPulse 2s infinite;
+    }
+
+    /* Enhanced Stats Cards */
+    .stats-wrapper {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 25px;
+      margin-top: 30px;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-md);
+      padding: 25px;
+      box-shadow: var(--shadow-md);
+      border-top: 5px solid var(--primary-color);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      animation: cardFloat 6s infinite ease-in-out;
+    }
+
+    .stat-card:nth-child(2) { border-color: var(--secondary-color); animation-delay: 0.2s; }
+    .stat-card:nth-child(3) { border-color: var(--success-color); animation-delay: 0.4s; }
+    .stat-card:nth-child(4) { border-color: var(--warning-color); animation-delay: 0.6s; }
+
+    .stat-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: var(--shadow-lg);
+      animation: none;
+    }
+
+    .stat-card i {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      color: var(--primary-color);
+    }
+
+    .stat-card:nth-child(2) i { color: var(--secondary-color); }
+    .stat-card:nth-child(3) i { color: var(--success-color); }
+    .stat-card:nth-child(4) i { color: var(--warning-color); }
+
+    .stat-card .number {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 5px;
+    }
+
+    .stat-card .label {
+      color: var(--text-medium);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    /* Animated Progress Bars */
+    .progress-container {
+      height: 6px;
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 3px;
+      margin-top: 15px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-bar {
+      height: 100%;
+      border-radius: 3px;
+      position: relative;
+      animation: progressMove 2s infinite linear;
+    }
+
+    .progress-bar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      animation: progressShine 3s infinite linear;
+    }
+
+    /* Main Table Container */
+    .table-container {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: 35px;
+      box-shadow: var(--shadow-lg);
+      animation: fadeInUp 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s both;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      margin-bottom: 40px;
+    }
+
+    .table-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--gradient-primary);
+      animation: gradientMove 3s infinite linear;
+    }
+
+    /* Enhanced Table with Perfect Text Visibility */
+    #registrationTable {
+      border: none;
+      margin: 0;
+      color: var(--text-dark);
+      font-size: 1rem;
+    }
+
+    #registrationTable_wrapper {
+      position: relative;
+    }
+
+    #registrationTable thead {
+      background: var(--gradient-primary);
+      border-radius: var(--radius-md) var(--radius-md) 0 0;
+      overflow: hidden;
+      border-bottom: 3px solid var(--primary-dark);
+      position: relative;
+    }
+
+    #registrationTable thead::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      animation: headerShine 4s infinite;
+    }
+
+    #registrationTable thead th {
+      border: none;
+      color: white !important;
+      font-weight: 700;
+      padding: 22px 18px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      font-size: 0.95rem;
+      position: relative;
+      transition: all 0.3s ease;
+      background: transparent !important;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    #registrationTable thead th:hover {
+      background: rgba(255, 255, 255, 0.15) !important;
+    }
+
+    /* Row animations */
+    #registrationTable tbody tr {
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      animation: slideInRight 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+      position: relative;
+    }
+
+    #registrationTable tbody tr:nth-child(even) {
+      background-color: rgba(248, 250, 252, 0.5);
+    }
+
+    #registrationTable tbody tr:hover {
+      background: rgba(219, 234, 254, 0.7);
+      transform: translateX(10px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+      border-left: 4px solid var(--primary-color);
+    }
+
+    /* PERFECT TEXT VISIBILITY */
+    #registrationTable tbody td {
+      padding: 22px 18px;
+      vertical-align: middle;
+      color: var(--text-dark) !important;
+      font-weight: 500;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+      font-size: 1rem;
+      text-shadow: none !important;
+    }
+
+    #registrationTable tbody td:first-child {
+      font-weight: 700;
+      color: var(--primary-color) !important;
+      font-size: 1.1rem;
+    }
+
+    /* User Avatar with Animation */
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      background: var(--gradient-primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-right: 12px;
+      animation: avatarFloat 4s infinite ease-in-out;
+    }
+
+    /* Action Icons */
+    .action-icons {
+      display: flex;
+      gap: 10px;
+      opacity: 0;
+      transform: translateX(20px);
+      transition: all 0.3s ease;
+    }
+
+    #registrationTable tbody tr:hover .action-icons {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .action-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .action-icon.view { background: var(--primary-color); }
+    .action-icon.edit { background: var(--warning-color); }
+    .action-icon.delete { background: var(--danger-color); }
+
+    /* Enhanced DataTables Styling */
+    .dataTables_wrapper .dataTables_filter input {
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 14px 24px;
+      font-size: 1.05rem;
+      transition: all 0.3s ease;
+      background: white;
+      color: var(--text-dark);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+      width: 320px;
+      font-weight: 500;
+      animation: searchGlow 3s infinite alternate;
+    }
+
+    .dataTables_paginate .paginate_button {
+      border-radius: var(--radius-md) !important;
+      margin: 0 5px;
+      border: 2px solid var(--border-color) !important;
+      padding: 10px 18px !important;
+      transition: all 0.3s ease !important;
+      font-weight: 600;
+      background: white !important;
+      color: var(--text-medium) !important;
+    }
+
+    .dataTables_paginate .paginate_button:hover {
+      background: var(--gradient-primary) !important;
+      color: white !important;
+      border-color: transparent !important;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+    }
+
+    .dataTables_paginate .paginate_button.current {
+      background: var(--gradient-primary) !important;
+      color: white !important;
+      border-color: transparent !important;
+      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+    }
+
+    /* Additional Info Section */
+    .info-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    .info-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-md);
+      padding: 25px;
+      box-shadow: var(--shadow-md);
+      border-left: 4px solid var(--primary-color);
+      animation: fadeIn 1s ease both;
+    }
+
+    .info-card h5 {
+      color: var(--text-dark);
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .info-card ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .info-card li {
+      padding: 8px 0;
+      color: var(--text-medium);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    /* Activity Log */
+    .activity-log {
+      max-height: 200px;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+
+    .activity-item {
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      animation: slideInLeft 0.5s ease both;
+    }
+
+    /* Enhanced Footer */
+    .dashboard-footer {
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+
+    .footer-section h5 {
+      color: var(--text-dark);
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+    }
+
+    .security-badge {
+      text-align: center;
+      padding: 20px;
+      background: var(--card-bg);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-color);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ANIMATIONS */
+    @keyframes float {
+      0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+      25% {
+        transform: translate(40px, 40px) rotate(90deg);
+      }
+      50% {
+        transform: translate(0, 80px) rotate(180deg);
+      }
+      75% {
+        transform: translate(-40px, 40px) rotate(270deg);
+      }
+    }
+
+    @keyframes floatElement {
+      0%, 100% {
+        transform: translate(0, 0) scale(1);
+      }
+      25% {
+        transform: translate(30px, 30px) scale(1.1);
+      }
+      50% {
+        transform: translate(0, 60px) scale(1);
+      }
+      75% {
+        transform: translate(-30px, 30px) scale(0.9);
+      }
+    }
+
+    @keyframes gridMove {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(25px, 25px); }
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 0.8; }
+    }
+
+    @keyframes iconSpin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes indicatorPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.2); }
+      50% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+    }
+
+    @keyframes dotPulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.5);
+        opacity: 0.7;
+      }
+    }
+
+    @keyframes cardFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    @keyframes progressMove {
+      0% { background-position: 0% 0; }
+      100% { background-position: 100% 0; }
+    }
+
+    @keyframes progressShine {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+
+    @keyframes headerShine {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    @keyframes searchGlow {
+      0% { box-shadow: 0 8px 20px rgba(59, 130, 246, 0.1); }
+      100% { box-shadow: 0 8px 30px rgba(59, 130, 246, 0.2); }
+    }
+
+    @keyframes avatarFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .dashboard-header {
+        padding: 30px;
+      }
+
+      .header-content h2 {
+        font-size: 2.4rem;
+      }
+    }
+
+    @media (max-width: 992px) {
+      .stats-wrapper,
+      .info-section,
+      .footer-content {
+        grid-template-columns: 1fr;
+      }
+
+      .table-container {
+        padding: 25px;
+      }
+
+      .dataTables_wrapper .dataTables_filter input {
+        width: 100%;
+        margin-bottom: 15px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px 10px;
+      }
+
+      .dashboard-header {
+        padding: 25px 20px;
+      }
+
+      .header-content h2 {
+        font-size: 2rem;
+      }
+
+      .status-indicator {
+        position: relative;
+        top: 0;
+        right: 0;
+        margin-bottom: 20px;
+        width: fit-content;
+      }
+
+      #registrationTable thead th,
+      #registrationTable tbody td {
+        padding: 16px 12px;
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="bg-animation"></div>
+  <div class="grid-lines"></div>
+  <div class="floating-elements">
+    <div class="floating-element element-1"></div>
+    <div class="floating-element element-2"></div>
+    <div class="floating-element element-3"></div>
+    <div class="floating-element element-4"></div>
+  </div>
+
+  <div class="container">
+    <!-- Premium Dashboard Header -->
+    <div class="dashboard-header">
+      <div class="status-indicator">
+        <div class="status-dot"></div>
+        <span class="fw-bold">System Active • {{ data|length }} Users</span>
+      </div>
+
+      <div class="header-content">
+        <h2>
+          <i class="fas fa-users"></i>
+          User Management Dashboard
+        </h2>
+        <p class="text-muted">Monitor and manage all registered users on your e-shopping platform with real-time insights and analytics.</p>
+
+        <!-- Animated Stats Cards -->
+        <div class="stats-wrapper">
+          <div class="stat-card">
+            <i class="fas fa-user-friends"></i>
+            <div class="number">{{ data|length }}</div>
+            <div class="label">Total Users</div>
+            <div class="progress-container">
+              <div class="progress-bar" style="background: var(--primary-color); width: 100%;"></div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <i class="fas fa-user-check"></i>
+            <div class="number">{{ data|length|add:"-2" }}</div>
+            <div class="label">Active Today</div>
+            <div class="progress-container">
+              <div class="progress-bar" style="background: var(--secondary-color); width: 75%;"></div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <i class="fas fa-shopping-bag"></i>
+            <div class="number">{{ data|length|add:"12" }}</div>
+            <div class="label">Orders Today</div>
+            <div class="progress-container">
+              <div class="progress-bar" style="background: var(--success-color); width: 85%;"></div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <i class="fas fa-chart-line"></i>
+            <div class="number">+{{ data|length|add:"8" }}%</div>
+            <div class="label">Growth Rate</div>
+            <div class="progress-container">
+              <div class="progress-bar" style="background: var(--warning-color); width: 65%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Additional Info Section -->
+    <div class="info-section">
+      <div class="info-card" style="animation-delay: 0.1s;">
+        <h5><i class="fas fa-chart-pie text-primary"></i> User Analytics</h5>
+        <ul>
+          <li><i class="fas fa-circle text-primary"></i> New users this week: <strong>{{ data|length|add:"5" }}</strong></li>
+          <li><i class="fas fa-circle text-success"></i> Active users: <strong>{{ data|length|add:"-2" }}</strong></li>
+          <li><i class="fas fa-circle text-warning"></i> Pending verification: <strong>3</strong></li>
+          <li><i class="fas fa-circle text-info"></i> Average sessions: <strong>4.2</strong></li>
+        </ul>
+      </div>
+
+      <div class="info-card" style="animation-delay: 0.3s;">
+        <h5><i class="fas fa-bolt text-warning"></i> Quick Actions</h5>
+        <ul>
+          <li><i class="fas fa-plus-circle text-success"></i> Add new user</li>
+          <li><i class="fas fa-file-export text-primary"></i> Export user data</li>
+          <li><i class="fas fa-filter text-info"></i> Filter by activity</li>
+          <li><i class="fas fa-bell text-warning"></i> Set user alerts</li>
+        </ul>
+      </div>
+
+      <div class="info-card activity-log" style="animation-delay: 0.5s;">
+        <h5><i class="fas fa-history text-secondary"></i> Recent Activity</h5>
+        <div class="activity-item">
+          <div class="d-flex justify-content-between">
+            <span><i class="fas fa-user-plus text-success me-2"></i>New user registered</span>
+            <small class="text-muted">2 min ago</small>
+          </div>
+          <small class="text-muted">John Doe joined the platform</small>
+        </div>
+        <div class="activity-item">
+          <div class="d-flex justify-content-between">
+            <span><i class="fas fa-shopping-cart text-primary me-2"></i>Order placed</span>
+            <small class="text-muted">15 min ago</small>
+          </div>
+          <small class="text-muted">User #{{ data|length|add:"-1" }} made a purchase</small>
+        </div>
+        <div class="activity-item">
+          <div class="d-flex justify-content-between">
+            <span><i class="fas fa-user-edit text-warning me-2"></i>Profile updated</span>
+            <small class="text-muted">25 min ago</small>
+          </div>
+          <small class="text-muted">User updated their information</small>
+        </div>
+        <div class="activity-item">
+          <div class="d-flex justify-content-between">
+            <span><i class="fas fa-star text-warning me-2"></i>Review submitted</span>
+            <small class="text-muted">1 hour ago</small>
+          </div>
+          <small class="text-muted">User left a product review</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Table Container -->
+    <div class="table-container">
+      <table id="registrationTable" class="table table-striped table-bordered">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th><i class="fas fa-user me-2"></i>Name</th>
+            <th><i class="fas fa-envelope me-2"></i>Email</th>
+            <th><i class="fas fa-phone me-2"></i>Phone number</th>
+{#            <th><i class="fas fa-cog me-2"></i>Actions</th>#}
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in data %}
+          <tr style="animation-delay: {{ forloop.counter0|add:1|divisibleby:2|yesno:'0.1s,0.2s' }}">
+            <td>
+              <span class="badge bg-primary rounded-pill px-3 py-2 fw-bold">{{ forloop.counter }}</span>
+            </td>
+            <td class="fw-bold">
+              <div class="d-flex align-items-center">
+                <div class="user-avatar">
+                  {{ i.name|first|upper }}
+                </div>
+                <div>
+                  <div class="text-dark">{{ i.name }}</div>
+                  <small class="text-muted">Member since Today</small>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <i class="fas fa-envelope text-primary me-2"></i>
+                <a href="mailto:{{ i.email }}" class="text-decoration-none text-dark fw-medium">
+                  {{ i.email }}
+                </a>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <i class="fas fa-phone text-success me-2"></i>
+                <a href="tel:{{ i.phone }}" class="text-decoration-none text-dark fw-medium">
+                  {{ i.phone }}
+                </a>
+              </div>
+            </td>
+{#            <td>#}
+{#              <div class="action-icons">#}
+{#                <a href="#" class="action-icon view" title="View Profile">#}
+{#                  <i class="fas fa-eye"></i>#}
+{#                </a>#}
+{#                <a href="#" class="action-icon edit" title="Edit User">#}
+{#                  <i class="fas fa-edit"></i>#}
+{#                </a>#}
+{#                <a href="#" class="action-icon delete" title="Delete User">#}
+{#                  <i class="fas fa-trash"></i>#}
+{#                </a>#}
+{#              </div>#}
+{#            </td>#}
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="5" class="text-center py-5">
+              <div class="empty-state">
+                <i class="fas fa-users-slash fa-4x text-muted mb-4 animate__animated animate__pulse animate__infinite"></i>
+                <h4 class="text-dark mb-3">No Users Found</h4>
+                <p class="text-muted">Start by adding your first user to the system</p>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <!-- Table Footer -->
+      <div class="mt-4 pt-3 border-top d-flex justify-content-between align-items-center">
+        <div class="text-muted">
+          <i class="fas fa-info-circle me-1"></i>
+          <small>Showing {{ data|length }} users • Click on email/phone to contact</small>
+        </div>
+        <div class="text-muted">
+          <i class="fas fa-clock me-1"></i>
+          <small>Last updated: <span class="fw-bold">Just now</span></small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Enhanced Footer -->
+    <div class="dashboard-footer">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h5>About User Management</h5>
+          <p class="text-muted">Our platform provides comprehensive user management tools to help you monitor and optimize your e-commerce user base.</p>
+        </div>
+
+        <div class="footer-section">
+          <h5>Quick Links</h5>
+          <div class="d-flex flex-column gap-2">
+            <a href="#" class="text-decoration-none text-muted">
+              <i class="fas fa-cog me-2"></i>System Settings
+            </a>
+            <a href="#" class="text-decoration-none text-muted">
+              <i class="fas fa-question-circle me-2"></i>Help Center
+            </a>
+            <a href="#" class="text-decoration-none text-muted">
+              <i class="fas fa-file-alt me-2"></i>Documentation
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-section">
+          <h5>System Status</h5>
+          <div class="d-flex align-items-center mb-2">
+            <div class="status-dot me-2" style="animation-delay: 0s;"></div>
+            <span>User Database: <strong class="text-success">Online</strong></span>
+          </div>
+          <div class="d-flex align-items-center mb-2">
+            <div class="status-dot me-2" style="animation-delay: 0.2s; background: var(--primary-color);"></div>
+            <span>API Services: <strong class="text-success">Active</strong></span>
+          </div>
+          <div class="d-flex align-items-center">
+            <div class="status-dot me-2" style="animation-delay: 0.4s; background: var(--warning-color);"></div>
+            <span>Sync Status: <strong class="text-success">Synced</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Security Badge -->
+      <div class="security-badge mt-4">
+        <div class="d-flex justify-content-center align-items-center gap-3 mb-3">
+          <i class="fas fa-shield-alt fa-2x text-primary animate__animated animate__pulse animate__infinite"></i>
+          <div>
+            <h5 class="mb-1 text-dark">Secure User Management</h5>
+            <p class="mb-0 text-muted">All user data is encrypted and protected with industry-standard security measures</p>
+          </div>
+        </div>
+        <div class="d-flex justify-content-center gap-4">
+          <small class="text-muted"><i class="fas fa-lock me-1"></i>256-bit Encryption</small>
+          <small class="text-muted"><i class="fas fa-user-shield me-1"></i>GDPR Compliant</small>
+          <small class="text-muted"><i class="fas fa-sync-alt me-1"></i>Real-time Backup</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      // Initialize DataTable with premium options
+      var table = $('#registrationTable').DataTable({
+        "pageLength": 10,
+        "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+        "order": [[0, 'asc']],
+        "language": {
+          "search": '<i class="fas fa-search me-2"></i>',
+          "lengthMenu": "Show _MENU_ entries",
+          "info": "Showing _START_ to _END_ of _TOTAL_ users",
+          "paginate": {
+            "previous": '<i class="fas fa-chevron-left"></i>',
+            "next": '<i class="fas fa-chevron-right"></i>'
+          }
+        },
+        "initComplete": function() {
+          // Add sequential animation delay to each row
+          $('#registrationTable tbody tr').each(function(index) {
+            var delay = (index * 0.1);
+            $(this).css('animation-delay', delay + 's');
+          });
+
+          // Add floating particles animation
+          addFloatingParticles();
+
+          // Add hover effects to stats cards
+          $('.stat-card').hover(
+            function() {
+              $(this).addClass('animate__animated animate__pulse');
+            },
+            function() {
+              $(this).removeClass('animate__animated animate__pulse');
+            }
+          );
+
+          // Initialize tooltips
+          $('[title]').tooltip();
+        }
+      });
+
+      // Add floating particles animation
+      function addFloatingParticles() {
+        const colors = ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444'];
+
+        for(let i = 0; i < 12; i++) {
+          const color = colors[Math.floor(Math.random() * colors.length)];
+          const size = Math.random() * 4 + 2;
+          const duration = Math.random() * 15 + 10;
+
+          $('.table-container').append(`
+            <div class="floating-particle" style="
+              position: absolute;
+              width: ${size}px;
+              height: ${size}px;
+              background: ${color};
+              border-radius: 50%;
+              opacity: ${Math.random() * 0.3 + 0.1};
+              top: ${Math.random() * 90 + 5}%;
+              left: ${Math.random() * 90 + 5}%;
+              animation: particleMove ${duration}s infinite linear;
+              pointer-events: none;
+              z-index: 1;
+            "></div>
+          `);
+        }
+
+        // Add CSS for particle animation
+        if (!$('#particle-animation').length) {
+          $('head').append(`
+            <style id="particle-animation">
+              @keyframes particleMove {
+                0%, 100% {
+                  transform: translate(0, 0) rotate(0deg);
+                  opacity: 0.1;
+                }
+                25% {
+                  transform: translate(${Math.random() * 30 - 15}px, ${Math.random() * 30 - 15}px) rotate(90deg);
+                  opacity: 0.3;
+                }
+                50% {
+                  transform: translate(${Math.random() * 30 - 15}px, ${Math.random() * 30 - 15}px) rotate(180deg);
+                  opacity: 0.1;
+                }
+                75% {
+                  transform: translate(${Math.random() * 30 - 15}px, ${Math.random() * 30 - 15}px) rotate(270deg);
+                  opacity: 0.3;
+                }
+              }
+            </style>
+          `);
+        }
+      }
+
+      // Enhanced row hover effects
+      $('#registrationTable tbody tr').hover(
+        function() {
+          $(this).addClass('animate__animated animate__headShake');
+          $(this).css('animation-duration', '0.6s');
+
+          // Add glow effect to user avatar
+          $(this).find('.user-avatar').addClass('animate__animated animate__bounce');
+
+          // Highlight the row
+          $(this).css('background', 'linear-gradient(90deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1))');
+        },
+        function() {
+          $(this).removeClass('animate__animated animate__headShake');
+          $(this).find('.user-avatar').removeClass('animate__animated animate__bounce');
+          $(this).css('background', '');
+        }
+      );
+
+      // Action icon click animations
+      $('.action-icon').click(function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const action = $(this).hasClass('view') ? 'view' :
+                      $(this).hasClass('edit') ? 'edit' : 'delete';
+        const actions = {
+          'view': {icon: 'eye', color: 'primary', text: 'Viewing'},
+          'edit': {icon: 'edit', color: 'warning', text: 'Editing'},
+          'delete': {icon: 'trash', color: 'danger', text: 'Deleting'}
+        };
+
+        // Button animation
+        $(this).addClass('animate__animated animate__rubberBand');
+
+        // Show action notification
+        const userRow = $(this).closest('tr');
+        const userName = userRow.find('td:nth-child(2) .text-dark').text();
+
+        showActionNotification(`${actions[action].text} user: ${userName}`, actions[action].color);
+
+        // Remove animation
+        setTimeout(() => {
+          $(this).removeClass('animate__animated animate__rubberBand');
+        }, 1000);
+      });
+
+      // Email and phone link animations
+      $('a[href^="mailto:"], a[href^="tel:"]').click(function(e) {
+        e.preventDefault();
+        const href = $(this).attr('href');
+        const isEmail = href.startsWith('mailto:');
+
+        // Link animation
+        $(this).addClass('animate__animated animate__pulse');
+
+        // Show notification
+        showActionNotification(isEmail ? 'Opening email client...' : 'Preparing to call...', 'info');
+
+        // Simulate delay and redirect
+        setTimeout(() => {
+          window.location.href = href;
+        }, 500);
+
+        // Remove animation
+        setTimeout(() => {
+          $(this).removeClass('animate__animated animate__pulse');
+        }, 1000);
+      });
+
+      // Notification function
+      function showActionNotification(message, type = 'info') {
+        const colors = {
+          'primary': '#3b82f6',
+          'success': '#10b981',
+          'warning': '#f59e0b',
+          'danger': '#ef4444',
+          'info': '#64748b'
+        };
+
+        const notification = $(`
+          <div class="action-notification" style="
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: ${colors[type]};
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 9999;
+            transform: translateX(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            max-width: 300px;
+          ">
+            <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : type === 'danger' ? 'times-circle' : 'info-circle'} me-2"></i>
+            ${message}
+          </div>
+        `);
+
+        $('body').append(notification);
+
+        // Animate in
+        setTimeout(() => {
+          notification.css({
+            'transform': 'translateX(0)',
+            'opacity': '1'
+          });
+        }, 10);
+
+        // Animate out and remove
+        setTimeout(() => {
+          notification.css({
+            'transform': 'translateX(100px)',
+            'opacity': '0'
+          });
+          setTimeout(() => notification.remove(), 300);
+        }, 3000);
+      }
+
+      // Auto-update activity log
+      setInterval(() => {
+        updateActivityLog();
+      }, 30000);
+
+      function updateActivityLog() {
+        const activities = [
+          {action: 'user login', icon: 'sign-in-alt', color: 'success'},
+          {action: 'profile update', icon: 'user-edit', color: 'warning'},
+          {action: 'order placed', icon: 'shopping-cart', color: 'primary'},
+          {action: 'review submitted', icon: 'star', color: 'warning'}
+        ];
+
+        const randomActivity = activities[Math.floor(Math.random() * activities.length)];
+        const activityLog = $('.activity-log');
+
+        const newItem = $(`
+          <div class="activity-item animate__animated animate__fadeIn">
+            <div class="d-flex justify-content-between">
+              <span><i class="fas fa-${randomActivity.icon} text-${randomActivity.color} me-2"></i>
+              ${randomActivity.action}</span>
+              <small class="text-muted">just now</small>
+            </div>
+            <small class="text-muted">User activity detected</small>
+          </div>
+        `);
+
+        // Add new item and remove oldest if more than 4
+        activityLog.prepend(newItem);
+        if (activityLog.find('.activity-item').length > 4) {
+          activityLog.find('.activity-item').last().remove();
+        }
+      }
+
+      // Add search box animation
+      $('.dataTables_filter input').on('focus', function() {
+        $(this).addClass('animate__animated animate__tada');
+      }).on('blur', function() {
+        $(this).removeClass('animate__animated animate__tada');
+      });
+
+      // Add keyboard shortcut
+      $(document).keydown(function(e) {
+        if (e.ctrlKey && e.key === 'k') {
+          e.preventDefault();
+          $('.dataTables_filter input').focus().select();
+          showActionNotification('Search shortcut activated', 'info');
+        }
+      });
+
+      // Initial notification
+      setTimeout(() => {
+        showActionNotification('User dashboard loaded successfully!', 'success');
+      }, 1500);
+    });
+  </script>
+<script>
+// Prevent going back to this page after form submission
+if (window.history && window.history.pushState) {
+    // Add current page to history
+    window.history.pushState(null, null, window.location.href);
+
+    // Listen for back/forward navigation
+    window.onpopstate = function(event) {
+        // Redirect to /rtohome when back button is pressed
+        window.location.href = '/home';
+    };
+}
+</script>
+</body>
+</html>

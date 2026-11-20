@@ -1,0 +1,449 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#  <meta charset="UTF-8">#}
+{#  <title>Registration Data Table</title>#}
+{#  <!-- Bootstrap CSS -->#}
+{#  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">#}
+{#  <!-- DataTables CSS -->#}
+{#  <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">#}
+{#</head>#}
+{#<body>#}
+{#<div class="container mt-5">#}
+{#  <h2 class="mb-4">View review</h2>#}
+{#  <table id="registrationTable" class="table table-striped table-bordered">#}
+{#    <thead>#}
+{#      <tr>#}
+{#        <th>#</th>#}
+{#        <th>Username</th>#}
+{#        <th>Email</th>#}
+{#        <th>Review</th>#}
+{#        <th>Rating</th>#}
+{#        <th>Date</th>#}
+{#      </tr>#}
+{#    </thead>#}
+{#    <tbody>#}
+{#      <!-- Sample Data Row -->#}
+{#      {% for i in data %}#}
+{#      <tr>#}
+{#        <td>&nbsp;{{ forloop.counter }}</td>#}
+{#        <td>&nbsp;{{ i.CUSTOMER.name }}</td>#}
+{#        <td>&nbsp;{{ i.CUSTOMER.email }}</td>#}
+{#        <td>&nbsp;{{ i.comment }}</td>#}
+{#        <td>&nbsp;{{ i.rating }}</td>#}
+{#        <td>&nbsp;{{ i.date }}</td>#}
+{#      </tr>#}
+{#      {% endfor %}#}
+{#       #}
+{#      <!-- Add more rows dynamically from backend -->#}
+{#    </tbody>#}
+{#  </table>#}
+{#  </div>#}
+{##}
+{#  <!-- Scripts -->#}
+{#  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>#}
+{#  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>#}
+{#  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>#}
+{#  <script>#}
+{#    $(document).ready(function () {#}
+{#      $('#registrationTable').DataTable();#}
+{#    });#}
+{#  </script>#}
+{#<script>#}
+{#// Prevent going back to this page after form submission#}
+{#if (window.history && window.history.pushState) {#}
+{#    // Add current page to history#}
+{#    window.history.pushState(null, null, window.location.href);#}
+{##}
+{#    // Listen for back/forward navigation#}
+{#    window.onpopstate = function(event) {#}
+{#        // Redirect to /rtohome when back button is pressed#}
+{#        window.location.href = '/homeuser';#}
+{#    };#}
+{#}#}
+{#</script>#}
+{##}
+{#</body>#}
+{#</html>#}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>View Reviews - Flipkart Style</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- DataTables CSS -->
+  <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* ===== GLOBAL STYLES ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #fffaf5 0%, #fff1e4 50%, #ffe8d6 100%);
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      padding: 30px 0 60px;
+      position: relative;
+    }
+
+    /* floating particles (subtle orange dots) */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80"><circle cx="15" cy="15" r="3" fill="%23fb8b28" opacity="0.1"/><circle cx="65" cy="30" r="4" fill="%23fb8b28" opacity="0.1"/><circle cx="45" cy="70" r="3.5" fill="%23fb8b28" opacity="0.1"/><circle cx="5" cy="60" r="2.5" fill="%23fb8b28" opacity="0.1"/><circle cx="75" cy="75" r="3" fill="%23fb8b28" opacity="0.1"/></svg>');
+      background-repeat: repeat;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.5;
+    }
+
+    .container {
+      position: relative;
+      z-index: 10;
+      max-width: 1300px;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== CARD STYLE FOR TABLE ===== */
+    .dataTables_wrapper {
+      background: white;
+      border-radius: 36px;
+      padding: 28px 24px 32px;
+      box-shadow:
+        0 30px 60px -20px rgba(251, 139, 40, 0.3),
+        0 20px 40px -20px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 240, 230, 0.8);
+      transition: all 0.3s ease;
+      margin-top: 20px;
+    }
+
+    .dataTables_wrapper:hover {
+      box-shadow: 0 40px 70px -20px #fb8b28;
+    }
+
+    /* header styling */
+    h2 {
+      font-size: 2.6rem;
+      font-weight: 700;
+      color: #2b2b2b;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px !important;
+      padding-left: 16px;
+      position: relative;
+      display: inline-block;
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 16px;
+      width: 100px;
+      height: 4px;
+      background: #fb8b28;
+      border-radius: 10px;
+    }
+
+    /* ===== TABLE CUSTOMIZATION ===== */
+    .table {
+      margin-bottom: 0;
+      width: 100% !important;
+      border-collapse: collapse;
+      background: white;
+    }
+
+    .table thead th {
+      background: #fb8b28;
+      color: white;
+      font-weight: 600;
+      font-size: 1.05rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      padding: 16px 12px;
+      border: none !important;
+      border-bottom: 3px solid #ffa755;
+    }
+
+    .table thead th:first-child {
+      border-top-left-radius: 20px;
+    }
+
+    .table thead th:last-child {
+      border-top-right-radius: 20px;
+    }
+
+    /* table rows - SOLID WHITE BACKGROUND */
+    .table tbody tr {
+      background-color: white !important;
+      transition: all 0.2s ease;
+      border-bottom: 1px solid #ffeee3;
+    }
+
+    .table tbody tr:hover {
+      background-color: #fff9f2 !important;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px -8px #fb8b28;
+      position: relative;
+      z-index: 5;
+    }
+
+    .table tbody td {
+      padding: 16px 14px;
+      border: none;
+      font-size: 1.02rem;
+      color: #2c2c2c;
+      font-weight: 450;
+      vertical-align: middle;
+      background-color: white !important;
+    }
+
+    /* striped rows - light orange tint for alternating rows */
+    .table-striped > tbody > tr:nth-of-type(odd) {
+      background-color: #fffaf5 !important;
+    }
+
+    .table-striped > tbody > tr:nth-of-type(odd) td {
+      background-color: #fffaf5 !important;
+    }
+
+    /* rating stars style */
+    .table tbody td:nth-child(5) {
+      font-weight: 700;
+      color: #fb8b28;
+    }
+
+    /* DataTables controls styling */
+    .dataTables_length label,
+    .dataTables_filter label {
+      font-weight: 500;
+      color: #2b2b2b;
+      margin-bottom: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dataTables_length select,
+    .dataTables_filter input {
+      border: 2px solid #fbcfb0;
+      border-radius: 40px !important;
+      padding: 8px 16px;
+      background-color: white;
+      transition: all 0.3s;
+      outline: none;
+      margin: 0 8px;
+    }
+
+    .dataTables_length select:focus,
+    .dataTables_filter input:focus {
+      border-color: #fb8b28;
+      box-shadow: 0 0 0 4px rgba(251, 139, 40, 0.2);
+    }
+
+    .dataTables_filter input {
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="%23fb8b28" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      background-size: 18px;
+      padding-right: 44px;
+    }
+
+    .dataTables_paginate {
+      margin-top: 20px;
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .dataTables_paginate .paginate_button {
+      background: white;
+      border: 2px solid #fbcfb0 !important;
+      border-radius: 40px !important;
+      padding: 8px 18px !important;
+      margin: 0 4px !important;
+      color: #2b2b2b !important;
+      font-weight: 600;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .dataTables_paginate .paginate_button.current {
+      background: #fb8b28 !important;
+      border-color: #fb8b28 !important;
+      color: white !important;
+      box-shadow: 0 8px 16px -8px #fb8b28;
+    }
+
+    .dataTables_paginate .paginate_button:hover:not(.current) {
+      background: #ffdec6 !important;
+      border-color: #fb8b28 !important;
+      transform: translateY(-2px);
+    }
+
+    .dataTables_info {
+      color: #5c5c5c;
+      font-weight: 500;
+      padding-top: 16px;
+    }
+
+    /* responsive extras */
+    @media (max-width: 768px) {
+      h2 { font-size: 2rem; }
+      .dataTables_wrapper { padding: 20px 12px; }
+      .table tbody td { font-size: 0.9rem; padding: 12px 8px; }
+    }
+
+    /* ensure text is always visible */
+    .table td, .table th {
+      color: #1e1e1e !important;
+    }
+
+    /* orange bullet for first column */
+    .table tbody td:first-child {
+      font-weight: 600;
+      position: relative;
+      padding-left: 25px !important;
+    }
+
+    .table tbody td:first-child::before {
+      content: "◆";
+      color: #fb8b28;
+      font-size: 12px;
+      position: absolute;
+      left: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    /* container animation */
+    .container {
+      animation: slideUp 0.8s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* row hover animation */
+    @keyframes rowGlow {
+      0% { box-shadow: 0 0 0 0 rgba(251, 139, 40, 0.4); }
+      100% { box-shadow: 0 0 20px 0 rgba(251, 139, 40, 0.2); }
+    }
+
+    .table tbody tr:hover {
+      animation: rowGlow 0.5s ease-out;
+    }
+  </style>
+</head>
+<body>
+<div class="container mt-5">
+  <h2 class="mb-4">
+    <i class="fa-regular fa-star" style="color: #fb8b28; margin-right: 12px;"></i>
+    View Reviews
+  </h2>
+
+  <table id="registrationTable" class="table table-striped table-bordered">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Review</th>
+        <th>Rating</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Sample Data Row (django loop unchanged) -->
+      {% for i in data %}
+      <tr>
+        <td>&nbsp;{{ forloop.counter }}</td>
+        <td>&nbsp;{{ i.CUSTOMER.name }}</td>
+        <td>&nbsp;{{ i.CUSTOMER.email }}</td>
+        <td>&nbsp;{{ i.comment }}</td>
+        <td>&nbsp;{{ i.rating }}</td>
+        <td>&nbsp;{{ i.date }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Scripts (original order preserved) -->
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script>
+  $(document).ready(function () {
+    // DataTable initialization with orange theme
+    $('#registrationTable').DataTable({
+      language: {
+        paginate: {
+          previous: '<i class="fa-solid fa-chevron-left"></i>',
+          next: '<i class="fa-solid fa-chevron-right"></i>'
+        },
+        search: "Search reviews:",
+        lengthMenu: "Show _MENU_ entries"
+      },
+      drawCallback: function() {
+        // Add subtle animation to new rows
+        $('.table tbody tr').each(function(index) {
+          $(this).css('opacity', '0').delay(index * 30).queue(function(next) {
+            $(this).css('opacity', '1');
+            next();
+          });
+        });
+      }
+    });
+
+    // Add fade-in effect to table on load
+    $('.table tbody tr').each(function(index) {
+      $(this).css('opacity', '0').delay(index * 50).queue(function(next) {
+        $(this).css('opacity', '1');
+        next();
+      });
+    });
+  });
+</script>
+
+<script>
+// Prevent going back to this page after form submission (original code, untouched)
+if (window.history && window.history.pushState) {
+    // Add current page to history
+    window.history.pushState(null, null, window.location.href);
+
+    // Listen for back/forward navigation
+    window.onpopstate = function(event) {
+        // Redirect to /homeuser when back button is pressed
+        window.location.href = '/homeuser';
+    };
+}
+</script>
+
+<!-- Nothing changed: all IDs, classes, django variables exactly as before -->
+<!-- Table content is now fully visible with solid white backgrounds -->
+</body>
+</html>

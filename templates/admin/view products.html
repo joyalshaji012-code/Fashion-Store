@@ -1,0 +1,1523 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#  <meta charset="UTF-8">#}
+{#  <title>Registration Data Table</title>#}
+{#  <!-- Bootstrap CSS -->#}
+{#  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">#}
+{#  <!-- DataTables CSS -->#}
+{#  <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">#}
+{#</head>#}
+{#<body>#}
+{#  <div class="container mt-5">#}
+{#    <h2 class="mb-4">View Product</h2>#}
+{#    <table width="485" class="table table-striped table-bordered" id="registrationTable">#}
+{#      <thead>#}
+{#        <tr>#}
+{#          <th width="10">#</th>#}
+{#          <th width="49">Name</th>#}
+{#          <th width="96">Description</th>#}
+{#          <th width="52">Image</th>#}
+{#          <th width="44">Price</th>#}
+{#          <th width="48">Stock</th>#}
+{#          <th width="47">Color</th>#}
+{#          <th width="36">Size</th>#}
+{#          <th width="61"></th>#}
+{#        </tr>#}
+{#      </thead>#}
+{#      <tbody>#}
+{#        <!-- Sample Data Row -->#}
+{#        {% for i in data %}#}
+{#        <tr>#}
+{#          <td>1</td>#}
+{#          <td>{{ i.name }}</td>#}
+{#          <td>{{ i.description }}</td>#}
+{#          <td><img src="{{ i.image }}" height="100" width="100"></td>#}
+{#          <td>{{ i.price }}</td>#}
+{#          <td>{{ i.stock }}</td>#}
+{#          <td>{{ i.color }}</td>#}
+{#          <td>{{ i.size }}</td>#}
+{#          <td><p><a href="/editproduct/{{ i.id }}">Edit</a></p>#}
+{#          <p><a href="/removeproduct/{{ i.id }}">Remove</a></p></td>#}
+{#        </tr>#}
+{#        {% endfor %}#}
+{##}
+{#        <!-- Add more rows dynamically from backend -->#}
+{#      </tbody>#}
+{#    </table>#}
+{#  </div>#}
+{##}
+{#  <!-- Scripts -->#}
+{#  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>#}
+{#  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>#}
+{#  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>#}
+{#  <script>#}
+{#    $(document).ready(function () {#}
+{#      $('#registrationTable').DataTable();#}
+{#    });#}
+{#  </script>#}
+{#</body>#}
+{#</html>#}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Management | E-Shop Admin</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- DataTables CSS -->
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        :root {
+            --primary: #6C63FF;
+            --primary-dark: #5A52E0;
+            --secondary: #FF6584;
+            --accent: #36D1DC;
+            --success: #4ADE80;
+            --warning: #FBBF24;
+            --danger: #F75555;
+            --light: #F8FAFC;
+            --dark: #1E293B;
+            --gray: #64748B;
+            --gradient-1: linear-gradient(135deg, #6C63FF 0%, #36D1DC 100%);
+            --gradient-2: linear-gradient(135deg, #FF6584 0%, #FFD166 100%);
+            --gradient-3: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-success: linear-gradient(135deg, #4ADE80 0%, #22C55E 100%);
+            --gradient-info: linear-gradient(135deg, #36D1DC 0%, #06B6D4 100%);
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --shadow-sm: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --shadow-glow: 0 0 40px rgba(108, 99, 255, 0.3);
+            --radius-xl: 24px;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --transition-smooth: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--dark);
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Modern Background with Floating Particles */
+        .background-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(108, 99, 255, 0.15));
+            border-radius: 50%;
+            animation: particleFloat 25s infinite linear;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg) scale(0.5);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.4;
+            }
+            90% {
+                opacity: 0.4;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px) rotate(360deg) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: containerEntrance 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes containerEntrance {
+            0% {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Dashboard Header */
+        .dashboard-header {
+            margin-bottom: 50px;
+            padding: 50px 40px;
+            position: relative;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-xl);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: headerReveal 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            opacity: 0;
+        }
+
+        @keyframes headerReveal {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .dashboard-header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg,
+                #FFFFFF 0%,
+                #FFD166 33%,
+                #36D1DC 66%,
+                #6C63FF 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+            background-size: 300% 100%;
+            animation: gradientFlow 6s ease infinite;
+            letter-spacing: -0.5px;
+        }
+
+        @keyframes gradientFlow {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .dashboard-header p {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 700px;
+            margin-top: 20px;
+            line-height: 1.6;
+            animation: textReveal 1s ease-out 0.5s forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes textReveal {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Stats Cards */
+        .header-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg,
+                rgba(255, 255, 255, 0.15) 0%,
+                rgba(255, 255, 255, 0.05) 100%);
+            border-radius: var(--radius-lg);
+            padding: 35px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition-bounce);
+            animation: cardEntrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.2s; }
+        .stat-card:nth-child(2) { animation-delay: 0.4s; }
+        .stat-card:nth-child(3) { animation-delay: 0.6s; }
+
+        .stat-card:hover {
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .stat-card i {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: white;
+            opacity: 0.9;
+        }
+
+        .stat-card h3 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: white;
+            margin: 10px 0;
+        }
+
+        .stat-card p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin: 0;
+        }
+
+        /* Table Container */
+        .table-container {
+            background: linear-gradient(135deg,
+                rgba(255, 255, 255, 0.12) 0%,
+                rgba(255, 255, 255, 0.06) 100%);
+            border-radius: var(--radius-xl);
+            padding: 50px;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 50px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            animation: tableReveal 1s cubic-bezier(0.4, 0, 0.2, 1) 0.8s forwards;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        @keyframes tableReveal {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .table-header h2 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .add-product-btn {
+            background: var(--gradient-1);
+            color: white;
+            padding: 18px 36px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            transition: var(--transition-bounce);
+            box-shadow: 0 10px 30px rgba(108, 99, 255, 0.4);
+            border: none;
+            cursor: pointer;
+        }
+
+        .add-product-btn:hover {
+            transform: translateY(-5px) scale(1.08);
+            box-shadow: 0 15px 40px rgba(108, 99, 255, 0.6);
+            color: white;
+        }
+
+        /* Table Wrapper with Horizontal Scroll - FIXED */
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: var(--radius-lg);
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        /* DataTable Container */
+        .dataTables_wrapper {
+            position: relative;
+            min-height: 400px;
+        }
+
+        /* Table styling - Fixed column widths */
+        #registrationTable {
+            border: none !important;
+            margin: 0 !important;
+            font-size: 1rem;
+            width: 100% !important;
+            min-width: 1300px; /* Updated for new column */
+            table-layout: auto;
+        }
+
+        /* Fixed Table Headers */
+        #registrationTable thead th {
+            background: var(--gradient-3) !important;
+            color: white !important;
+            border: none !important;
+            padding: 20px 15px !important;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            white-space: nowrap;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        /* Fixed Column Widths - Updated for new Manage Colors column (9th column) */
+        #registrationTable thead th:nth-child(1) { width: 80px; min-width: 80px; } /* ID */
+        #registrationTable thead th:nth-child(2) { width: 180px; min-width: 180px; } /* Product Name */
+        #registrationTable thead th:nth-child(3) { width: 250px; min-width: 250px; } /* Description */
+        #registrationTable thead th:nth-child(4) { width: 120px; min-width: 120px; } /* Image */
+        #registrationTable thead th:nth-child(5) { width: 100px; min-width: 100px; } /* Price */
+        #registrationTable thead th:nth-child(6) { width: 200px; min-width: 200px; } /* Stock Status */
+        #registrationTable thead th:nth-child(7) { width: 130px; min-width: 130px; } /* Color */
+        #registrationTable thead th:nth-child(8) { width: 150px; min-width: 150px; } /* Size */
+        #registrationTable thead th:nth-child(9) { width: 180px; min-width: 180px; } /* Manage Colors - NEW */
+        #registrationTable thead th:nth-child(10) { width: 220px; min-width: 220px; } /* Actions */
+
+        #registrationTable tbody tr {
+            transition: var(--transition-smooth);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        #registrationTable tbody tr:hover {
+            background: linear-gradient(135deg,
+                rgba(108, 99, 255, 0.1) 0%,
+                rgba(54, 209, 220, 0.1) 100%) !important;
+            transform: translateX(5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        #registrationTable tbody td {
+            padding: 20px 15px !important;
+            vertical-align: middle !important;
+            border: none !important;
+            font-weight: 500;
+            color: var(--dark);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Cell Content Alignment - Updated for new column */
+        #registrationTable tbody td:nth-child(1) { text-align: center; font-weight: 700; } /* ID */
+        #registrationTable tbody td:nth-child(2) { font-weight: 600; white-space: nowrap; } /* Product Name */
+        #registrationTable tbody td:nth-child(3) { white-space: normal; max-width: 250px; } /* Description */
+        #registrationTable tbody td:nth-child(4) { text-align: center; } /* Image */
+        #registrationTable tbody td:nth-child(5) { text-align: center; font-weight: 700; } /* Price */
+        #registrationTable tbody td:nth-child(6) { text-align: center; } /* Stock Status */
+        #registrationTable tbody td:nth-child(7) { text-align: center; } /* Color */
+        #registrationTable tbody td:nth-child(8) { text-align: center; } /* Size */
+        #registrationTable tbody td:nth-child(9) { text-align: center; } /* Manage Colors - NEW */
+        #registrationTable tbody td:nth-child(10) { text-align: center; } /* Actions */
+
+        /* Product Image */
+        .product-img-container {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            transition: var(--transition-bounce);
+        }
+
+        .product-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition-smooth);
+        }
+
+        .product-img-container:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Stock Status Display */
+        .stock-status {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid;
+            transition: var(--transition-smooth);
+            min-width: 180px;
+            max-width: 200px;
+            margin: 0 auto;
+        }
+
+        .stock-status:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .stock-status.high {
+            border-left-color: #22C55E;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.05) 0%, white 100%);
+        }
+
+        .stock-status.medium {
+            border-left-color: #F59E0B;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, white 100%);
+        }
+
+        .stock-status.low {
+            border-left-color: #EF4444;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, white 100%);
+            animation: pulseWarning 2s infinite;
+        }
+
+        @keyframes pulseWarning {
+            0%, 100% {
+                box-shadow: 0 4px 12px rgba(239, 68, 68, 0.1);
+            }
+            50% {
+                box-shadow: 0 4px 20px rgba(239, 68, 68, 0.2);
+            }
+        }
+
+        .stock-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .stock-status.high .stock-icon {
+            background: linear-gradient(135deg, #4ADE80 0%, #22C55E 100%);
+            color: white;
+            box-shadow: 0 4px 10px rgba(34, 197, 94, 0.3);
+        }
+
+        .stock-status.medium .stock-icon {
+            background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
+            color: white;
+            box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);
+        }
+
+        .stock-status.low .stock-icon {
+            background: linear-gradient(135deg, #F75555 0%, #EF4444 100%);
+            color: white;
+            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
+            animation: iconPulse 1.5s infinite;
+        }
+
+        @keyframes iconPulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .stock-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .stock-count {
+            font-size: 1.4rem;
+            font-weight: 800;
+            line-height: 1;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+
+        .stock-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .stock-status.high .stock-label {
+            color: #22C55E;
+        }
+
+        .stock-status.medium .stock-label {
+            color: #F59E0B;
+        }
+
+        .stock-status.low .stock-label {
+            color: #EF4444;
+        }
+
+        .stock-label i {
+            font-size: 0.7rem;
+        }
+
+        /* Color Display */
+        .color-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .color-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            transition: var(--transition-smooth);
+        }
+
+        /* Size Tags */
+        .size-tags {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .size-tag {
+            display: inline-block;
+            background: var(--gradient-1);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            transition: var(--transition-smooth);
+        }
+
+        /* Price Display */
+        .price-display {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .price-display::before {
+            content: '$';
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        /* NEW: Manage Colors Buttons */
+        .colors-management {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(248, 250, 252, 0.9) 0%, rgba(241, 245, 249, 0.9) 100%);
+            border-radius: var(--radius-md);
+            border: 2px solid #E2E8F0;
+            transition: var(--transition-smooth);
+            min-width: 160px;
+            max-width: 180px;
+            margin: 0 auto;
+        }
+
+        .colors-management:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-color: var(--accent);
+            background: linear-gradient(135deg, rgba(54, 209, 220, 0.05) 0%, rgba(241, 245, 249, 0.95) 100%);
+        }
+
+        .colors-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--dark);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 5px;
+        }
+
+        .colors-title i {
+            color: var(--accent);
+            font-size: 1rem;
+            animation: iconSpin 4s linear infinite;
+        }
+
+        @keyframes iconSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .colors-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .btn-color-action {
+            padding: 10px 15px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: var(--transition-smooth);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+        }
+
+        .btn-add-colors {
+            background: var(--gradient-success);
+            color: white;
+            box-shadow: 0 4px 12px rgba(74, 222, 128, 0.3);
+        }
+
+        .btn-add-colors:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.5);
+            color: white;
+        }
+
+        .btn-view-colors {
+            background: var(--gradient-info);
+            color: white;
+            box-shadow: 0 4px 12px rgba(54, 209, 220, 0.3);
+        }
+
+        .btn-view-colors:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(54, 209, 220, 0.5);
+            color: white;
+        }
+
+        .color-count-badge {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 700;
+            margin-left: auto;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-action {
+            padding: 10px 20px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: var(--transition-smooth);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            min-width: 90px;
+            justify-content: center;
+        }
+
+        .btn-edit {
+            background: var(--gradient-1);
+            color: white;
+            box-shadow: 0 5px 15px rgba(108, 99, 255, 0.3);
+        }
+
+        .btn-edit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(108, 99, 255, 0.5);
+            color: white;
+        }
+
+        .btn-delete {
+            background: var(--gradient-2);
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 101, 132, 0.3);
+        }
+
+        .btn-delete:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 101, 132, 0.5);
+            color: white;
+        }
+
+        /* Empty State */
+        .empty-state {
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Loading Styles */
+        .loading-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+        }
+
+        .loading-text {
+            margin-top: 15px;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: white;
+        }
+
+        /* Footer */
+        .dashboard-footer {
+            text-align: center;
+            padding: 40px;
+            margin-top: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-xl);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: footerReveal 1s ease-out 1.2s forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        @keyframes footerReveal {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Loading Animation */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .loading-spinner {
+            width: 80px;
+            height: 80px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1.5s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Custom Scrollbar Styles */
+        .table-wrapper::-webkit-scrollbar {
+            height: 12px;
+        }
+
+        .table-wrapper::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin: 4px;
+        }
+
+        .table-wrapper::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.95);
+        }
+
+        .table-wrapper::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--accent) 100%);
+        }
+
+        /* Body scrollbar */
+        body::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        body::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        body::-webkit-scrollbar-thumb {
+            background: var(--gradient-3);
+            border-radius: 5px;
+        }
+
+        body::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+
+        /* DataTable scroll container */
+        .dataTables_scroll {
+            width: 100% !important;
+        }
+
+        .dataTables_scrollBody {
+            overflow-y: auto !important;
+            max-height: 500px !important; /* Fixed height for vertical scroll */
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .container {
+                max-width: 95%;
+            }
+            .dashboard-header h1 {
+                font-size: 3rem;
+            }
+            #registrationTable {
+                min-width: 1100px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .dashboard-header h1 {
+                font-size: 2.5rem;
+            }
+            .header-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .table-container {
+                padding: 40px;
+            }
+            #registrationTable {
+                min-width: 1000px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            .dashboard-header {
+                padding: 40px 25px;
+            }
+            .dashboard-header h1 {
+                font-size: 2.2rem;
+            }
+            .header-stats {
+                grid-template-columns: 1fr;
+            }
+            .table-container {
+                padding: 30px;
+            }
+            .table-header {
+                flex-direction: column;
+                gap: 25px;
+                align-items: stretch;
+                text-align: center;
+            }
+            .add-product-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            #registrationTable {
+                min-width: 900px;
+            }
+            .stock-status {
+                min-width: 160px;
+                padding: 10px 14px;
+            }
+            .stock-count {
+                font-size: 1.3rem;
+            }
+            .stock-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+            .colors-management {
+                min-width: 140px;
+                padding: 12px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            #registrationTable {
+                min-width: 800px;
+            }
+            #registrationTable thead {
+                display: none;
+            }
+            #registrationTable tbody tr {
+                display: block;
+                margin-bottom: 20px;
+                border: 2px solid rgba(226, 232, 240, 0.9);
+                border-radius: var(--radius-lg);
+                padding: 20px;
+                background: white;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+                min-width: 0;
+            }
+            #registrationTable tbody td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 12px 0 !important;
+                border-bottom: 1px solid rgba(241, 245, 249, 0.9);
+                max-width: none;
+                white-space: normal;
+                text-align: right !important;
+            }
+            #registrationTable tbody td:last-child {
+                border-bottom: none;
+            }
+            #registrationTable tbody td::before {
+                content: attr(data-label);
+                font-weight: 700;
+                color: var(--primary);
+                flex: 1;
+                font-size: 0.95rem;
+                text-align: left;
+            }
+            .stock-status {
+                margin: 0;
+                justify-content: flex-start;
+                min-width: auto;
+                max-width: none;
+            }
+            .colors-management {
+                margin: 0;
+                justify-content: flex-start;
+                min-width: auto;
+                max-width: none;
+            }
+            .colors-buttons {
+                flex-direction: row;
+                gap: 10px;
+            }
+            .btn-color-action {
+                width: auto;
+                flex: 1;
+            }
+            .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .btn-action {
+                width: 100%;
+            }
+            /* Hide DataTable scroll on mobile */
+            .dataTables_scrollBody {
+                max-height: none !important;
+                overflow-y: visible !important;
+            }
+        }
+
+        /* Ensure DataTable responsive works */
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            padding: 8px 12px !important;
+            margin: 2px !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Modern Background -->
+    <div class="background-elements" id="backgroundElements"></div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Loading Products...</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <h1><i class="fas fa-boxes"></i> Product Management Dashboard</h1>
+            <p>Manage all your products, update inventory, and monitor product performance in real-time with advanced analytics.</p>
+
+            <div class="header-stats">
+                <div class="stat-card">
+                    <i class="fas fa-cube"></i>
+                    <h3>{{ data|length }}</h3>
+                    <p>Total Products in Inventory</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>₹{{ total_sales|default:"0" }}</h3>
+                    <p>Total Sales Value</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>{{ active_products|default:"0" }}</h3>
+                    <p>Active Products</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Table -->
+        <div class="table-container">
+            <div class="table-header">
+                <h2><i class="fas fa-table"></i> Product Inventory Management</h2>
+                <div>
+                    <a href="/addproduct" class="add-product-btn">
+                        <i class="fas fa-plus-circle"></i> Add New Product
+                    </a>
+                </div>
+            </div>
+
+            <!-- Table Wrapper with Horizontal Scroll -->
+            <div class="table-wrapper">
+                <table class="table table-striped table-bordered" >
+                    <thead>
+                        <tr>
+                            <th data-label="ID">ID</th>
+                            <th data-label="Product Name">Product Category</th>
+                            <th data-label="Product Name">Product Name</th>
+                            <th data-label="Description">Description</th>
+                            <th data-label="Product Image">Image</th>
+                            <th data-label="Price">Price</th>
+                            <th data-label="Actions">Actions</th>
+                            <th data-label="Actions">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if data %}
+                            {% for i in data %}
+                            <tr style="animation-delay: {{ forloop.counter0|add:1 }}00ms">
+                                <!-- Column 1: ID -->
+                                <td data-label="ID">
+                                    <strong>{{ forloop.counter }}</strong>
+                                </td>
+
+                                <!-- Column 2: Product Name -->
+                                <td data-label="Product Name">
+                                    <strong class="product-name">{{ i.categories }}</strong>
+                                </td>
+ <td data-label="Product Name">
+                                    <strong class="product-name">{{ i.name }}</strong>
+                                </td>
+
+                                <!-- Column 3: Description -->
+                                <td data-label="Description" class="description-cell">
+                                    <div class="description-text" title="{{ i.description }}">
+                                        {{ i.description|truncatechars:60 }}
+                                    </div>
+                                </td>
+
+                                <!-- Column 4: Product Image -->
+                                <td data-label="Product Image">
+                                    <div class="product-img-container">
+                                        <img src="{{ i.image }}" alt="{{ i.name }}" class="product-img" onerror="this.src='https://via.placeholder.com/80?text=Product'">
+                                    </div>
+                                </td>
+
+                                <!-- Column 5: Price -->
+                                <td data-label="Price">
+                                    <span class="price-display">{{ i.price }}</span>
+                                </td>
+
+                                <!-- Column 6: Stock Status -->
+{#                                <td data-label="Stock Status">#}
+{#                                    <div class="stock-status {% if i.stock > 20 %}high{% elif i.stock > 10 %}medium{% else %}low{% endif %}">#}
+{#                                        <div class="stock-icon">#}
+{#                                            {% if i.stock > 20 %}#}
+{#                                                <i class="fas fa-check"></i>#}
+{#                                            {% elif i.stock > 10 %}#}
+{#                                                <i class="fas fa-exclamation"></i>#}
+{#                                            {% else %}#}
+{#                                                <i class="fas fa-exclamation-triangle"></i>#}
+{#                                            {% endif %}#}
+{#                                        </div>#}
+{#                                        <div class="stock-info">#}
+{#                                            <div class="stock-count">{{ i.stock }}</div>#}
+{#                                            <div class="stock-label">#}
+{#                                                {% if i.stock > 20 %}#}
+{#                                                    <span>IN STOCK</span>#}
+{#                                                    <i class="fas fa-arrow-up"></i>#}
+{#                                                {% elif i.stock > 10 %}#}
+{#                                                    <span>LOW STOCK</span>#}
+{#                                                    <i class="fas fa-minus"></i>#}
+{#                                                {% else %}#}
+{#                                                    <span>CRITICAL</span>#}
+{#                                                    <i class="fas fa-exclamation-triangle"></i>#}
+{#                                                {% endif %}#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </td>#}
+
+                                <!-- Column 7: Color Variant -->
+{#                                <td data-label="Color Variant">#}
+{#                                    <div class="color-display">#}
+{#                                        <div class="color-circle" style="background-color: {{ i.color|default:'#6C63FF' }};"></div>#}
+{#                                        <span>{{ i.color|default:"Default" }}</span>#}
+{#                                    </div>#}
+{#                                </td>#}
+
+                                <!-- Column 8: Available Sizes -->
+{#                                <td data-label="Available Sizes">#}
+{#                                    <div class="size-tags">#}
+{#                                        {% if i.size %}#}
+{#                                            {% with sizes_str=i.size|stringformat:"s" %}#}
+{#                                                {% for size in sizes_str.split %}#}
+{#                                                    {% if size %}#}
+{#                                                        <span class="size-tag">{{ size|striptags }}</span>#}
+{#                                                    {% endif %}#}
+{#                                                {% endfor %}#}
+{#                                            {% endwith %}#}
+{#                                        {% else %}#}
+{#                                            <span class="size-tag">One Size</span>#}
+{#                                        {% endif %}#}
+{#                                    </div>#}
+{#                                </td>#}
+{##}
+{#                                <!-- Column 9: NEW - Manage Colors Section -->#}
+{#                                <td data-label="Image slides">#}
+{#                                    <div class="colors-management">#}
+{#                                        <div class="colors-title">#}
+{#                                            <i class="fas fa-palette"></i>#}
+{#                                            Colors#}
+{#                                            <span class="color-count-badge" title="Color variants">#}
+{#                                                {% if i.color_count %}#}
+{#                                                    {{ i.color_count }}#}
+{#                                                {% else %}#}
+{#                                                    0#}
+{#                                                {% endif %}#}
+{#                                            </span>#}
+{#                                        </div>#}
+{#                                        <div class="colors-buttons">#}
+{#                                            <a href="/productbycolour/{{ i.id }}" class="btn-color-action btn-add-colors">#}
+{#                                                <i class="fas fa-plus"></i> Add#}
+{#                                            </a>#}
+{#                                            <a href="/viewbycolour/{{ i.id }}" class="btn-color-action btn-view-colors">#}
+{#                                                <i class="fas fa-eye"></i> View#}
+{#                                            </a>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </td>#}
+
+                                <!-- Column 10: Actions -->
+                                <td data-label="Actions">
+                                    <div class="action-buttons">
+                                        <a href="/editproduct/{{ i.id }}" class="btn-action btn-edit">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                        <a href="/removeproduct/{{ i.id }}" class="btn-action btn-delete" onclick="return confirmDelete(event)">
+                                            <i class="fas fa-trash"></i> Remove
+                                        </a>
+                                    </div>
+                                </td>
+
+                                <td data-label="Actions">
+                                    <div class="action-buttons">
+                                        <a href="/addstock/{{ i.id }}" class="btn-action btn-edit">
+                                            <i class="fas fa-add"></i> Add stock
+                                        </a>
+                                        <a href="/viewstock/{{ i.id }}" class="btn-action btn-view">
+                                            <i class="fas fa-view"></i> View stock
+                                        </a>
+                                    </div>
+                                </td>
+
+
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <!-- Empty State -->
+                            <tr>
+                                <td colspan="10">
+                                    <div class="empty-state text-center py-5">
+                                        <i class="fas fa-box-open fa-4x mb-4"></i>
+                                        <h3 class="mb-3">No Products Found</h3>
+                                        <p class="text-muted mb-4">Start building your inventory by adding your first product.</p>
+                                        <a href="/addproduct" class="add-product-btn">
+                                            <i class="fas fa-plus-circle"></i> Add Your First Product
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Dashboard Footer -->
+        <div class="dashboard-footer">
+            <p>
+                <i class="fas fa-shield-alt"></i>
+                E-Shop Admin Panel &copy; 2023 | Secure Product Management System v2.0
+            </p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+    <script>
+        // Create modern floating particles
+        function createModernParticles() {
+            const container = document.getElementById('backgroundElements');
+            const particleCount = 20;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+
+                const size = Math.random() * 100 + 50;
+                const left = Math.random() * 100;
+                const delay = Math.random() * 25;
+                const duration = Math.random() * 20 + 30;
+
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${left}%`;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.opacity = Math.random() * 0.2 + 0.1;
+
+                container.appendChild(particle);
+            }
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create background particles
+            createModernParticles();
+
+            // Hide loading overlay
+            setTimeout(function() {
+                document.getElementById('loadingOverlay').style.opacity = '0';
+                setTimeout(function() {
+                    document.getElementById('loadingOverlay').style.display = 'none';
+                }, 500);
+            }, 1500);
+
+            // Initialize DataTable with proper configuration
+            var table = $('#registrationTable').DataTable({
+                "language": {
+                    "search": "<i class='fas fa-search me-2'></i>Search Products:",
+                    "lengthMenu": "<i class='fas fa-list me-2'></i>Show _MENU_ entries",
+                    "info": "Showing <strong>_START_</strong> to <strong>_END_</strong> of <strong>_TOTAL_</strong> products",
+                    "infoEmpty": "No products available",
+                    "infoFiltered": "(filtered from <strong>_MAX_</strong> total products)",
+                    "paginate": {
+                        "previous": "<i class='fas fa-chevron-left'></i>",
+                        "next": "<i class='fas fa-chevron-right'></i>",
+                        "first": "<i class='fas fa-angle-double-left'></i>",
+                        "last": "<i class='fas fa-angle-double-right'></i>"
+                    },
+                    "emptyTable": "No products found in database"
+                },
+                "order": [[0, 'asc']], // Order by ID column (first column)
+                "responsive": true,
+                "pageLength": 10,
+                "autoWidth": false,
+                "scrollY": "500px", // Fixed height for vertical scroll
+                "scrollX": true, // Enable horizontal scroll
+                "scrollCollapse": true,
+                "dom": '<"top"lf>rt<"bottom"ip><"clear">',
+                "columnDefs": [
+                    { "orderable": true, "targets": [0, 1, 4, 5] }, // Make ID, Name, Price, Stock sortable
+                    { "orderable": false, "targets": [2, 3, 6, 7, 8, 9] } // Make other columns not sortable
+                ],
+                "drawCallback": function(settings) {
+                    // Add tooltips to truncated descriptions
+                    $('.description-text').each(function() {
+                        const fullText = $(this).attr('title');
+                        if (fullText) {
+                            $(this).tooltip({
+                                title: fullText,
+                                placement: 'top',
+                                trigger: 'hover'
+                            });
+                        }
+                    });
+
+                    // Add hover effect to stock status
+                    $('.stock-status').on('mouseenter', function() {
+                        $(this).css('transform', 'translateY(-3px)');
+                    }).on('mouseleave', function() {
+                        $(this).css('transform', 'translateY(0)');
+                    });
+
+                    // Add hover effect to colors management
+                    $('.colors-management').on('mouseenter', function() {
+                        $(this).css('transform', 'translateY(-3px)');
+                    }).on('mouseleave', function() {
+                        $(this).css('transform', 'translateY(0)');
+                    });
+
+                    // Fix DataTable scroll
+                    $('.dataTables_scrollBody').css('max-height', '500px');
+                },
+                "initComplete": function() {
+                    // Style DataTable elements
+                    $('.dataTables_length select').addClass('form-select form-select-sm');
+                    $('.dataTables_filter input').addClass('form-control form-control-sm');
+
+                    // Set table width to match columns
+                    $('#registrationTable').css('width', '100%');
+
+                    // Force horizontal scroll by setting table width
+                    const tableWidth = $('#registrationTable').outerWidth();
+                    $('.dataTables_scrollHeadInner').css('width', tableWidth + 'px');
+                    $('.dataTables_scrollHeadInner table').css('width', tableWidth + 'px');
+                    $('.dataTables_scrollBody table').css('width', tableWidth + 'px');
+                }
+            });
+
+            // Add hover animations to table rows
+            $('#registrationTable tbody').on('mouseenter', 'tr', function() {
+                $(this).css('transition', 'all 0.4s ease');
+            }).on('mouseleave', 'tr', function() {
+                $(this).css('transform', '');
+            });
+
+            // Add click animations to buttons
+            $('.btn-action, .btn-color-action').on('click', function(e) {
+                $(this).css('transform', 'scale(0.95)');
+                setTimeout(() => {
+                    $(this).css('transform', '');
+                }, 200);
+            });
+
+            // Add scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe animated elements
+            document.querySelectorAll('.stat-card, .table-container, .dashboard-footer').forEach(el => {
+                observer.observe(el);
+            });
+        });
+
+        // Delete confirmation function
+        function confirmDelete(event) {
+            event.preventDefault();
+            const url = event.currentTarget.href;
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This product will be permanently deleted!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#6C63FF',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel',
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                color: 'white',
+                backdrop: 'rgba(0,0,0,0.7)'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = url;
+                }
+            });
+
+            return false;
+        }
+
+        // Handle image loading errors
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('.product-img');
+            images.forEach(img => {
+                img.addEventListener('error', function() {
+                    this.src = 'https://via.placeholder.com/80?text=Product';
+                });
+            });
+        });
+    </script>
+<script>
+// Prevent going back to this page after form submission
+if (window.history && window.history.pushState) {
+    // Add current page to history
+    window.history.pushState(null, null, window.location.href);
+
+    // Listen for back/forward navigation
+    window.onpopstate = function(event) {
+        // Redirect to /rtohome when back button is pressed
+        window.location.href = '/home';
+    };
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,979 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#  <meta charset="UTF-8">#}
+{#  <title>Registration Data Table</title>#}
+{#  <!-- Bootstrap CSS -->#}
+{#  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">#}
+{#  <!-- DataTables CSS -->#}
+{#  <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">#}
+{#</head>#}
+{#<body>#}
+{#  <div class="container mt-5">#}
+{#    <h2 class="mb-4">View products</h2>#}
+{#    <table id="registrationTable" class="table table-striped table-bordered">#}
+{#      <thead>#}
+{#        <tr>#}
+{#          <th>#</th>#}
+{#          <th>Name</th>#}
+{#          <th>Description</th>#}
+{#          <th>Price</th>#}
+{#          <th>Color</th>#}
+{#          <th>Image</th>#}
+{#          <th>Size</th>#}
+{#          <th>&nbsp;</th>#}
+{#          <th>&nbsp;Status</th>#}
+{#          #}
+{#        </tr>#}
+{#      </thead>#}
+{#      <tbody>#}
+{#        <!-- Sample Data Row -->#}
+{#        {% for i in data %}#}
+{#        <tr>#}
+{#          <td>&nbsp;{{ forloop.counter }}</td>#}
+{#          <td>&nbsp;{{ i.name }}</td>#}
+{#          <td>&nbsp;{{ i.description }}</td>#}
+{#          <td>&nbsp;{{ i.price }}</td>#}
+{#          <td>&nbsp;{{ i.color }}</td>#}
+{#          <td><img src="{{ i.image }}" height="100" width="100"></td>#}
+{#          <td>&nbsp;{{ i.size }}</td>#}
+{#          <td>{% if i.status == "pending" %}#}
+{#              <p><a href="/editproductworker/{{ i.id }}">Update</a></p>#}
+{#          <p><a href="/removeproductworker/{{ i.id }}">Remove</a></p>#}
+{#          {% endif %}#}
+{#          </td>#}
+{#          <td> {{ i.status }}</td>#}
+{#         #}
+{##}
+{#        </tr>#}
+{#       {% endfor %}#}
+{#        <!-- Add more rows dynamically from backend -->#}
+{#      </tbody>#}
+{#    </table>#}
+{#  </div>#}
+{##}
+{#  <!-- Scripts -->#}
+{#  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>#}
+{#  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>#}
+{#  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>#}
+{#  <script>#}
+{#    $(document).ready(function () {#}
+{#      $('#registrationTable').DataTable();#}
+{#    });#}
+{#  </script>#}
+{#</body>#}
+{#</html>#}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Worker Product Management</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- DataTables CSS -->
+  <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --pure-black: #000000;
+      --dark-black: #0a0a0a;
+      --medium-black: #111111;
+      --light-black: #1a1a1a;
+      --accent-orange: #f97316;
+      --dark-orange: #c2410c;
+      --medium-orange: #ea580c;
+      --light-orange: #fb923c;
+      --content-white: #ffffff;
+      --pale-orange: #fed7aa;
+      --glow-orange: rgba(249, 115, 22, 0.3);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--pure-black);
+      color: var(--light-orange);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Black and Orange Animated Background */
+    .animated-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -3;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 20% 80%, rgba(249, 115, 22, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(249, 115, 22, 0.03) 0%, transparent 50%),
+        linear-gradient(45deg, #000000 0%, #0a0a0a 100%);
+    }
+
+    /* Orange Geometric Grid */
+    .orange-grid {
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background-image:
+        linear-gradient(90deg, rgba(249, 115, 22, 0.05) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(249, 115, 22, 0.05) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: gridMove 40s linear infinite;
+    }
+
+    /* Floating Orange Particles */
+    .orange-particles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background-color: var(--accent-orange);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--accent-orange);
+      animation: particleFloat 15s infinite linear;
+      opacity: 0.4;
+    }
+
+    /* Keyframe Animations */
+    @keyframes gridMove {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      100% { transform: translate(-50px, -50px) rotate(0.5deg); }
+    }
+
+    @keyframes particleFloat {
+      0% {
+        transform: translate(0, 0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.6;
+      }
+      90% {
+        opacity: 0.6;
+      }
+      100% {
+        transform: translate(var(--tx), var(--ty));
+        opacity: 0;
+      }
+    }
+
+    @keyframes orangeGlow {
+      0%, 100% {
+        box-shadow:
+          0 0 20px rgba(249, 115, 22, 0.2),
+          inset 0 0 20px rgba(249, 115, 22, 0.05);
+      }
+      50% {
+        box-shadow:
+          0 0 40px rgba(249, 115, 22, 0.4),
+          inset 0 0 30px rgba(249, 115, 22, 0.1);
+      }
+    }
+
+    @keyframes borderGlow {
+      0%, 100% {
+        border-color: rgba(249, 115, 22, 0.2);
+      }
+      50% {
+        border-color: rgba(249, 115, 22, 0.5);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        transform: translateY(30px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    @keyframes shine {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    /* Main Container */
+    .main-container {
+      position: relative;
+      z-index: 100;
+      background: rgba(10, 10, 10, 0.95);
+      border-radius: 20px;
+      padding: 40px;
+      margin: 40px auto;
+      max-width: 95%;
+      border: 2px solid rgba(249, 115, 22, 0.2);
+      animation:
+        orangeGlow 4s ease-in-out infinite,
+        fadeInUp 1s ease-out;
+      box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.8),
+        inset 0 0 0 1px rgba(249, 115, 22, 0.1);
+    }
+
+    /* Header - Orange Only */
+    .page-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      position: relative;
+    }
+
+    .page-header h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      color: var(--light-orange);
+      text-shadow: 0 0 20px rgba(249, 115, 22, 0.5);
+    }
+
+    .page-header .subtitle {
+      color: var(--accent-orange);
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+      opacity: 0.8;
+    }
+
+    .page-header:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 300px;
+      height: 3px;
+      background: linear-gradient(90deg,
+        transparent,
+        var(--accent-orange),
+        transparent);
+    }
+
+    /* Table Container */
+    .table-container {
+      background: rgba(17, 17, 17, 0.9);
+      border-radius: 15px;
+      overflow: hidden;
+      border: 1px solid rgba(249, 115, 22, 0.15);
+      position: relative;
+    }
+
+    .table-container:before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg,
+        transparent,
+        rgba(249, 115, 22, 0.1),
+        transparent);
+      z-index: -1;
+      border-radius: 16px;
+      animation: borderGlow 3s linear infinite;
+    }
+
+    /* Table Styling - Table Headers in Orange, Content in White */
+    #registrationTable {
+      background: transparent !important;
+      border: none !important;
+      margin: 0 !important;
+    }
+
+    /* Table Headers - Orange */
+    #registrationTable thead {
+      background: linear-gradient(to bottom,
+        rgba(249, 115, 22, 0.15),
+        rgba(26, 26, 26, 0.95)) !important;
+      border-bottom: 3px solid var(--accent-orange) !important;
+    }
+
+    #registrationTable thead th {
+      color: var(--light-orange) !important;
+      font-weight: 700;
+      padding: 20px 15px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-size: 13px;
+      border: none !important;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Table Content Cells - WHITE TEXT */
+    #registrationTable tbody td {
+      padding: 20px 15px;
+      color: var(--content-white) !important; /* WHITE TEXT */
+      border: none !important;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.5;
+      transition: all 0.3s ease;
+    }
+
+    #registrationTable tbody tr {
+      background: rgba(26, 26, 26, 0.7) !important;
+      border-bottom: 1px solid rgba(249, 115, 22, 0.1) !important;
+      transition: all 0.4s ease;
+      animation: fadeInUp 0.6s ease-out both;
+    }
+
+    #registrationTable tbody tr:nth-child(even) {
+      background: rgba(30, 30, 30, 0.7) !important;
+    }
+
+    #registrationTable tbody tr:hover {
+      background: rgba(249, 115, 22, 0.1) !important;
+      transform: translateX(10px);
+      box-shadow:
+        -10px 0 30px rgba(249, 115, 22, 0.2),
+        0 5px 20px rgba(0, 0, 0, 0.4);
+      border-left: 3px solid var(--accent-orange) !important;
+    }
+
+    #registrationTable tbody tr:hover td {
+      color: var(--content-white) !important; /* Keep white on hover */
+      font-weight: 500;
+    }
+
+    /* Orange ID Badge - White Text */
+    .id-badge {
+      background: rgba(249, 115, 22, 0.1);
+      color: var(--content-white) !important; /* WHITE TEXT */
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 16px;
+      border: 1px solid rgba(249, 115, 22, 0.3);
+      display: inline-block;
+      animation: borderGlow 3s infinite;
+    }
+
+    /* Orange Price Tag - White Text */
+    .price-tag {
+      background: linear-gradient(135deg,
+        rgba(249, 115, 22, 0.15),
+        rgba(249, 115, 22, 0.05));
+      color: var(--content-white) !important; /* WHITE TEXT */
+      padding: 12px 22px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 18px;
+      border: 2px solid rgba(249, 115, 22, 0.3);
+      display: inline-block;
+      animation: pulse 2s infinite;
+    }
+
+    /* Description Text - White */
+    .description-text {
+      color: var(--content-white) !important; /* WHITE TEXT */
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    /* Orange Image Container */
+    .image-container {
+      position: relative;
+      display: inline-block;
+      overflow: hidden;
+      border-radius: 10px;
+      border: 2px solid rgba(249, 115, 22, 0.2);
+      transition: all 0.4s ease;
+    }
+
+    .product-image {
+      transition: all 0.4s ease;
+    }
+
+    #registrationTable tbody tr:hover .image-container {
+      border-color: var(--accent-orange);
+      box-shadow: 0 0 30px rgba(249, 115, 22, 0.3);
+      transform: scale(1.05);
+    }
+
+    #registrationTable tbody tr:hover .product-image {
+      transform: scale(1.1);
+    }
+
+    /* Orange Status Badges - White Text */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 20px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      min-width: 120px;
+      position: relative;
+      overflow: hidden;
+      color: var(--content-white) !important; /* WHITE TEXT */
+    }
+
+    .status-pending {
+      background: linear-gradient(135deg,
+        rgba(249, 115, 22, 0.2),
+        rgba(249, 115, 22, 0.1));
+      border: 2px solid rgba(249, 115, 22, 0.4);
+      animation: pulse 1.5s infinite;
+    }
+
+    .status-badge:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent);
+      animation: shine 3s infinite;
+    }
+
+    /* Orange Action Buttons - White Text */
+    .action-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .action-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      border: 2px solid;
+      animation: borderGlow 3s infinite;
+      color: var(--content-white) !important; /* WHITE TEXT */
+    }
+
+    .btn-update {
+      background: linear-gradient(135deg,
+        rgba(249, 115, 22, 0.2),
+        rgba(249, 115, 22, 0.1));
+      border-color: rgba(249, 115, 22, 0.4);
+    }
+
+    .btn-update:hover {
+      background: linear-gradient(135deg,
+        rgba(249, 115, 22, 0.4),
+        rgba(249, 115, 22, 0.2));
+      color: var(--content-white) !important;
+      transform: translateY(-3px);
+      box-shadow:
+        0 10px 25px rgba(249, 115, 22, 0.3),
+        0 5px 15px rgba(249, 115, 22, 0.2);
+      border-color: var(--accent-orange);
+    }
+
+    /* Orange Icons */
+    .orange-icon {
+      color: var(--accent-orange);
+      margin-right: 10px;
+      font-size: 16px;
+    }
+
+    /* DataTables Customization - Table Headers Orange, Content White */
+    .dataTables_wrapper {
+      background: rgba(17, 17, 17, 0.9) !important;
+      padding: 20px !important;
+      border-top: 1px solid rgba(249, 115, 22, 0.1) !important;
+      color: var(--light-orange) !important;
+    }
+
+    .dataTables_length {
+      color: var(--light-orange) !important;
+    }
+
+    .dataTables_length select,
+    .dataTables_filter input {
+      background: rgba(26, 26, 26, 0.8) !important;
+      border: 1px solid rgba(249, 115, 22, 0.3) !important;
+      color: var(--light-orange) !important;
+      border-radius: 6px !important;
+      padding: 8px 15px !important;
+    }
+
+    .dataTables_length select:focus,
+    .dataTables_filter input:focus {
+      outline: none;
+      border-color: var(--accent-orange) !important;
+      box-shadow: 0 0 10px rgba(249, 115, 22, 0.2) !important;
+    }
+
+    .dataTables_filter label {
+      color: var(--light-orange) !important;
+    }
+
+    .dataTables_info {
+      color: var(--light-orange) !important;
+      opacity: 0.8;
+    }
+
+    /* Pagination - Orange Only */
+    .paginate_button {
+      background: rgba(26, 26, 26, 0.8) !important;
+      border: 1px solid rgba(249, 115, 22, 0.2) !important;
+      color: var(--light-orange) !important;
+      border-radius: 6px !important;
+      margin: 0 3px !important;
+      padding: 8px 12px !important;
+    }
+
+    .paginate_button:hover {
+      background: rgba(249, 115, 22, 0.2) !important;
+      color: var(--light-orange) !important;
+      border-color: rgba(249, 115, 22, 0.4) !important;
+    }
+
+    .paginate_button.current {
+      background: rgba(249, 115, 22, 0.3) !important;
+      color: var(--light-orange) !important;
+      border-color: var(--accent-orange) !important;
+    }
+
+    .paginate_button.disabled {
+      background: rgba(26, 26, 26, 0.4) !important;
+      color: rgba(249, 115, 22, 0.3) !important;
+      border-color: rgba(249, 115, 22, 0.1) !important;
+    }
+
+    /* Bootstrap Overrides - Table Content in White */
+    .table {
+      --bs-table-color: var(--content-white) !important; /* WHITE */
+      --bs-table-bg: transparent !important;
+      --bs-table-border-color: rgba(249, 115, 22, 0.1) !important;
+      --bs-table-striped-color: var(--content-white) !important; /* WHITE */
+      --bs-table-striped-bg: rgba(30, 30, 30, 0.7) !important;
+      --bs-table-active-color: var(--content-white) !important; /* WHITE */
+      --bs-table-active-bg: rgba(249, 115, 22, 0.1) !important;
+      --bs-table-hover-color: var(--content-white) !important; /* WHITE */
+      --bs-table-hover-bg: rgba(249, 115, 22, 0.1) !important;
+      border-color: rgba(249, 115, 22, 0.1) !important;
+    }
+
+    .table-striped > tbody > tr:nth-of-type(odd) > * {
+      --bs-table-accent-bg: rgba(26, 26, 26, 0.7) !important;
+      color: var(--content-white) !important; /* WHITE */
+    }
+
+    .table-striped > tbody > tr:nth-of-type(even) > * {
+      --bs-table-accent-bg: rgba(30, 30, 30, 0.7) !important;
+      color: var(--content-white) !important; /* WHITE */
+    }
+
+    .table-bordered {
+      border: 1px solid rgba(249, 115, 22, 0.1) !important;
+    }
+
+    .table-bordered th,
+    .table-bordered td {
+      border: 1px solid rgba(249, 115, 22, 0.1) !important;
+    }
+
+    /* Text colors - White for table content */
+    .text-muted {
+      color: rgba(255, 255, 255, 0.6) !important; /* WHITE with opacity */
+    }
+
+    .text-center {
+      color: var(--content-white) !important; /* WHITE */
+    }
+
+    /* LOCKED text - White */
+    .locked-text {
+      color: rgba(255, 255, 255, 0.6) !important;
+      font-style: italic;
+    }
+
+    /* Scrollbar - Orange Only */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--dark-black);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(to bottom,
+        rgba(249, 115, 22, 0.4),
+        rgba(249, 115, 22, 0.2));
+      border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(to bottom,
+        rgba(249, 115, 22, 0.6),
+        rgba(249, 115, 22, 0.4));
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .main-container {
+        margin: 20px;
+        padding: 25px;
+      }
+
+      .page-header h1 {
+        font-size: 2rem;
+      }
+
+      .action-buttons {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .action-btn {
+        padding: 10px 15px;
+        font-size: 12px;
+      }
+
+      .status-badge {
+        min-width: 100px;
+        padding: 8px 15px;
+      }
+
+      #registrationTable thead th,
+      #registrationTable tbody td {
+        padding: 15px 10px;
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Black and Orange Animated Background -->
+  <div class="animated-bg">
+    <div class="orange-grid"></div>
+    <div class="orange-particles" id="orangeParticles"></div>
+  </div>
+
+  <!-- Main Container -->
+  <div class="main-container">
+    <!-- Header -->
+    <div class="page-header">
+      <h1>
+        <i class="fas fa-cube orange-icon"></i>
+        PRODUCT MANAGEMENT
+      </h1>
+      <div class="subtitle">
+        WORKER CONTROL PANEL | BLACK & ORANGE THEME
+      </div>
+    </div>
+
+    <!-- Table Container -->
+    <div class="table-container">
+      <table id="registrationTable" class="table table-striped table-bordered">
+        <thead>
+          <tr>
+            <th><i class="fas fa-hashtag orange-icon"></i>ID</th>
+            <th><i class="fas fa-align-left orange-icon"></i>DESCRIPTION</th>
+            <th><i class="fas fa-tag orange-icon"></i>PRICE</th>
+            <th><i class="fas fa-image orange-icon"></i>IMAGE</th>
+            <th><i class="fas fa-bolt orange-icon"></i>ACTIONS</th>
+            <th><i class="fas fa-chart-bar orange-icon"></i>STATUS</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in data %}
+          <tr style="animation-delay: {{ forloop.counter|add:'0.1' }}s">
+            <td>
+              <span class="id-badge">
+                {{ forloop.counter }}
+              </span>
+            </td>
+            <td>
+              <div class="description-text">
+                <i class="fas fa-file-alt orange-icon"></i>
+                {{ i.description }}
+              </div>
+            </td>
+            <td>
+              <div class="price-tag">
+                <i class="fas fa-inr orange-icon"></i>
+                {{ i.requested_price }}
+              </div>
+            </td>
+            <td class="text-center">
+              <div class="image-container">
+                <img src="{{ i.image }}" height="100" width="100" alt="Product" class="product-image">
+              </div>
+            </td>
+            <td>
+              {% if i.status == "pending" %}
+              <div class="action-buttons">
+                <a href="/editproductworker/{{ i.id }}" class="action-btn btn-update">
+                  <i class="fas fa-edit orange-icon"></i>
+                  UPDATE
+                </a>
+                <a href="/removeproductworker/{{ i.id }}" class="action-btn btn-update">
+                  <i class="fas fa-trash-alt orange-icon"></i>
+                  REMOVE
+                </a>
+              </div>
+              {% else %}
+              <div class="locked-text">
+                <i class="fas fa-lock orange-icon"></i>
+                LOCKED
+              </div>
+              {% endif %}
+            </td>
+            <td>
+              {% if i.status == "pending" %}
+              <span class="status-badge status-pending">
+                <i class="fas fa-clock orange-icon"></i>
+                {{ i.status|upper }}
+              </span>
+              {% elif i.status == "approved" or i.status == "completed" %}
+              <span class="status-badge status-pending">
+                <i class="fas fa-check-circle orange-icon"></i>
+                {{ i.status|upper }}
+              </span>
+              {% else %}
+              <span class="status-badge status-pending">
+                <i class="fas fa-check-circle orange-icon"></i>
+                {{ i.status|upper }}
+              </span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      // Initialize DataTable
+      const table = $('#registrationTable').DataTable({
+        "pageLength": 10,
+        "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+        "order": [[0, "asc"]],
+        "language": {
+          "search": "<i class='fas fa-search orange-icon'></i> SEARCH:",
+          "lengthMenu": "<i class='fas fa-list orange-icon'></i> SHOW _MENU_ ENTRIES",
+          "info": "<i class='fas fa-info-circle orange-icon'></i> SHOWING _START_ TO _END_ OF _TOTAL_",
+          "paginate": {
+            "previous": "<i class='fas fa-chevron-left orange-icon'></i>",
+            "next": "<i class='fas fa-chevron-right orange-icon'></i>"
+          }
+        },
+        "initComplete": function(settings, json) {
+          // Ensure all table content is white
+          $('#registrationTable tbody td').css('color', '#ffffff');
+          $('.description-text').css('color', '#ffffff');
+          $('.price-tag').css('color', '#ffffff');
+          $('.status-badge').css('color', '#ffffff');
+          $('.action-btn').css('color', '#ffffff');
+          $('.id-badge').css('color', '#ffffff');
+          $('.locked-text').css('color', 'rgba(255, 255, 255, 0.6)');
+
+          // Add staggered animation to rows
+          $('#registrationTable tbody tr').each(function(index) {
+            const $row = $(this);
+            $row.css({
+              'animation': `fadeInUp 0.6s ease-out ${index * 0.1}s both`
+            });
+          });
+        }
+      });
+
+      // Create orange particles
+      function createOrangeParticles() {
+        const container = $('#orangeParticles');
+        for (let i = 0; i < 60; i++) {
+          const particle = $('<div class="particle"></div>');
+          const posX = Math.random() * 100;
+          const posY = Math.random() * 100;
+          const tx = Math.random() * 300 - 150;
+          const ty = Math.random() * 300 - 150;
+          const delay = Math.random() * 15;
+          const duration = Math.random() * 10 + 10;
+
+          particle.css({
+            '--tx': `${tx}px`,
+            '--ty': `${ty}px`,
+            left: `${posX}%`,
+            top: `${posY}%`,
+            animationDelay: `${delay}s`,
+            animationDuration: `${duration}s`
+          });
+          container.append(particle);
+        }
+      }
+
+      // Initialize background animations
+      createOrangeParticles();
+
+      // Row hover effects with orange particles
+      $('#registrationTable tbody tr').hover(
+        function() {
+          const $row = $(this);
+          $row.css('background-color', 'rgba(249, 115, 22, 0.1)');
+
+          // Create orange particles on hover
+          for (let i = 0; i < 5; i++) {
+            const particle = $('<div class="hover-particle"></div>');
+            const x = Math.random() * $row.width();
+            const y = Math.random() * $row.height();
+
+            particle.css({
+              position: 'absolute',
+              left: x,
+              top: y,
+              width: '4px',
+              height: '4px',
+              background: 'var(--accent-orange)',
+              borderRadius: '50%',
+              boxShadow: '0 0 10px var(--accent-orange)',
+              pointerEvents: 'none',
+              zIndex: 1000
+            });
+
+            $row.append(particle);
+
+            particle.animate({
+              top: y - 80,
+              opacity: 0
+            }, 1000, function() {
+              particle.remove();
+            });
+          }
+        },
+        function() {
+          const $row = $(this);
+          const isEven = $row.index() % 2 === 0;
+          $row.css('background-color', isEven ? 'rgba(26, 26, 26, 0.7)' : 'rgba(30, 30, 30, 0.7)');
+        }
+      );
+
+      // Button click effects with orange ripple
+      $('.action-btn').click(function(e) {
+        e.preventDefault();
+        const $btn = $(this);
+        const href = $btn.attr('href');
+
+        // Orange ripple effect
+        const ripple = $('<span class="orange-ripple"></span>');
+        const x = e.pageX - $btn.offset().left;
+        const y = e.pageY - $btn.offset().top;
+
+        ripple.css({
+          position: 'absolute',
+          borderRadius: '50%',
+          background: 'rgba(249, 115, 22, 0.4)',
+          transform: 'scale(0)',
+          animation: 'ripple 0.6s linear',
+          width: '15px',
+          height: '15px',
+          top: y,
+          left: x,
+          pointerEvents: 'none'
+        });
+
+        $btn.append(ripple);
+
+        setTimeout(() => {
+          window.location.href = href;
+        }, 300);
+      });
+
+      // Add CSS for ripple animation
+      $('<style>').text(`
+        @keyframes ripple {
+          to {
+            transform: scale(10);
+            opacity: 0;
+          }
+        }
+
+        /* Force white text for all table content */
+        #registrationTable tbody td,
+        #registrationTable tbody td *:not(.orange-icon) {
+          color: #ffffff !important;
+        }
+
+        /* DataTables specific fixes */
+        .dataTables_wrapper {
+          color: var(--light-orange) !important;
+        }
+
+        .dataTables_wrapper *:not(input):not(select) {
+          color: var(--light-orange) !important;
+        }
+
+        /* Table border fixes */
+        .table-bordered th,
+        .table-bordered td {
+          border-color: rgba(249, 115, 22, 0.1) !important;
+        }
+      `).appendTo('head');
+
+      // Auto-refresh status badge animations
+      setInterval(() => {
+        $('.status-pending').css('animation', 'none');
+        setTimeout(() => {
+          $('.status-pending').css('animation', 'pulse 1.5s infinite');
+        }, 10);
+      }, 3000);
+    });
+  </script>
+<script>
+// Prevent going back to this page after form submission
+if (window.history && window.history.pushState) {
+    // Add current page to history
+    window.history.pushState(null, null, window.location.href);
+
+    // Listen for back/forward navigation
+    window.onpopstate = function(event) {
+        // Redirect to /rtohome when back button is pressed
+        window.location.href = '/homeworker';
+    };
+}
+</script>
+</body>
+</html>

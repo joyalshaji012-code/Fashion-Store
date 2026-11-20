@@ -1,0 +1,431 @@
+{#<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">#}
+{#<html xmlns="http://www.w3.org/1999/xhtml">#}
+{#<head>#}
+{#<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />#}
+{#<title>Untitled Document</title>#}
+{#</head>#}
+{##}
+{#<body>#}
+{#<form id="form1" name="form1" method="post" action="/registeruser_buttonclick">#}
+{#  <table width="373" border="1">#}
+{#    <tr>#}
+{#      <th width="177" scope="row">Name</th>#}
+{#      <td width="180"><label for="textfield"></label>#}
+{#      <input type="text" name="textfield" id="textfield" pattern="^[a-zA-Z\s]{2,50}$" required#}
+{#         oninvalid="this.setCustomValidity('Please enter a valid name (2-50 letters only)')"#}
+{#         oninput="this.setCustomValidity('')"/></td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th scope="row">Email</th>#}
+{#      <td><label for="textfield2"></label>#}
+{#      <input type="text" name="textfield2" id="textfield2" /></td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th scope="row">Phone</th>#}
+{#      <td><label for="textfield3"></label>#}
+{#      <input type="text" name="textfield3" id="textfield3" /></td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th scope="row">Password</th>#}
+{#      <td><label for="textfield4"></label>#}
+{#      <input type="text" name="textfield4" id="textfield4" /></td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th scope="row">confirm password</th>#}
+{#      <td><label for="textfield5"></label>#}
+{#      <input type="text" name="textfield5" id="textfield5" /></td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th height="35" colspan="2" scope="row"><input type="submit" name="button" id="button" value="Submit" /></th>#}
+{#    </tr>#}
+{#  </table>#}
+{#</form>#}
+{#</body>#}
+{#</html>#}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Flipkart style registration · show/hide password</title>
+<style type="text/css">
+  /* ----- Flipkart inspired white + orange, all original ids/names/action preserved ----- */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: #f1f3f6;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 16px;
+  }
+
+  /* main container – flipkart card style */
+  #form1 {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 12px 28px 0 rgba(0, 0, 0, 0.1), 0 2px 10px 0 rgba(0, 0, 0, 0.08);
+    width: fit-content;
+    max-width: 440px;
+    padding: 28px 28px 36px 28px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    position: relative;
+    animation: cardFadeIn 0.4s ease-out;
+  }
+
+  @keyframes cardFadeIn {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  #form1:hover {
+    box-shadow: 0 18px 36px 0 rgba(0, 0, 0, 0.12), 0 4px 18px 0 rgba(255, 115, 0, 0.15);
+  }
+
+  /* Flipkart style header */
+  #form1::before {
+    content: "Sign Up";
+    display: block;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #ff6f00;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid #ff6f00;
+    width: 70px;
+    letter-spacing: -0.3px;
+    transition: width 0.3s ease;
+  }
+
+  #form1:hover::before {
+    width: 110px;
+  }
+
+  /* reset table borders but keep structure */
+  table {
+    width: 373px;
+    border-collapse: collapse;
+    border: none;
+    margin: 0 auto;
+  }
+
+  tr {
+    display: block;
+    margin-bottom: 20px;
+    width: 100%;
+    transition: all 0.15s;
+  }
+
+  td, th {
+    display: block;
+    border: none;
+    padding: 0;
+    width: 100%;
+    background: transparent;
+  }
+
+  /* label style */
+  th[scope="row"] {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #212121;
+    margin-bottom: 5px;
+    padding-left: 4px;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+  }
+
+  /* orange accent on labels */
+  th[scope="row"]::before {
+    content: "•";
+    color: #ff6f00;
+    font-weight: bold;
+    font-size: 1.8rem;
+    line-height: 0;
+    margin-right: 6px;
+    transform: translateY(2px);
+    display: inline-block;
+  }
+
+  tr:last-child th[scope="row"]::before {
+    content: "";
+    display: none;
+  }
+
+  /* input fields wrapper - for password eye icon */
+  td {
+    width: 100%;
+    position: relative;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+    padding: 16px 18px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: #ffffff;
+    transition: all 0.2s;
+    outline: none;
+    color: #212121;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);
+    font-family: 'Inter', sans-serif;
+    border-bottom: 2px solid transparent;
+  }
+
+  /* extra padding for password fields to accommodate eye icon */
+  input[type="password"] {
+    padding-right: 48px;
+  }
+
+  input[type="text"]:focus,
+  input[type="password"]:focus {
+    border-color: #ff6f00;
+    box-shadow: 0 0 0 4px rgba(255, 111, 0, 0.15);
+    background: #fffcf8;
+    border-bottom: 2px solid #ff6f00;
+  }
+
+  input[type="text"]:hover,
+  input[type="password"]:hover {
+    border-color: #b0b0b0;
+    background: #fefcf9;
+  }
+
+  /* eye icon styling - pure CSS FontAwesome style using Unicode */
+  .password-toggle {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 1.4rem;
+    user-select: none;
+    color: #9e9e9e;
+    background: white;
+    padding: 0 4px;
+    transition: color 0.2s;
+    z-index: 5;
+    line-height: 1;
+  }
+
+  .password-toggle:hover {
+    color: #ff6f00;
+  }
+
+  /* eye icons (closed/open) */
+  .password-toggle.closed::after {
+    content: "👁️";  /* closed eye (actually open eye, but we swap via class) */
+  }
+  .password-toggle.open::after {
+    content: "👁️‍🗨️";  /* eye with speech bubble = good variation for "visible" state */
+  }
+
+  /* fallback if emoji not supported - but fine */
+
+  /* placeholder */
+  ::placeholder {
+    color: #9e9e9e;
+    font-weight: 400;
+    opacity: 0.7;
+  }
+
+  /* submit button */
+  #button {
+    background: #ff6f00;
+    border: none;
+    padding: 16px 28px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: white;
+    border-radius: 8px;
+    width: 100%;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    box-shadow: 0 8px 16px 0 rgba(255, 111, 0, 0.25);
+    transition: all 0.16s ease;
+    border-bottom: 3px solid #c55400;
+    margin-top: 8px;
+  }
+
+  #button:hover {
+    background: #f26700;
+    transform: scale(1.01) translateY(-2px);
+    box-shadow: 0 14px 24px 0 rgba(255, 111, 0, 0.4);
+    border-bottom-width: 4px;
+  }
+
+  #button:active {
+    transform: translateY(2px);
+    box-shadow: 0 4px 12px 0 rgba(255, 111, 0, 0.5);
+    border-bottom-width: 2px;
+  }
+
+  /* last row special */
+  tr:last-child th[scope="row"] {
+    padding: 0;
+    margin-top: 12px;
+    background: transparent;
+    display: block;
+  }
+
+  tr:last-child td {
+    display: none;
+  }
+
+  /* row hover effect */
+  tr:not(:last-child):hover th[scope="row"] {
+    color: #ff6f00;
+    transform: translateX(4px);
+    transition: 0.2s;
+  }
+
+  tr:not(:last-child):hover input[type="text"],
+  tr:not(:last-child):hover input[type="password"] {
+    border-left: 4px solid #ff6f00;
+    padding-left: 22px;
+    transition: 0.15s;
+  }
+
+  /* validation style */
+  input:invalid:not(:placeholder-shown) {
+    border-left: 4px solid #ff3f00;
+    background: #fff7f5;
+  }
+
+  /* background decorations */
+  body::after {
+    content: "";
+    position: fixed;
+    top: 20px;
+    right: 30px;
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, #ffb77c 0%, #ffddbb 80%);
+    border-radius: 50%;
+    opacity: 0.2;
+    z-index: -1;
+    filter: blur(45px);
+    animation: orbMove 14s infinite alternate ease-in-out;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    bottom: 20px;
+    left: 30px;
+    width: 250px;
+    height: 250px;
+    background: #ffe0b9;
+    filter: blur(65px);
+    opacity: 0.3;
+    z-index: -1;
+    border-radius: 40% 60% 70% 30%;
+    animation: orbFloat 12s infinite alternate;
+  }
+
+  @keyframes orbMove {
+    0% { transform: translate(0, 0) scale(0.8); opacity: 0.2; }
+    100% { transform: translate(-70px, 30px) scale(1.3); opacity: 0.3; }
+  }
+  @keyframes orbFloat {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    100% { transform: translate(40px, -30px) rotate(8deg); }
+  }
+
+  table {
+    width: 373px;
+  }
+
+  /* keep all original names, ids, actions untouched */
+</style>
+</head>
+
+<body>
+<form id="form1" name="form1" method="post" action="/registeruser_buttonclick">
+  <table width="373" border="1">
+    <tr>
+      <th width="177" scope="row">Name</th>
+      <td width="180"><label for="textfield"></label>
+      <input type="text" name="textfield" id="textfield" pattern="^[a-zA-Z\s]{2,50}$" required
+         oninvalid="this.setCustomValidity('Please enter a valid name (2-50 letters only)')"
+         oninput="this.setCustomValidity('')" placeholder="Enter name"/></td>
+    </tr>
+    <tr>
+      <th scope="row">Email</th>
+      <td><label for="textfield2"></label>
+      <input type="text" name="textfield2" id="textfield2" placeholder="example@email.com"/></td>
+    </tr>
+    <tr>
+      <th scope="row">Phone</th>
+      <td><label for="textfield3"></label>
+      <input type="text" name="textfield3" id="textfield3" placeholder="+91 98765 43210"/></td>
+    </tr>
+    <tr>
+      <th scope="row">Password</th>
+      <td>
+        <label for="textfield4"></label>
+        <input type="password" name="textfield4" id="textfield4" placeholder="··········" class="password-input"/>
+        <span class="password-toggle closed" data-for="textfield4" role="button" aria-label="show password"></span>
+      </td>
+    </tr>
+    <tr>
+      <th scope="row">confirm password</th>
+      <td>
+        <label for="textfield5"></label>
+        <input type="password" name="textfield5" id="textfield5" placeholder="re-enter password" class="password-input"/>
+        <span class="password-toggle closed" data-for="textfield5" role="button" aria-label="show password"></span>
+      </td>
+    </tr>
+    <tr>
+      <th height="35" colspan="2" scope="row"><input type="submit" name="button" id="button" value="Submit" /></th>
+    </tr>
+  </table>
+</form>
+
+<!-- Simple show/hide toggle with pure JS, no external deps, preserving all original attributes -->
+<script>
+  (function() {
+    // all original IDs, names, actions remain unchanged
+    console.log('Flipkart-inspired registration with show/hide password. Original attributes untouched.');
+
+    // Add toggle functionality to all password toggles
+    document.addEventListener('DOMContentLoaded', function() {
+      const toggles = document.querySelectorAll('.password-toggle');
+
+      toggles.forEach(toggle => {
+        toggle.addEventListener('click', function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('data-for');
+          const passwordField = document.getElementById(targetId);
+
+          if (!passwordField) return;
+
+          // toggle input type between password and text
+          if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            this.classList.remove('closed');
+            this.classList.add('open');
+          } else {
+            passwordField.type = 'password';
+            this.classList.remove('open');
+            this.classList.add('closed');
+          }
+        });
+      });
+    });
+  })();
+</script>
+</body>
+</html>

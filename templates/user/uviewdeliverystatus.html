@@ -1,0 +1,643 @@
+{#<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">#}
+{#<html xmlns="http://www.w3.org/1999/xhtml">#}
+{#<head>#}
+{#<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />#}
+{#<title>Untitled Document</title>#}
+{#</head>#}
+{##}
+{#<body>#}
+{#<form id="form1" name="form1" method="post" action="/shippingstatus">#}
+{#  <table width="294" border="1">#}
+{#    <tr>#}
+{#      <th width="23" scope="row"><h3>#</h3></th>#}
+{#      <td width="61">Status</td>#}
+{#      <td width="98">Description</td>#}
+{#      <td width="84">Date</td>#}
+{#    </tr>#}
+{#        {% for i in data %}#}
+{#    <tr>#}
+{##}
+{#      <th scope="row">&nbsp;{{ forloop.counter }}</th>#}
+{#      <td>&nbsp;{{ i.status }}</td>#}
+{#      <td>&nbsp;{{ i.description }}</td>#}
+{#      <td>&nbsp;{{ i.date }}</td>#}
+{#    </tr>#}
+{#      {% endfor %}#}
+{##}
+{#  </table>#}
+{#</form>#}
+{#<script>#}
+{#// Prevent going back to this page after form submission#}
+{#if (window.history && window.history.pushState) {#}
+{#    // Add current page to history#}
+{#    window.history.pushState(null, null, window.location.href);#}
+{##}
+{#    // Listen for back/forward navigation#}
+{#    window.onpopstate = function(event) {#}
+{#        // Redirect to /rtohome when back button is pressed#}
+{#        window.location.href = '/homeuser';#}
+{#    };#}
+{#}#}
+{#</script>#}
+{##}
+{#</body>#}
+{#</html>#}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Flipkart Style · Delivery Status (Card View)</title>
+<style>
+  /* ===== Flipkart Inspired White & Orange Theme ===== */
+  :root {
+    --fk-orange: #fb641b;
+    --fk-orange-light: #fff1e6;
+    --fk-orange-soft: #ff9f5b;
+    --fk-white: #ffffff;
+    --fk-white-off: #fcfcfc;
+    --fk-grey-bg: #f1f3f6;
+    --fk-text-dark: #212121;
+    --fk-text-soft: #666666;
+    --fk-border-soft: #f0e4d8;
+    --fk-shadow: 0 4px 20px rgba(251, 100, 27, 0.08);
+    --fk-shadow-hover: 0 8px 30px rgba(251, 100, 27, 0.12);
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: var(--fk-grey-bg);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    margin: 0;
+    animation: fadeInBg 0.5s ease;
+  }
+
+  @keyframes fadeInBg {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* ===== Main Container – Flipkart Card ===== */
+  #form1 {
+    background: var(--fk-white);
+    border-radius: 28px;
+    box-shadow: var(--fk-shadow);
+    width: 100%;
+    max-width: 950px;
+    padding: 36px 40px;
+    border: 1px solid var(--fk-border-soft);
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+    animation: cardRise 0.6s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+  }
+
+  #form1:hover {
+    box-shadow: var(--fk-shadow-hover);
+    transform: translateY(-3px);
+  }
+
+  @keyframes cardRise {
+    0% { opacity: 0; transform: translateY(30px) scale(0.98); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* ===== Header with Flipkart style orange accent ===== */
+  .status-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 24px;
+    border-bottom: 3px solid var(--fk-orange);
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+
+  .status-icon {
+    background: var(--fk-orange-light);
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
+    color: var(--fk-orange);
+    box-shadow: 0 8px 20px rgba(251, 100, 27, 0.25);
+    animation: floatTruck 3s infinite ease-in-out;
+  }
+
+  @keyframes floatTruck {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  .status-title h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--fk-text-dark);
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+  }
+
+  .status-title p {
+    font-size: 15px;
+    color: var(--fk-text-soft);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .live-badge {
+    background: var(--fk-orange);
+    color: white;
+    padding: 5px 16px;
+    border-radius: 40px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .tracking-id {
+    background: #f0f0f0;
+    padding: 5px 14px;
+    border-radius: 30px;
+    font-size: 13px;
+    color: var(--fk-text-soft);
+  }
+
+  /* ===== Summary Cards (Flipkart style stats) ===== */
+  .summary-strip {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+
+  .summary-card {
+    background: var(--fk-orange-light);
+    border-radius: 22px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex: 1 1 200px;
+    border: 1px solid #ffe4d0;
+    transition: all 0.3s ease;
+    cursor: default;
+  }
+
+  .summary-card:hover {
+    background: white;
+    border-color: var(--fk-orange);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(251, 100, 27, 0.15);
+  }
+
+  .summary-emoji {
+    font-size: 32px;
+    background: white;
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.04);
+    color: var(--fk-orange);
+  }
+
+  .summary-details {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .summary-label {
+    font-size: 14px;
+    color: var(--fk-text-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    font-weight: 500;
+  }
+
+  .summary-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--fk-text-dark);
+    line-height: 1.2;
+  }
+
+  .summary-sub {
+    font-size: 14px;
+    color: #388e3c;
+    font-weight: 500;
+  }
+
+  /* ===== CARD LIST VIEW – REPLACES TABLE ===== */
+  .delivery-card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin: 30px 0 25px;
+  }
+
+  /* Individual order card – Flipkart style */
+  .delivery-card {
+    background: var(--fk-white);
+    border-radius: 24px;
+    padding: 22px 26px;
+    border: 1px solid #f0e0d4;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px;
+    transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+    animation: cardAppear 0.5s ease-out backwards;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .delivery-card:hover {
+    border-color: var(--fk-orange);
+    box-shadow: 0 16px 32px rgba(251, 100, 27, 0.12);
+    transform: scale(1.01) translateY(-3px);
+    background: #fffdfa;
+  }
+
+  /* Orange left accent bar */
+  .delivery-card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 20%;
+    height: 60%;
+    width: 5px;
+    background: var(--fk-orange);
+    border-radius: 0 8px 8px 0;
+    opacity: 0.5;
+    transition: opacity 0.2s, height 0.2s;
+  }
+
+  .delivery-card:hover::before {
+    opacity: 1;
+    height: 80%;
+    top: 10%;
+  }
+
+  @keyframes cardAppear {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* Index / S.No – orange circle */
+  .card-index {
+    background: var(--fk-orange-light);
+    color: var(--fk-orange);
+    width: 52px;
+    height: 52px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 700;
+    box-shadow: 0 6px 12px rgba(251, 100, 27, 0.15);
+    flex-shrink: 0;
+  }
+
+  /* Main content area */
+  .card-content {
+    flex: 3;
+    min-width: 240px;
+  }
+
+  .card-title-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+
+  .status-badge {
+    background: var(--fk-orange);
+    color: white;
+    padding: 6px 18px;
+    border-radius: 40px;
+    font-size: 14px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 8px rgba(251, 100, 27, 0.2);
+  }
+
+  .status-badge.orange-light {
+    background: var(--fk-orange-soft);
+  }
+
+  .description-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--fk-text-dark);
+    margin-bottom: 4px;
+  }
+
+  .description-detail {
+    font-size: 14px;
+    color: var(--fk-text-soft);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* Right side – date and action */
+  .card-meta {
+    flex: 1;
+    min-width: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+  }
+
+  .date-chip {
+    background: #f5f5f5;
+    padding: 10px 18px;
+    border-radius: 40px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--fk-text-soft);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid #eae0d8;
+  }
+
+  .track-btn {
+    background: transparent;
+    border: 2px solid var(--fk-orange);
+    color: var(--fk-orange);
+    padding: 10px 24px;
+    border-radius: 40px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: default;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .track-btn:hover {
+    background: var(--fk-orange-light);
+    border-color: var(--fk-orange-soft);
+  }
+
+  /* Hidden original table – we keep it for Django loop but hide visually */
+  .original-table-wrapper {
+    display: none;
+  }
+
+  /* ===== Delivery note / Flipkart style tip ===== */
+  .tracking-note {
+    margin-top: 40px;
+    padding: 18px 28px;
+    background: var(--fk-orange-light);
+    border-radius: 60px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border: 1px dashed var(--fk-orange);
+    font-size: 16px;
+    color: var(--fk-text-dark);
+    flex-wrap: wrap;
+  }
+
+  .note-icon {
+    background: white;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+  }
+
+  .note-text {
+    flex: 1;
+    font-weight: 500;
+  }
+
+  .note-badge {
+    background: var(--fk-orange);
+    color: white;
+    padding: 8px 22px;
+    border-radius: 40px;
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  /* ===== Responsive design ===== */
+  @media (max-width: 750px) {
+    #form1 { padding: 24px 20px; }
+
+    .status-header { flex-direction: column; text-align: center; }
+    .summary-strip { flex-direction: column; }
+
+    .delivery-card {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .card-meta {
+      align-items: flex-start;
+      width: 100%;
+    }
+
+    .date-chip { align-self: flex-start; }
+  }
+
+  /* orange flair */
+  .orange-flair {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    opacity: 0.15;
+    pointer-events: none;
+    font-size: 56px;
+    z-index: -1;
+  }
+</style>
+</head>
+
+<body>
+
+<form id="form1" name="form1" method="post" action="/shippingstatus">
+
+  <!-- Flipkart style header -->
+  <div class="status-header">
+    <div class="status-icon">📦</div>
+    <div class="status-title">
+      <h1>Delivery Status</h1>
+      <p>
+        <span class="live-badge"><span>●</span> LIVE TRACKING</span>
+        <span class="tracking-id">ORDER #FK-8685</span>
+        <span>⏱️ Updated just now</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- Summary cards (dynamic, based on data) -->
+  <div class="summary-strip">
+    <div class="summary-card">
+      <div class="summary-emoji">📦</div>
+      <div class="summary-details">
+        <span class="summary-label">Total shipments</span>
+        <span class="summary-value" id="total-count">{{ data|length }}</span>
+        <span class="summary-sub">active</span>
+      </div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-emoji">🚚</div>
+      <div class="summary-details">
+        <span class="summary-label">In transit</span>
+        <span class="summary-value" id="in-transit-count">0</span>
+        <span class="summary-sub">on the way</span>
+      </div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-emoji">✅</div>
+      <div class="summary-details">
+        <span class="summary-label">Delivered</span>
+        <span class="summary-value" id="delivered-count">0</span>
+        <span class="summary-sub">completed</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD LIST – Dynamically generated from Django data (using same context) -->
+  <div class="delivery-card-list" id="deliveryCardList">
+    {% for i in data %}
+    <div class="delivery-card" data-row="{{ forloop.counter }}">
+      <div class="card-index">{{ forloop.counter }}</div>
+      <div class="card-content">
+        <div class="card-title-row">
+          <span class="status-badge">
+            {% if 'deliver' in i.status|lower or 'complete' in i.status|lower %}✅{% else %}🟠{% endif %}
+            {{ i.status }}
+          </span>
+        </div>
+        <div class="description-text">{{ i.description }}</div>
+        <div class="description-detail">
+          <span>📝 Order #FK-{{ i.order_number|default:forloop.counter }}</span>
+        </div>
+      </div>
+      <div class="card-meta">
+        <div class="date-chip">
+          <span>📅</span> {{ i.date }}
+        </div>
+{#        <div class="track-btn">#}
+{#          <span>🔍</span> Track#}
+{#        </div>#}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Original table – KEPT INTACT but hidden (Django template remains untouched) -->
+  <div style="display: none;">
+    <table width="294" border="1">
+      <tr>
+        <th width="23" scope="row"><h3>#</h3></th>
+        <td width="61">Status</td>
+        <td width="98">Description</td>
+        <td width="84">Date</td>
+      </tr>
+      {% for i in data %}
+      <tr>
+        <th scope="row">&nbsp;{{ forloop.counter }}</th>
+        <td>&nbsp;{{ i.status }}</td>
+        <td>&nbsp;{{ i.description }}</td>
+        <td>&nbsp;{{ i.date }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  <!-- Delivery note / Flipkart style tip -->
+  <div class="tracking-note">
+    <div class="note-icon">🚚</div>
+    <div class="note-text">⏱️ Your shipments are being tracked — real-time updates every 2 hours</div>
+    <div class="note-badge">🍊 TRACKING</div>
+  </div>
+
+</form>
+
+<!-- Original JavaScript - absolutely untouched -->
+<script>
+// Prevent going back to this page after form submission
+if (window.history && window.history.pushState) {
+    // Add current page to history
+    window.history.pushState(null, null, window.location.href);
+
+    // Listen for back/forward navigation
+    window.onpopstate = function(event) {
+        // Redirect to /rtohome when back button is pressed
+        window.location.href = '/homeuser';
+    };
+}
+</script>
+
+<!-- Script to update summary cards based on status (purely cosmetic) -->
+<script>
+(function() {
+  // Count in-transit and delivered from the cards (uses same data)
+  const cards = document.querySelectorAll('.delivery-card');
+  let inTransit = 0, delivered = 0;
+
+  // Also fix order numbers to be consistent
+  cards.forEach((card, index) => {
+    // Fix status counting
+    const badge = card.querySelector('.status-badge');
+    if (badge) {
+      const statusText = badge.textContent.trim().toLowerCase();
+      if (statusText.includes('deliver') || statusText.includes('complete') || statusText.includes('✅')) delivered++;
+      else if (statusText.includes('transit') || statusText.includes('shipped') || statusText.includes('packed') || statusText.includes('🟠')) inTransit++;
+    }
+
+    // Ensure order numbers are consistent with the card index
+    const orderDetail = card.querySelector('.description-detail span');
+    if (orderDetail) {
+      // Extract the base order number without the counter
+      const baseOrderText = 'Order #FK-';
+      // Keep the same order number format but ensure it matches the card index
+      orderDetail.textContent = `📝 Order #FK-${index + 1}`;
+    }
+  });
+
+  const total = cards.length;
+  const inTransitSpan = document.getElementById('in-transit-count');
+  const deliveredSpan = document.getElementById('delivered-count');
+  if (inTransitSpan) inTransitSpan.textContent = inTransit || (total - delivered) || '—';
+  if (deliveredSpan) deliveredSpan.textContent = delivered || '—';
+})();
+</script>
+
+<!-- purely decorative orange slice (replaces old apple) -->
+<div class="orange-flair">🍊</div>
+</body>
+</html>

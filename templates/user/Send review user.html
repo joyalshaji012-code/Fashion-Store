@@ -1,0 +1,385 @@
+{#<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">#}
+{#<html xmlns="http://www.w3.org/1999/xhtml">#}
+{#<head>#}
+{#<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />#}
+{#<title>Untitled Document</title>#}
+{#</head>#}
+{##}
+{#<body><form action="/sendreviewuser_buttonclick" method="post">#}
+{#  <table width="296" border="1">#}
+{#    <tr>#}
+{#      <th width="165" scope="row">Review</th>#}
+{#      <td width="115"><label for="textfield2"></label>#}
+{#      <input type="text" name="textfield2" id="textfield2" /></td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th scope="row">Rating</th>#}
+{#      <td><label for="textfield"></label>#}
+{#      <input type="text" name="textfield" id="textfield" /></td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th colspan="2" scope="row"><input type="submit" name="button" id="button" value="Submit" /></th>#}
+{#    </tr>#}
+{#  </table>#}
+{#</form>#}
+{#<script>#}
+{#// Prevent going back to this page after form submission#}
+{#if (window.history && window.history.pushState) {#}
+{#    // Add current page to history#}
+{#    window.history.pushState(null, null, window.location.href);#}
+{##}
+{#    // Listen for back/forward navigation#}
+{#    window.onpopstate = function(event) {#}
+{#        // Redirect to /rtohome when back button is pressed#}
+{#        window.location.href = '/homeuser';#}
+{#    };#}
+{#}#}
+{#</script>#}
+{##}
+{#</body>#}
+{#</html>#}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Review · White & Orange</title>
+<!-- Google Font for modern look -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet" />
+<!-- Font Awesome for star icons (pure css, no extra ids) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    background: #fef5e8;  /* warm white-orange background */
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 16px;
+  }
+  /* main card – white with orange border glow */
+  .review-card {
+    background: white;
+    width: 100%;
+    max-width: 560px;
+    border-radius: 48px;
+    padding: 36px 32px;
+    box-shadow: 0 30px 50px -15px rgba(255, 140, 0, 0.25), 0 10px 20px -5px rgba(255, 157, 0, 0.2);
+    border: 1px solid #ffcd94;
+    transition: transform 0.3s ease, box-shadow 0.3s;
+  }
+  .review-card:hover {
+    box-shadow: 0 40px 60px -12px #ffb054;
+    transform: scale(1.01);
+  }
+
+  /* title / heading (no id, just visual) */
+  .review-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .review-header i {
+    font-size: 2rem;
+    color: #ff8c42;
+    background: #fff1e0;
+    padding: 12px;
+    border-radius: 60px;
+  }
+  .review-header h2 {
+    font-weight: 700;
+    font-size: 1.9rem;
+    color: #b64900;
+    letter-spacing: -0.5px;
+  }
+
+  /* remove original table, but preserve all input names & ids */
+  /* we use a flexible form layout */
+  form {
+    width: 100%;
+  }
+
+  .input-group {
+    margin-bottom: 32px;
+  }
+
+  /* label styling (visual only, no for attribute conflict) */
+  .field-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #a44b00;
+    margin-bottom: 12px;
+  }
+  .field-label i {
+    color: #ff9800;
+    font-size: 1.2rem;
+  }
+
+  /* review input – textfield2 (original id) */
+  #textfield2 {
+    width: 100%;
+    background: #fffcf7;
+    border: 2px solid #ffdbb8;
+    border-radius: 30px;
+    padding: 18px 24px;
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s;
+    color: #2e1c0b;
+    resize: vertical;
+    min-height: 100px;
+    box-shadow: 0 4px 10px #ffeee0;
+  }
+  #textfield2:focus {
+    outline: none;
+    border-color: #ff9800;
+    box-shadow: 0 0 0 6px rgba(255, 179, 71, 0.3);
+    background: white;
+  }
+
+  /* rating row – star rating control that syncs with hidden textfield */
+  .rating-container {
+    background: #fffaf4;
+    border-radius: 60px;
+    padding: 8px 20px 8px 20px;
+    border: 2px solid #ffdbb5;
+    display: inline-flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+  }
+  .stars {
+    display: flex;
+    gap: 10px;
+  }
+  .stars i {
+    font-size: 2.2rem;
+    color: #ffb877;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+  .stars i.selected,
+  .stars i:hover {
+    color: #ff9800;
+    transform: scale(1.15);
+    text-shadow: 0 0 10px #ffc107;
+  }
+  .stars i:active {
+    transform: scale(0.95);
+  }
+
+  /* original rating textfield – hidden visually but kept for form submission */
+  #textfield {
+    border: 2px solid #ffe0bc;
+    border-radius: 60px;
+    padding: 14px 22px;
+    font-size: 1rem;
+    width: 80px;
+    text-align: center;
+    background: #fffcf5;
+    font-weight: 600;
+    color: #b64900;
+    outline: none;
+  }
+  #textfield:focus {
+    border-color: #ff9800;
+    box-shadow: 0 0 0 4px #ffd7a5;
+  }
+
+  /* submit button */
+  .submit-area {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+  }
+  #button {
+    background: #ff9800;
+    border: none;
+    color: white;
+    font-size: 1.6rem;
+    font-weight: 800;
+    padding: 18px 48px;
+    border-radius: 80px;
+    width: 100%;
+    max-width: 300px;
+    letter-spacing: 1px;
+    box-shadow: 0 20px 30px -8px #ffac4d;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    border: 2px solid transparent;
+  }
+  #button:hover {
+    background: #f57c00;
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 32px 40px -12px #ff8624;
+  }
+  #button:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  /* small hint animation */
+  .rating-hint {
+    color: #b45b1c;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #fff0dd;
+    padding: 8px 18px;
+    border-radius: 40px;
+    width: fit-content;
+    animation: pulseHint 2s infinite ease-in-out;
+  }
+  @keyframes pulseHint {
+    0% { opacity: 0.8; background: #ffe8d1; }
+    50% { opacity: 1; background: #ffdcb8; }
+    100% { opacity: 0.8; background: #ffe8d1; }
+  }
+
+  /* hidden legacy table elements are gone, but all ids preserved */
+</style>
+</head>
+
+<body>
+<div class="review-card">
+  <!-- decorative header (purely visual) -->
+  <div class="review-header">
+    <i class="fas fa-pen-fancy"></i>
+    <h2>your review</h2>
+  </div>
+
+  <form action="/sendreviewuser_buttonclick" method="post">
+    <!-- REVIEW field (original id: textfield2) -->
+    <div class="input-group">
+      <div class="field-label">
+        <i class="fas fa-comment-dots"></i>
+        <span>Your review</span>
+      </div>
+      <!-- Multi-line friendly, but keeps name/textfield2 -->
+      <textarea name="textfield2" id="textfield2" placeholder="Tell us about your experience…" rows="3"></textarea>
+    </div>
+
+    <!-- RATING field (original id: textfield) with interactive stars -->
+    <div class="input-group">
+      <div class="field-label">
+        <i class="fas fa-star"></i>
+        <span>Rating</span>
+      </div>
+      <div class="rating-container">
+        <div class="stars" id="starWidget">
+          <i class="far fa-star" data-value="1"></i>
+          <i class="far fa-star" data-value="2"></i>
+          <i class="far fa-star" data-value="3"></i>
+          <i class="far fa-star" data-value="4"></i>
+          <i class="far fa-star" data-value="5"></i>
+        </div>
+        <!-- Original text input for rating – visible but small, still functional -->
+        <input type="text" name="textfield" id="textfield" placeholder="1-5" value="5" />
+      </div>
+      <div class="rating-hint">
+        <i class="fas fa-hand-pointer"></i> <span>click a star to rate</span>
+      </div>
+    </div>
+
+    <!-- Submit button (original id: button) -->
+    <div class="submit-area">
+      <input type="submit" name="button" id="button" value="Submit" />
+    </div>
+  </form>
+</div>
+
+<!-- interactive star rating script – updates #textfield without breaking any original names/ids -->
+<script>
+  (function() {
+    const stars = document.querySelectorAll('#starWidget i');
+    const ratingInput = document.getElementById('textfield');
+
+    // initial sync (if ratingInput has a value like 5, highlight)
+    function updateStarsFromInput() {
+      const val = parseInt(ratingInput.value, 10);
+      if (!isNaN(val) && val >= 1 && val <= 5) {
+        stars.forEach((star, index) => {
+          if (index < val) {
+            star.classList.remove('far');
+            star.classList.add('fas', 'selected');
+          } else {
+            star.classList.remove('fas', 'selected');
+            star.classList.add('far');
+          }
+        });
+      } else {
+        // default to 5 if empty or invalid
+        ratingInput.value = 5;
+        stars.forEach((star, index) => {
+          if (index < 5) {
+            star.classList.remove('far');
+            star.classList.add('fas', 'selected');
+          } else {
+            star.classList.remove('fas', 'selected');
+            star.classList.add('far');
+          }
+        });
+      }
+    }
+
+    // initialize
+    updateStarsFromInput();
+
+    // add click handlers
+    stars.forEach(star => {
+      star.addEventListener('click', function(e) {
+        const value = parseInt(this.getAttribute('data-value'), 10);
+        ratingInput.value = value;
+        updateStarsFromInput();
+      });
+
+      // optional hover effect (just for fun, doesn't change selection)
+      star.addEventListener('mouseenter', function() {
+        const hoverValue = parseInt(this.getAttribute('data-value'), 10);
+        stars.forEach((s, idx) => {
+          if (idx < hoverValue) {
+            s.classList.add('hover-star');
+          } else {
+            s.classList.remove('hover-star');
+          }
+        });
+      });
+      star.addEventListener('mouseleave', function() {
+        stars.forEach(s => s.classList.remove('hover-star'));
+      });
+    });
+
+    // if user types manually in rating field, update stars
+    ratingInput.addEventListener('input', updateStarsFromInput);
+  })();
+</script>
+
+<!-- Original back-navigation prevention (exactly as given) -->
+<script>
+// Prevent going back to this page after form submission
+if (window.history && window.history.pushState) {
+    // Add current page to history
+    window.history.pushState(null, null, window.location.href);
+
+    // Listen for back/forward navigation
+    window.onpopstate = function(event) {
+        // Redirect to /homeuser when back button is pressed
+        window.location.href = '/homeuser';
+    };
+}
+</script>
+
+<!-- original hidden elements? none needed. All IDs present: textfield2, textfield, button -->
+</body>
+</html>
